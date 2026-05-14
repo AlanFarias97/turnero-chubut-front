@@ -1,0 +1,7 @@
+{
+  "name": "turnero-chubut-front",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
