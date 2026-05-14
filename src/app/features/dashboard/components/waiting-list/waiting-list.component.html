@@ -1,0 +1,35 @@
+<div class="waiting-container">
+
+  <div class="waiting-header">
+
+    {{ title }}
+
+  </div>
+
+  <div
+  class="waiting-list"
+  cdkDropList
+  id="waitingList"
+  [cdkDropListData]="vehicles"
+  [cdkDropListConnectedTo]="[
+    'bay-1',
+    'bay-2',
+    'bay-3'
+  ]"
+  (cdkDropListDropped)="onDrop($event)">
+
+    <app-vehicle-card
+      *ngFor="let vehicle of vehicles"
+      [vehicle]="vehicle">
+    </app-vehicle-card>
+
+    <div
+    class="empty-list"
+    *ngIf="vehicles.length === 0">
+
+    Arrastrar vehículos aquí
+
+  </div>
+  </div>
+
+</div>

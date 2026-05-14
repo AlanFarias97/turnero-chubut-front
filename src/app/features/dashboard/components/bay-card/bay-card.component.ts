@@ -1,0 +1,42 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { Bay } from '../../models/bay';
+import { VehicleCardComponent } from '../vehicle-card/vehicle-card.component';
+
+@Component({
+  selector: 'app-bay-card',
+  templateUrl: './bay-card.component.html',
+  styleUrls: ['./bay-card.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonicModule,
+    DragDropModule,
+    VehicleCardComponent,
+  ]
+})
+export class BayCardComponent {
+
+  @Input() bay!: Bay;
+  @Output() vehicleDropped = new EventEmitter<any>();
+  @Output() vehicleCompleted =
+  new EventEmitter<number>();
+
+  onDrop(event: any) {
+
+    this.vehicleDropped.emit({
+      bayId: this.bay.id,
+      event
+    });
+
+  }
+  completeVehicle() {
+
+    this.vehicleCompleted.emit(
+      this.bay.id
+    );
+
+  }
+}

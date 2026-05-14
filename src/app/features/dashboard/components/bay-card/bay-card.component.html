@@ -1,0 +1,62 @@
+<div
+  class="bay-card"
+  [ngClass]="{
+    'occupied': bay.currentVehicle,
+    'empty-bay-card': !bay.currentVehicle
+  }"
+  cdkDropList
+  [id]="'bay-' + bay.id"
+  [cdkDropListData]="bay"
+  [cdkDropListConnectedTo]="['waitingList']"
+  (cdkDropListDropped)="onDrop($event)">
+
+  <div class="bay-header">
+
+    {{ bay.name }}
+
+  </div>
+
+  <div
+    class="bay-content"
+    [class.empty]="!bay.currentVehicle">
+
+    <ng-container *ngIf="bay.currentVehicle; else emptyBay">
+
+      <app-vehicle-card
+        [vehicle]="bay.currentVehicle">
+      </app-vehicle-card>
+
+      <div class="finish-container">
+
+        <button
+          *ngIf="bay.currentVehicle"
+          class="finish-button"
+          (click)="completeVehicle()">
+
+          FINALIZAR
+
+        </button>
+
+      </div>
+      
+    </ng-container>
+
+    <ng-template #emptyBay>
+
+      <div class="empty-content">
+
+        <div class="empty-title">
+          Libre
+        </div>
+
+        <div class="empty-subtitle">
+          Arrastrar vehículo aquí
+        </div>
+
+      </div>
+
+    </ng-template>
+
+  </div>
+
+</div>

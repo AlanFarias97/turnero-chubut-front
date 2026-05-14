@@ -1,0 +1,179 @@
+:host {
+
+  --app-red: #DC2626;
+  --app-black: #111111;
+  --app-light-gray: #F5F5F5;
+
+}
+
+.bay-card {
+
+  background: var(--app-light-gray);
+
+  border-radius: 24px;
+
+  border: 2px dashed #D1D5DB;
+
+  height: 320px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding: 20px;
+
+  transition: 0.2s;
+
+}
+.bay-card.empty-bay-card {
+
+  background: #ECFDF5;
+
+  border-color: #A7F3D0;
+
+}
+
+.bay-card.occupied {
+
+  background: #FEF2F2;
+
+  border-color: #FECACA;
+
+}
+
+.bay-card:hover {
+
+  border-color: var(--app-red);
+
+}
+
+.bay-header {
+
+  font-size: 22px;
+
+  font-weight: 700;
+
+  color: var(--app-black);
+
+  margin-bottom: 20px;
+
+}
+
+.bay-content {
+
+  flex: 1;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+.empty-content {
+
+  text-align: center;
+
+}
+
+.empty-title {
+
+  font-size: 24px;
+
+  font-weight: 700;
+
+  color: gray;
+
+}
+
+.empty-subtitle {
+
+  margin-top: 12px;
+
+  color: #9CA3AF;
+
+  font-size: 14px;
+
+}
+
+.vehicle-card {
+
+  width: 100%;
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 20px;
+
+  border-left: 6px solid var(--app-red);
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+
+}
+
+.plate {
+
+  font-size: 24px;
+
+  font-weight: 700;
+
+  color: var(--app-black);
+
+}
+
+.vehicle-info {
+
+  margin-top: 10px;
+
+  color: #4B5563;
+
+}
+
+.service {
+
+  margin-top: 14px;
+
+  color: var(--app-red);
+
+  font-weight: 600;
+
+}
+.finish-container {
+
+  display: flex;
+
+  justify-content: center;
+
+  margin-top: 14px;
+
+}
+
+.finish-button {
+
+  border: none;
+
+  border-radius: 12px;
+
+  padding: 10px 18px;
+
+  background: #111111;
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+  font-size: 13px;
+
+}
+
+.finish-button:hover {
+
+  background: #DC2626;
+
+}

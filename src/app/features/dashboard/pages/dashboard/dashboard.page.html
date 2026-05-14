@@ -1,0 +1,180 @@
+<ion-content fullscreen>
+
+  <div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div>
+
+        <div class="logo-container">
+
+          <h1>
+            TURNERO
+          </h1>
+
+          <span>
+            CHUBUT
+          </span>
+
+        </div>
+
+        <nav class="menu">
+
+          <div class="menu-item active">
+            Dashboard
+          </div>
+
+          <div class="menu-item">
+            Fila
+          </div>
+
+          <div class="menu-item">
+            Catálogos
+          </div>
+
+          <div class="menu-item">
+            Historial
+          </div>
+
+        </nav>
+
+      </div>
+
+      <div class="sidebar-footer">
+        Sistema operativo del taller
+      </div>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+      <!-- TOPBAR -->
+      <header class="topbar">
+
+        <div>
+
+          <h2>
+            Dashboard
+          </h2>
+
+          <p>
+            Gestión de turnos y bahías
+          </p>
+
+          <button
+  class="add-vehicle-button"
+  (click)="showCreateVehicle = true">
+
+  + Nuevo vehículo
+
+</button>
+
+        </div>
+
+        <div class="date-box">
+
+          {{ currentDate | date:'dd/MM/yyyy HH:mm' }}
+
+        </div>
+
+      </header>
+      <div
+  class="create-vehicle-modal"
+  *ngIf="showCreateVehicle">
+
+  <div class="create-vehicle-card">
+
+    <h3>
+      Nuevo vehículo
+    </h3>
+
+    <input
+      type="text"
+      placeholder="Patente"
+      [(ngModel)]="newVehicle.patent">
+
+    <input
+      type="text"
+      placeholder="Marca"
+      [(ngModel)]="newVehicle.brand">
+
+    <input
+      type="text"
+      placeholder="Modelo"
+      [(ngModel)]="newVehicle.model">
+
+    <input
+      type="text"
+      placeholder="Color"
+      [(ngModel)]="newVehicle.color">
+
+    <input
+      type="text"
+      placeholder="Servicio"
+      [(ngModel)]="newVehicle.service">
+
+    <div class="modal-actions">
+
+      <button
+        class="cancel-button"
+        (click)="showCreateVehicle = false">
+
+        Cancelar
+
+      </button>
+
+      <button
+        class="save-button"
+        (click)="createVehicle()">
+
+        Crear
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+      <div class="content-container">
+
+        <!-- BAHIAS -->
+        <div class="bays-grid">
+
+          <app-bay-card
+          *ngFor="let bay of bays"
+          [bay]="bay"
+          (vehicleDropped)="onVehicleDropped($event)"
+          (vehicleCompleted)="onVehicleCompleted($event)">
+          </app-bay-card>
+
+        </div>
+
+        <!-- LISTAS -->
+        <div class="lists-grid">
+
+          <!-- ESPERA -->
+          <app-waiting-list
+            title="Fila de espera"
+            [vehicles]="waitingVehicles"
+            (vehicleReturned)="onVehicleReturned($event)">
+          </app-waiting-list>
+
+          <!-- FINALIZADOS -->
+          <app-waiting-list
+            title="Finalizados"
+            [vehicles]="completedVehicles">
+          </app-waiting-list>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</ion-content>

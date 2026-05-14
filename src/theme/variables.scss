@@ -1,2 +1,18 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
+/* GLOBAL COLORS */
+
+:root {
+
+  /* PRIMARY */
+  --app-red: #DC2626;
+
+  /* DARK */
+  --app-black: #111111;
+  --app-dark-gray: #2B2B2B;
+
+  /* LIGHT */
+  --app-white: #FFFFFF;
+  --app-light-gray: #F3F4F6;
+
+}

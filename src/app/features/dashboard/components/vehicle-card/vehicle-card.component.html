@@ -1,0 +1,48 @@
+<div
+  class="vehicle-card"
+  [ngClass]="{
+    'waiting': vehicle.status === 'WAITING',
+    'in-bay': vehicle.status === 'IN_BAY',
+    'completed': vehicle.status === 'COMPLETED'
+  }"
+  cdkDrag
+  [cdkDragData]="vehicle">
+
+  <div class="vehicle-top">
+
+    <div class="ticket-number">
+
+      #{{ vehicle.ticketNumber }}
+
+    </div>
+
+    <div class="plate">
+
+      {{ vehicle.patent }}
+
+    </div>
+
+    <div class="waiting-time">
+
+      {{ vehicle.waitingMinutes }} min
+
+    </div>
+
+  </div>
+
+  <div class="vehicle-info">
+
+    {{ vehicle.brand }}
+    {{ vehicle.model }}
+    ·
+    {{ vehicle.color }}
+
+  </div>
+
+  <div class="service">
+
+    {{ vehicle.service }}
+
+  </div>
+
+</div>
