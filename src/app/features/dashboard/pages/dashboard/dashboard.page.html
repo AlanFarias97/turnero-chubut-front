@@ -1,75 +1,58 @@
 <ion-content fullscreen>
-
   <div class="dashboard-layout">
-
     <!-- SIDEBAR -->
     <aside class="sidebar">
-
       <div>
-
         <div class="logo-container">
+          <h1>TURNERO</h1>
 
-          <h1>
-            TURNERO
-          </h1>
-
-          <span>
-            CHUBUT
-          </span>
-
+          <span> CHUBUT </span>
         </div>
 
         <nav class="menu">
+          <div class="menu-item active">Dashboard</div>
 
-          <div class="menu-item active">
-            Dashboard
-          </div>
+          <div class="menu-item">Fila</div>
 
-          <div class="menu-item">
-            Fila
-          </div>
+          <div class="menu-item">Catálogos</div>
 
-          <div class="menu-item">
-            Catálogos
-          </div>
+          <div class="menu-item">Historial</div>
 
-          <div class="menu-item">
-            Historial
-          </div>
-
+          <a class="menu-item" href="/workshop" target="_blank">
+            Pantalla taller
+          </a>
         </nav>
-
       </div>
 
-      <div class="sidebar-footer">
-        Sistema operativo del taller
-      </div>
-
+      <div class="sidebar-footer">Sistema operativo del taller</div>
     </aside>
 
     <!-- MAIN -->
     <main class="main-content">
-
       <!-- TOPBAR -->
       <header class="topbar">
 
-        <div>
+        <div class="topbar-left">
 
-          <h2>
-            Dashboard
-          </h2>
+          <div>
 
-          <p>
-            Gestión de turnos y bahías
-          </p>
+            <h2>
+              Dashboard
+            </h2>
+
+            <p>
+              Gestión de turnos y bahías
+            </p>
+
+          </div>
 
           <button
-  class="add-vehicle-button"
-  (click)="showCreateVehicle = true">
+          class="new-vehicle-btn"
+          (click)="showCreateVehicle = true">
 
-  + Nuevo vehículo
+            + Nuevo vehículo
 
-</button>
+          </button>
 
         </div>
 
@@ -80,46 +63,124 @@
         </div>
 
       </header>
-      <div
-  class="create-vehicle-modal"
-  *ngIf="showCreateVehicle">
+      <div class="create-vehicle-modal" *ngIf="showCreateVehicle">
+        <div class="create-vehicle-card">
+          <h3>Nuevo vehículo</h3>
 
-  <div class="create-vehicle-card">
+          <input
+            type="text"
+            placeholder="Patente"
+            [(ngModel)]="newVehicle.patent"
+          />
 
-    <h3>
-      Nuevo vehículo
-    </h3>
+          <input
+            type="text"
+            placeholder="Marca"
+            [(ngModel)]="newVehicle.brand"
+          />
 
-    <input
-      type="text"
-      placeholder="Patente"
-      [(ngModel)]="newVehicle.patent">
+          <input
+            type="text"
+            placeholder="Modelo"
+            [(ngModel)]="newVehicle.model"
+          />
 
-    <input
-      type="text"
-      placeholder="Marca"
-      [(ngModel)]="newVehicle.brand">
+          <input
+            type="text"
+            placeholder="Color"
+            [(ngModel)]="newVehicle.color"
+          />
 
-    <input
-      type="text"
-      placeholder="Modelo"
-      [(ngModel)]="newVehicle.model">
+          <input
+            type="text"
+            placeholder="Servicio"
+            [(ngModel)]="newVehicle.service"
+          />
 
-    <input
-      type="text"
-      placeholder="Color"
-      [(ngModel)]="newVehicle.color">
 
-    <input
-      type="text"
-      placeholder="Servicio"
-      [(ngModel)]="newVehicle.service">
+          <div class="modal-actions">
+            <button
+            class="new-vehicle-btn"
+            (click)="showCreateVehicle = false">
+              Cancelar
+            </button>
+
+            <button class="save-button" (click)="createVehicle()">Crear</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-container">
+        <!-- BAHIAS -->
+        <div class="bays-grid">
+          <app-bay-card
+            *ngFor="let bay of bays"
+            [bay]="bay"
+            (vehicleDropped)="onVehicleDropped($event)"
+            (vehicleCompleted)="onVehicleCompleted($event)"
+          >
+          </app-bay-card>
+        </div>
+
+        <!-- LISTAS -->
+        <div class="lists-grid">
+          <!-- ESPERA -->
+          <app-waiting-list
+            title="Fila de espera"
+            listId="waiting-list"
+            [vehicles]="waitingVehicles"
+            (vehicleReturned)="onVehicleReturned($event)"
+          >
+          </app-waiting-list>
+
+          <!-- FINALIZADOS -->
+          <app-waiting-list
+          title="Finalizados"
+          listId="completed-list"
+          [vehicles]="completedVehicles"
+          (vehicleReturned)="onCompletedVehicleReturned($event)">
+        </app-waiting-list>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div
+  class="modal-backdrop"
+  *ngIf="showAssignOperatorModal">
+
+  <div class="modal-container">
+
+    <h2>
+      Asignar operario
+    </h2>
+
+    <p>
+      Seleccionar quién tomará este trabajo
+    </p>
+    <div class="operators-list">
+
+      <label
+        class="operator-option"
+        *ngFor="let operator of operators">
+
+        <input
+          type="checkbox"
+          [value]="operator"
+          (change)="onOperatorToggle(operator, $event)">
+
+        <span>
+          {{ operator }}
+        </span>
+
+      </label>
+
+    </div>
 
     <div class="modal-actions">
 
       <button
-        class="cancel-button"
-        (click)="showCreateVehicle = false">
+        class="new-vehicle-btn"
+        (click)="showAssignOperatorModal = false">
 
         Cancelar
 
@@ -127,9 +188,9 @@
 
       <button
         class="save-button"
-        (click)="createVehicle()">
+        (click)="confirmAssignOperator()">
 
-        Crear
+        Confirmar
 
       </button>
 
@@ -138,43 +199,4 @@
   </div>
 
 </div>
-
-      <div class="content-container">
-
-        <!-- BAHIAS -->
-        <div class="bays-grid">
-
-          <app-bay-card
-          *ngFor="let bay of bays"
-          [bay]="bay"
-          (vehicleDropped)="onVehicleDropped($event)"
-          (vehicleCompleted)="onVehicleCompleted($event)">
-          </app-bay-card>
-
-        </div>
-
-        <!-- LISTAS -->
-        <div class="lists-grid">
-
-          <!-- ESPERA -->
-          <app-waiting-list
-            title="Fila de espera"
-            [vehicles]="waitingVehicles"
-            (vehicleReturned)="onVehicleReturned($event)">
-          </app-waiting-list>
-
-          <!-- FINALIZADOS -->
-          <app-waiting-list
-            title="Finalizados"
-            [vehicles]="completedVehicles">
-          </app-waiting-list>
-
-        </div>
-
-      </div>
-
-    </main>
-
-  </div>
-
 </ion-content>

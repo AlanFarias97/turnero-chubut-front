@@ -9,13 +9,14 @@
   <div
   class="waiting-list"
   cdkDropList
-  id="waitingList"
+  [id]="listId"
   [cdkDropListData]="vehicles"
   [cdkDropListConnectedTo]="[
-    'bay-1',
-    'bay-2',
-    'bay-3'
-  ]"
+  'bay-1',
+  'bay-2',
+  'bay-3',
+  'completed-list'
+]"
   (cdkDropListDropped)="onDrop($event)">
 
     <app-vehicle-card

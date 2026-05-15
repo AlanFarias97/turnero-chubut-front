@@ -10,11 +10,13 @@
 
 .dashboard-layout {
 
-  display: flex;
-
   height: 100vh;
 
-  background: white;
+  display: flex;
+
+  overflow: hidden;
+
+  background: #F3F4F6;
 
 }
 
@@ -84,6 +86,8 @@
 
   font-weight: 500;
 
+  text-decoration: none;
+
 }
 
 .menu-item:hover {
@@ -116,8 +120,6 @@
 
   flex-direction: column;
 
-  padding: 24px;
-
   overflow: hidden;
 
 }
@@ -130,9 +132,18 @@
 
   justify-content: space-between;
 
-  align-items: center;
+  align-items: flex-start;
 
-  margin-bottom: 24px;
+  padding: 24px 24px 0 24px;
+
+}
+.topbar-left {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
 
 }
 
@@ -156,18 +167,21 @@
 
 .date-box {
 
-  background: var(--app-black);
+  background: #111111;
 
-  border: 1px solid var(--app-border);
+  color: white;
+
+  padding: 14px 20px;
 
   border-radius: 14px;
 
-  padding: 12px 18px;
+  font-weight: 700;
 
-  font-weight: 600;
+  font-size: 16px;
 
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  margin-right: 8px;
 
+  margin-top: 8px;
 
 }
 
@@ -183,7 +197,9 @@
 
   gap: 24px;
 
-  padding-bottom: 24px;
+  padding: 24px;
+
+  overflow-y: auto;
 
 }
 
@@ -226,8 +242,6 @@
   grid-template-columns: 1fr 1fr;
 
   gap: 24px;
-
-  min-height: 0;
 
 }
 .add-vehicle-button {
@@ -341,5 +355,111 @@
   font-weight: 700;
 
   cursor: pointer;
+
+}
+.new-vehicle-btn {
+
+  width: fit-content;
+
+  background: #DC2626;
+
+  color: white;
+
+  border: none;
+
+  border-radius: 14px;
+
+  padding: 12px 20px;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+}
+
+.new-vehicle-btn:hover {
+
+  background: #B91C1C;
+
+}
+.custom-select {
+
+  width: 100%;
+
+  padding: 12px;
+
+  border-radius: 12px;
+
+  border: 1px solid #D1D5DB;
+
+  background: white;
+
+  font-size: 14px;
+
+  outline: none;
+
+}
+.modal-backdrop {
+
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0,0,0,0.4);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  z-index: 999;
+
+}
+
+.modal-container {
+
+  width: 500px;
+
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 24px;
+
+  color: var(--app-black);
+
+}
+
+.close-btn {
+
+  margin-top: 20px;
+
+}
+.operators-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-top: 20px;
+
+}
+
+.operator-option {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  font-weight: 600;
 
 }

@@ -25,4 +25,6 @@ export interface Vehicle {
 
   createdAt: Date;
 
+  assignedOperators?: string[];
+
 }

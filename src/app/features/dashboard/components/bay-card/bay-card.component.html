@@ -6,8 +6,18 @@
   }"
   cdkDropList
   [id]="'bay-' + bay.id"
-  [cdkDropListData]="bay"
-  [cdkDropListConnectedTo]="['waitingList']"
+  [cdkDropListData]="
+  bay.currentVehicle
+    ? [bay.currentVehicle]
+    : []
+"
+  [cdkDropListConnectedTo]="[
+  'waiting-list',
+  'completed-list',
+  'bay-1',
+  'bay-2',
+  'bay-3'
+]"
   (cdkDropListDropped)="onDrop($event)">
 
   <div class="bay-header">
@@ -38,7 +48,7 @@
         </button>
 
       </div>
-      
+
     </ng-container>
 
     <ng-template #emptyBay>

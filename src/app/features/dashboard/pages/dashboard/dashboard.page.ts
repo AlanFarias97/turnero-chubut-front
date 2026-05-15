@@ -1,12 +1,26 @@
-import { Component,  OnInit,
-  OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
+
 import { IonicModule } from '@ionic/angular';
-import { BayCardComponent } from '../../components/bay-card/bay-card.component';
-import { WaitingListComponent } from '../../components/waiting-list/waiting-list.component';
-import { Vehicle } from '../../models/vehicle';
-import { Bay } from '../../models/bay';
+
 import { FormsModule } from '@angular/forms';
+
+import { BayCardComponent }
+from '../../components/bay-card/bay-card.component';
+
+import { WaitingListComponent }
+from '../../components/waiting-list/waiting-list.component';
+
+import { Vehicle }
+from '../../models/vehicle';
+
+import { WorkshopStateService }
+from 'src/app/core/services/workshop-state';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,30 +35,53 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ]
 })
-export class DashboardPage implements OnInit, OnDestroy {
+export class DashboardPage
+implements OnInit, OnDestroy {
 
   currentDate = new Date();
-  nextTicketNumber = 4;
-  showCreateVehicle = false;
+
   clockInterval: any;
-  ngOnInit() {
 
-    this.clockInterval = setInterval(() => {
+  nextTicketNumber = 4;
 
-      this.currentDate = new Date();
+  showCreateVehicle = false;
 
-      this.updateWaitingTimes();
+  showAssignOperatorModal = false;
 
-    }, 1000);
+  selectedVehicleForBay: Vehicle | null = null;
 
-  }
-  ngOnDestroy() {
+  selectedBayId: number | null = null;
 
-    clearInterval(
-      this.clockInterval
-    );
+  selectedOperators: string[] = [];
 
-  }
+  operators: string[] = [
+    'Juan',
+    'Martin',
+    'Lucas',
+    'Chino',
+    'Gabi',
+    'Beto'
+  ];
+
+  bays: any[] = [];
+
+  waitingVehicles: Vehicle[] = [
+    {
+      id: 1,
+      patent: 'AB123CD',
+      brand: 'Toyota',
+      model: 'Corolla',
+      status: 'WAITING',
+      color: 'Gris',
+      service: 'Cambio x2 delanteras',
+      waitingMinutes: 15,
+      ticketNumber: 2,
+      assignedOperators: [],
+      createdAt: new Date()
+    }
+  ];
+
+  completedVehicles: Vehicle[] = [];
 
   newVehicle = {
 
@@ -59,58 +96,43 @@ export class DashboardPage implements OnInit, OnDestroy {
     service: ''
 
   };
-  bays: Bay[] = [
 
-    {
-      id: 1,
-      name: 'BAHÍA 1',
-      currentVehicle: null
-    },
+  constructor(
+    private workshopStateService:
+    WorkshopStateService
+  ) {}
 
-    {
-      id: 2,
-      name: 'BAHÍA 2',
-      currentVehicle: {
-        id: 4,
-        patent: 'AA135MC',
-        status: 'IN_BAY',
-        brand: 'Toyota',
-        model: 'Camry',
-        color: 'Blanco',
-        service: 'Devuelvanme mis llantas :C',
-        waitingMinutes: 15,
-        ticketNumber: 1,
+  ngOnInit(): void {
 
-        createdAt: new Date()
-      }
-    },
+    this.clockInterval =
+      setInterval(() => {
 
-    {
-      id: 3,
-      name: 'BAHÍA 3',
-      currentVehicle: null
-    }
+        this.currentDate =
+          new Date();
 
-  ];
+        this.updateWaitingTimes();
 
-  waitingVehicles: Vehicle[] = [
+      }, 1000);
 
-    {
-      id: 1,
-      patent: 'AB123CD',
-      brand: 'Toyota',
-      model: 'Corolla',
-      status: 'WAITING',
-      color: 'Gris',
-      service: 'Cambio x2 delanteras',
-      waitingMinutes: 15,
-      ticketNumber: 2,
+    this.workshopStateService
+      .bays$
+      .subscribe(bays => {
 
-      createdAt: new Date()
-    }
-  ];
+        this.bays = [...bays];
 
-  updateWaitingTimes() {
+      });
+
+  }
+
+  ngOnDestroy(): void {
+
+    clearInterval(
+      this.clockInterval
+    );
+
+  }
+
+  updateWaitingTimes(): void {
 
     const allVehicles = [
 
@@ -119,8 +141,12 @@ export class DashboardPage implements OnInit, OnDestroy {
       ...this.completedVehicles,
 
       ...this.bays
-        .filter(b => b.currentVehicle)
-        .map(b => b.currentVehicle!)
+        .filter(
+          bay => bay.currentVehicle
+        )
+        .map(
+          bay => bay.currentVehicle
+        )
 
     ];
 
@@ -128,7 +154,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 
       const diffMs =
         new Date().getTime() -
-        new Date(vehicle.createdAt).getTime();
+        new Date(vehicle.createdAt)
+          .getTime();
 
       vehicle.waitingMinutes =
         Math.floor(diffMs / 60000);
@@ -137,9 +164,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
   }
 
-  completedVehicles: Vehicle[] = [];
-
-  onVehicleDropped(data: any) {
+  onVehicleDropped(data: any): void {
 
     const draggedVehicle: Vehicle =
       data.event.item.data;
@@ -152,31 +177,124 @@ export class DashboardPage implements OnInit, OnDestroy {
       return;
     }
 
+    const previousContainerId =
+      data.event.previousContainer.id;
+
+    /*
+     * SI VIENE DE OTRO BOX
+     */
+    if (
+      previousContainerId.startsWith('bay-')
+    ) {
+
+      const previousBayId =
+        Number(
+          previousContainerId.replace(
+            'bay-',
+            ''
+          )
+        );
+
+      const previousBay =
+        this.bays.find(
+          b => b.id === previousBayId
+        );
+
+      if (
+        previousBay &&
+        previousBay.currentVehicle
+      ) {
+
+        previousBay.currentVehicle =
+          null;
+
+      }
+
+    }
+
+    /*
+     * SI EL BOX YA ESTÁ OCUPADO
+     */
     if (bay.currentVehicle) {
       return;
     }
-    draggedVehicle.status = 'IN_BAY';
-    bay.currentVehicle = draggedVehicle;
 
+    this.selectedVehicleForBay =
+      draggedVehicle;
 
-    this.waitingVehicles =
-      this.waitingVehicles.filter(
-        vehicle => vehicle.id !== draggedVehicle.id
-      );
+    this.selectedBayId =
+      bay.id;
+
+    this.showAssignOperatorModal =
+      true;
 
   }
 
-  onVehicleReturned(event: any) {
+  confirmAssignOperator(): void {
 
-    const draggedVehicle: Vehicle =
-      event.item.data;
+    if (
+      !this.selectedVehicleForBay ||
+      !this.selectedBayId
+    ) {
+      return;
+    }
+
+    const bay = this.bays.find(
+      b => b.id === this.selectedBayId
+    );
+
+    if (!bay) {
+      return;
+    }
+
+    this.selectedVehicleForBay
+      .assignedOperators =
+      [...this.selectedOperators];
+
+    this.selectedVehicleForBay
+      .status = 'IN_BAY';
+
+    bay.currentVehicle =
+      {
+        ...this.selectedVehicleForBay
+      };
+
+    this.waitingVehicles =
+      this.waitingVehicles.filter(
+        vehicle =>
+          vehicle.id !==
+          this.selectedVehicleForBay?.id
+      );
+
+    this.bays = [...this.bays];
+
+    this.workshopStateService
+      .updateBays(this.bays);
+
+    this.showAssignOperatorModal =
+      false;
+
+    this.selectedVehicleForBay =
+      null;
+
+    this.selectedBayId =
+      null;
+
+    this.selectedOperators = [];
+
+  }
+
+  onVehicleReturned(
+    event: any
+  ): void {
 
     const previousContainerId =
       event.previousContainer.id;
 
     const bayId =
       Number(
-        previousContainerId.replace('bay-', '')
+        previousContainerId
+          .replace('bay-', '')
       );
 
     const bay = this.bays.find(
@@ -191,16 +309,36 @@ export class DashboardPage implements OnInit, OnDestroy {
       return;
     }
 
-    bay.currentVehicle.status = 'WAITING';
+    bay.currentVehicle
+      .assignedOperators = [];
+
+    bay.currentVehicle.status =
+      'WAITING';
 
     this.waitingVehicles.push(
-      bay.currentVehicle
+      {
+        ...bay.currentVehicle
+      }
     );
 
     bay.currentVehicle = null;
 
+    this.waitingVehicles.sort(
+      (a, b) =>
+        a.ticketNumber -
+        b.ticketNumber
+    );
+
+    this.bays = [...this.bays];
+
+    this.workshopStateService
+      .updateBays(this.bays);
+
   }
-  onVehicleCompleted(bayId: number) {
+
+  onVehicleCompleted(
+    bayId: number
+  ): void {
 
     const bay = this.bays.find(
       b => b.id === bayId
@@ -218,49 +356,68 @@ export class DashboardPage implements OnInit, OnDestroy {
       'COMPLETED';
 
     this.completedVehicles.unshift(
-      bay.currentVehicle
+      {
+        ...bay.currentVehicle
+      }
     );
 
     bay.currentVehicle = null;
 
+    this.bays = [...this.bays];
+
+    this.workshopStateService
+      .updateBays(this.bays);
+
   }
 
-  createVehicle() {
+  createVehicle(): void {
 
     const vehicle: Vehicle = {
 
       id: Date.now(),
 
-      ticketNumber: this.nextTicketNumber,
+      ticketNumber:
+        this.nextTicketNumber,
 
-      patent: this.newVehicle.patent,
+      patent:
+        this.newVehicle.patent,
 
-      brand: this.newVehicle.brand,
+      brand:
+        this.newVehicle.brand,
 
-      model: this.newVehicle.model,
+      model:
+        this.newVehicle.model,
 
-      color: this.newVehicle.color,
+      color:
+        this.newVehicle.color,
 
-      service: this.newVehicle.service,
+      service:
+        this.newVehicle.service,
 
       waitingMinutes: 0,
 
       createdAt: new Date(),
 
-      status: 'WAITING'
+      status: 'WAITING',
+
+      assignedOperators: []
 
     };
 
-    this.waitingVehicles.push(vehicle);
+    this.waitingVehicles.push(
+      vehicle
+    );
 
     this.waitingVehicles.sort(
       (a, b) =>
-        a.ticketNumber - b.ticketNumber
+        a.ticketNumber -
+        b.ticketNumber
     );
 
     this.nextTicketNumber++;
 
-    this.showCreateVehicle = false;
+    this.showCreateVehicle =
+      false;
 
     this.newVehicle = {
 
@@ -275,6 +432,55 @@ export class DashboardPage implements OnInit, OnDestroy {
       service: ''
 
     };
+
+  }
+
+  onOperatorToggle(
+    operator: string,
+    event: any
+  ): void {
+
+    if (event.target.checked) {
+
+      this.selectedOperators.push(
+        operator
+      );
+
+    } else {
+
+      this.selectedOperators =
+        this.selectedOperators.filter(
+          op => op !== operator
+        );
+
+    }
+
+  }
+  onCompletedVehicleReturned(
+    event: any
+  ): void {
+
+    const vehicle: Vehicle =
+      event.item.data;
+
+    this.completedVehicles =
+      this.completedVehicles.filter(
+        v => v.id !== vehicle.id
+      );
+
+    vehicle.status = 'WAITING';
+
+    this.waitingVehicles.push(
+      {
+        ...vehicle
+      }
+    );
+
+    this.waitingVehicles.sort(
+      (a, b) =>
+        a.ticketNumber -
+        b.ticketNumber
+    );
 
   }
 }

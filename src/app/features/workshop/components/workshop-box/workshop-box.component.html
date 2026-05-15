@@ -1,0 +1,69 @@
+<div
+  class="workshop-box"
+  [ngClass]="{
+    'occupied': box.currentVehicle,
+    'empty': !box.currentVehicle
+  }">
+
+  <div class="box-title">
+
+    {{ box.name }}
+
+  </div>
+
+  <div class="vehicle-content">
+
+    <ng-container *ngIf="box.currentVehicle; else emptyBox">
+
+      <div class="ticket">
+
+        #{{ box.currentVehicle.ticketNumber }}
+
+      </div>
+
+      <div class="plate">
+
+        {{ box.currentVehicle.patent }}
+
+      </div>
+
+      <div class="vehicle">
+
+        {{ box.currentVehicle.brand }}
+        {{ box.currentVehicle.model }}
+
+      </div>
+
+      <div class="service">
+
+        {{ box.currentVehicle.service }}
+
+      </div>
+
+      <div class="operator">
+
+        👨‍🔧 {{ box.currentVehicle.assignedOperators?.join(', ') }}
+
+      </div>
+
+      <div class="waiting-time">
+
+        {{ box.currentVehicle.waitingMinutes }} min
+
+      </div>
+
+    </ng-container>
+
+    <ng-template #emptyBox>
+
+      <div class="empty-text">
+
+        LIBRE
+
+      </div>
+
+    </ng-template>
+
+  </div>
+
+</div>

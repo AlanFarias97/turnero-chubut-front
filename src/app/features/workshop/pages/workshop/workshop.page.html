@@ -1,0 +1,28 @@
+<ion-content fullscreen>
+
+  <div class="workshop-layout">
+
+    <header class="workshop-header">
+
+      <h1>
+        PANTALLA OPERATIVA
+      </h1>
+
+      <p>
+        Estado de boxes del taller
+      </p>
+
+    </header>
+
+    <div class="boxes-grid">
+
+      <app-workshop-box
+        *ngFor="let box of boxes"
+        [box]="box">
+      </app-workshop-box>
+
+    </div>
+
+  </div>
+
+</ion-content>

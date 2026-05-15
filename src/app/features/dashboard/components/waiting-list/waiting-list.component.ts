@@ -24,6 +24,7 @@ export class WaitingListComponent {
   @Output() vehicleReturned =
   new EventEmitter<any>();
   @Input() title = '';
+  @Input() listId = 'waiting-list';
   onDrop(event: any) {
 
     this.vehicleReturned.emit(event);
