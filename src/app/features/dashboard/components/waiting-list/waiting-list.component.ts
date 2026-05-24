@@ -23,6 +23,11 @@ export class WaitingListComponent {
   @Input() vehicles: Vehicle[] = [];
   @Output() vehicleReturned =
   new EventEmitter<any>();
+  @Output() vehicleMoveRequested =
+  new EventEmitter<{
+    vehicle: Vehicle;
+    sourceContainerId: string;
+  }>();
   @Input() title = '';
   @Input() listId = 'waiting-list';
 
@@ -72,6 +77,18 @@ export class WaitingListComponent {
     this.vehicleReturned.emit({
       listId: this.listId,
       event
+    });
+
+  }
+
+  requestMove(
+    vehicle: Vehicle
+  ): void {
+
+    this.vehicleMoveRequested.emit({
+      vehicle,
+      sourceContainerId:
+        this.listId
     });
 
   }

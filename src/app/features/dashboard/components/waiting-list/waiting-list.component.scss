@@ -59,6 +59,10 @@ app-vehicle-card {
   text-align: center;
 }
 
+.touch-instruction {
+  display: none;
+}
+
 @media (max-width: 680px) {
   :host {
     height: auto;
@@ -82,5 +86,15 @@ app-vehicle-card {
     padding: 12px;
     overflow: visible;
     touch-action: pan-y;
+  }
+}
+
+@media (pointer: coarse) {
+  .desktop-instruction {
+    display: none;
+  }
+
+  .touch-instruction {
+    display: inline;
   }
 }

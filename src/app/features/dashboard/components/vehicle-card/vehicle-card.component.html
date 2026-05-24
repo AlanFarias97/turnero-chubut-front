@@ -8,7 +8,7 @@
     'not-completed': vehicle.status === 'not_completed'
   }"
   cdkDrag
-  [cdkDragDisabled]="!draggable"
+  [cdkDragDisabled]="!canDrag"
   [cdkDragData]="vehicle">
 
   <div class="vehicle-top">
@@ -20,7 +20,7 @@
     </div>
 
     <button
-      *ngIf="draggable"
+      *ngIf="canDrag"
       type="button"
       class="drag-handle"
       cdkDragHandle
@@ -33,6 +33,18 @@
       <span></span>
       <span></span>
       <span></span>
+
+    </button>
+
+    <button
+      *ngIf="canRequestMove"
+      type="button"
+      class="move-button"
+      aria-label="Mover vehiculo"
+      title="Mover vehiculo"
+      (click)="requestMove($event)">
+
+      Mover
 
     </button>
 

@@ -231,6 +231,7 @@
             (vehicleDropped)="onVehicleDropped($event)"
             (vehicleCompleted)="onVehicleCompleted($event)"
             (vehicleEditRequested)="openEditVehicleModal($event)"
+            (vehicleMoveRequested)="openMoveVehicleModal($event)"
           >
           </app-bay-card>
         </div>
@@ -243,6 +244,7 @@
             listId="waiting-list"
             [vehicles]="waitingVehicles"
             (vehicleReturned)="onVehicleReturned($event)"
+            (vehicleMoveRequested)="openMoveVehicleModal($event)"
           >
           </app-waiting-list>
 
@@ -251,12 +253,67 @@
           title="Trabajos cerrados"
           listId="completed-list"
           [vehicles]="completedVehicles"
-          (vehicleReturned)="onCompletedVehicleReturned($event)">
+          (vehicleReturned)="onCompletedVehicleReturned($event)"
+          (vehicleMoveRequested)="openMoveVehicleModal($event)">
         </app-waiting-list>
         </div>
       </div>
     </main>
   </div>
+
+  <div
+    class="modal-backdrop"
+    *ngIf="showMoveVehicleModal">
+
+    <div class="modal-container move-modal">
+
+      <h2>Mover vehiculo</h2>
+
+      <p>
+        Selecciona el destino de
+        <strong>{{ selectedVehicleToMove?.patent }}</strong>
+      </p>
+
+      <div class="move-destinations">
+
+        <button
+          type="button"
+          class="move-destination"
+          *ngIf="canMoveToQueue"
+          (click)="moveSelectedVehicleToQueue()">
+
+          Fila de espera
+
+        </button>
+
+        <button
+          type="button"
+          class="move-destination"
+          *ngFor="let bay of availableMoveBays"
+          (click)="selectMoveDestinationBay(bay.id)">
+
+          {{ bay.name }}
+
+        </button>
+
+      </div>
+
+      <div class="modal-actions">
+
+        <button
+          class="new-vehicle-btn secondary-button"
+          (click)="closeMoveVehicleModal()">
+
+          Cancelar
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
   <div
   class="modal-backdrop"
   *ngIf="showAssignOperatorModal">

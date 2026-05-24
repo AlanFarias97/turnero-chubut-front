@@ -7,24 +7,22 @@
   cdkDropList
   [id]="'bay-' + bay.id"
   [cdkDropListData]="
-  bay.currentVehicle
-    ? [bay.currentVehicle]
-    : []
-"
+    bay.currentVehicle
+      ? [bay.currentVehicle]
+      : []
+  "
   [cdkDropListConnectedTo]="[
-  'waiting-list',
-  'completed-list',
-  'bay-1',
-  'bay-2',
-  'bay-3'
-]"
+    'waiting-list',
+    'completed-list',
+    'bay-1',
+    'bay-2',
+    'bay-3'
+  ]"
   [cdkDropListEnterPredicate]="canEnter"
   (cdkDropListDropped)="onDrop($event)">
 
   <div class="bay-header">
-
     {{ bay.name }}
-
   </div>
 
   <div
@@ -36,7 +34,8 @@
       <div class="occupied-content">
 
         <app-vehicle-card
-          [vehicle]="bay.currentVehicle">
+          [vehicle]="bay.currentVehicle"
+          (moveRequested)="requestMove($event)">
         </app-vehicle-card>
 
         <div class="bay-actions">
@@ -48,8 +47,7 @@
             title="Editar vehiculo"
             (click)="editVehicle()">
 
-            <span class="edit-icon">
-            </span>
+            <span class="edit-icon"></span>
 
           </button>
 
@@ -60,8 +58,7 @@
             title="Completar trabajo"
             (click)="completeVehicle()">
 
-            <span class="finish-icon">
-            </span>
+            <span class="finish-icon"></span>
 
           </button>
 
@@ -80,7 +77,12 @@
         </div>
 
         <div class="empty-subtitle">
-          Arrastrar vehículo aquí
+          <span class="desktop-instruction">
+            Arrastrar vehiculo aqui
+          </span>
+          <span class="touch-instruction">
+            Destino disponible
+          </span>
         </div>
 
       </div>

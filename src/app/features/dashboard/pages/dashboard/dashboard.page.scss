@@ -310,6 +310,34 @@
   width: min(560px, 100%);
 }
 
+.move-modal {
+  width: min(460px, 100%);
+}
+
+.move-destinations {
+  display: grid;
+  gap: 10px;
+}
+
+.move-destination {
+  min-height: 52px;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 800;
+  text-align: left;
+  touch-action: manipulation;
+}
+
+.move-destination:active,
+.move-destination:hover {
+  border-color: var(--app-red);
+  background: #fef2f2;
+}
+
 .completion-options {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

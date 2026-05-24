@@ -26,6 +26,11 @@ export class BayCardComponent {
   new EventEmitter<number>();
   @Output() vehicleEditRequested =
   new EventEmitter<number>();
+  @Output() vehicleMoveRequested =
+  new EventEmitter<{
+    vehicle: Vehicle;
+    sourceContainerId: string;
+  }>();
 
   canEnter = (
     drag: { data?: Vehicle }
@@ -53,6 +58,18 @@ export class BayCardComponent {
     this.vehicleEditRequested.emit(
       this.bay.id
     );
+
+  }
+
+  requestMove(
+    vehicle: Vehicle
+  ): void {
+
+    this.vehicleMoveRequested.emit({
+      vehicle,
+      sourceContainerId:
+        `bay-${this.bay.id}`
+    });
 
   }
 }

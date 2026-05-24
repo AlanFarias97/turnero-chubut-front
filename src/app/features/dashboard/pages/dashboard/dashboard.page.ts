@@ -77,6 +77,12 @@ implements OnInit, OnDestroy {
 
   showCompletionModal = false;
 
+  showMoveVehicleModal = false;
+
+  selectedVehicleToMove: Vehicle | null = null;
+
+  moveSourceContainerId: string | null = null;
+
   completionBayId: number | null = null;
 
   completionStatus:
@@ -410,7 +416,10 @@ implements OnInit, OnDestroy {
 
     const query =
       this.normalizeServiceTerm(
-        token.value.slice(1)
+        token.value.replace(
+          /^\/+/,
+          ''
+        )
       );
 
     this.filteredServices =
@@ -751,6 +760,135 @@ implements OnInit, OnDestroy {
 
     this.showAssignOperatorModal =
       true;
+
+  }
+
+  openMoveVehicleModal(
+    data: {
+      vehicle: Vehicle;
+      sourceContainerId: string;
+    }
+  ): void {
+
+    if (data.vehicle.status === 'completed') {
+      return;
+    }
+
+    this.selectedVehicleToMove = {
+      ...data.vehicle,
+      assignedOperators: [
+        ...(data.vehicle.assignedOperators || [])
+      ]
+    };
+
+    this.moveSourceContainerId =
+      data.sourceContainerId;
+
+    this.showMoveVehicleModal =
+      true;
+
+  }
+
+  get availableMoveBays(): any[] {
+
+    return this.bays.filter(
+      bay =>
+        !bay.currentVehicle &&
+        `bay-${bay.id}` !==
+          this.moveSourceContainerId
+    );
+
+  }
+
+  get canMoveToQueue(): boolean {
+
+    return (
+      this.moveSourceContainerId !==
+      'waiting-list'
+    );
+
+  }
+
+  selectMoveDestinationBay(
+    bayId: number
+  ): void {
+
+    if (!this.selectedVehicleToMove) {
+      return;
+    }
+
+    this.selectedVehicleForBay = {
+      ...this.selectedVehicleToMove,
+      assignedOperators: [
+        ...(
+          this.selectedVehicleToMove
+            .assignedOperators || []
+        )
+      ]
+    };
+
+    this.selectedBayId =
+      bayId;
+
+    this.selectedSourceContainerId =
+      this.moveSourceContainerId;
+
+    this.selectedOperators = [
+      ...(
+        this.selectedVehicleToMove
+          .assignedOperators || []
+      )
+    ];
+
+    this.closeMoveVehicleModal();
+
+    this.showAssignOperatorModal =
+      true;
+
+  }
+
+  moveSelectedVehicleToQueue(): void {
+
+    if (!this.selectedVehicleToMove) {
+      return;
+    }
+
+    this.removeVehicleFromSource(
+      this.selectedVehicleToMove.id,
+      this.moveSourceContainerId
+    );
+
+    this.waitingVehicles.push({
+      ...this.selectedVehicleToMove,
+      status: 'in_queue',
+      assignedOperators: []
+    });
+
+    this.waitingVehicles.sort(
+      (a, b) =>
+        a.ticketNumber -
+        b.ticketNumber
+    );
+
+    this.bays = [...this.bays];
+
+    this.workshopStateService
+      .updateBays(this.bays);
+
+    this.closeMoveVehicleModal();
+
+  }
+
+  closeMoveVehicleModal(): void {
+
+    this.showMoveVehicleModal =
+      false;
+
+    this.selectedVehicleToMove =
+      null;
+
+    this.moveSourceContainerId =
+      null;
 
   }
 

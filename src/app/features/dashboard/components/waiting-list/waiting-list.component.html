@@ -1,33 +1,38 @@
 <div class="waiting-container">
 
   <div class="waiting-header">
-
     {{ title }}
-
   </div>
 
   <div
-  class="waiting-list"
-  cdkDropList
-  [id]="listId"
-  [cdkDropListData]="vehicles"
-  [cdkDropListConnectedTo]="connectedDropLists"
-  [cdkDropListEnterPredicate]="canEnter"
-  (cdkDropListDropped)="onDrop($event)">
+    class="waiting-list"
+    cdkDropList
+    [id]="listId"
+    [cdkDropListData]="vehicles"
+    [cdkDropListConnectedTo]="connectedDropLists"
+    [cdkDropListEnterPredicate]="canEnter"
+    (cdkDropListDropped)="onDrop($event)">
 
     <app-vehicle-card
       *ngFor="let vehicle of vehicles"
       [vehicle]="vehicle"
-      [draggable]="vehicle.status !== 'completed'">
+      [draggable]="vehicle.status !== 'completed'"
+      (moveRequested)="requestMove($event)">
     </app-vehicle-card>
 
     <div
-    class="empty-list"
-    *ngIf="vehicles.length === 0">
+      class="empty-list"
+      *ngIf="vehicles.length === 0">
 
-    Arrastrar vehículos aquí
+      <span class="desktop-instruction">
+        Arrastrar vehiculos aqui
+      </span>
+      <span class="touch-instruction">
+        Sin vehiculos
+      </span>
 
-  </div>
+    </div>
+
   </div>
 
 </div>

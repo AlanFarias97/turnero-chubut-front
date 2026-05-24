@@ -76,6 +76,10 @@
   font-weight: 700;
 }
 
+.touch-instruction {
+  display: none;
+}
+
 app-vehicle-card {
   width: min(100%, 280px);
 }
@@ -247,5 +251,15 @@ app-vehicle-card {
   .finish-button {
     width: 42px;
     height: 42px;
+  }
+}
+
+@media (pointer: coarse) {
+  .desktop-instruction {
+    display: none;
+  }
+
+  .touch-instruction {
+    display: inline;
   }
 }
