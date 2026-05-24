@@ -30,9 +30,9 @@
     "@ionic/angular": "^8.0.0",
     "@tailwindcss/postcss": "^4.3.0",
     "ionicons": "^7.0.0",
-    "ngx-quill": "^20.0.1",
-    "quill": "^1.3.7",
-    "quill-mention": "^3.3.0",
+    "ngx-quill": "^28.0.2",
+    "quill": "^2.0.3",
+    "quill-mention": "^6.1.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
