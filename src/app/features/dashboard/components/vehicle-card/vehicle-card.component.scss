@@ -224,6 +224,7 @@
   .vehicle-card {
     min-height: 132px;
     padding: 14px;
+    touch-action: pan-y;
   }
 
   .plate {

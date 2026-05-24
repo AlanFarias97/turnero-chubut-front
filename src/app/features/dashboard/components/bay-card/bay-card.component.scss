@@ -219,6 +219,7 @@ app-vehicle-card {
   .bay-card {
     min-height: 230px;
     padding: 14px;
+    touch-action: pan-y;
   }
 
   .bay-card.empty-bay-card {

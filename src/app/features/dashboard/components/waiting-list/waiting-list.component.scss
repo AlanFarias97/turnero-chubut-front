@@ -81,5 +81,6 @@ app-vehicle-card {
     max-height: none;
     padding: 12px;
     overflow: visible;
+    touch-action: pan-y;
   }
 }

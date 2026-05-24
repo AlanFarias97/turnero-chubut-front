@@ -453,6 +453,8 @@
   padding: 8px;
   overflow-x: hidden;
   overflow-y: auto;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
   background: #ffffff;
   border: 1px solid #d1d5db;
   border-radius: 8px;
@@ -569,7 +571,7 @@
     gap: 8px;
     overflow-x: auto;
     padding-bottom: 2px;
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
   }
 
   .menu-item {
@@ -618,11 +620,13 @@
     gap: 18px;
     padding: 16px;
     overflow: visible;
+    touch-action: pan-y;
   }
 
   .bays-grid,
   .lists-grid {
     gap: 16px;
+    touch-action: pan-y;
   }
 
   .create-vehicle-modal,

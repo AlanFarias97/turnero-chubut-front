@@ -136,6 +136,13 @@
                 $event.preventDefault()
               "
 
+              (pointerup)="
+                selectServiceFromPointer(
+                  service,
+                  $event
+                )
+              "
+
               (click)="
                 selectService(service)
               ">

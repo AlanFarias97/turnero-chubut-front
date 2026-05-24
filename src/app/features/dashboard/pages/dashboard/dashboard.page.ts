@@ -370,6 +370,19 @@ implements OnInit, OnDestroy {
 
   }
 
+  selectServiceFromPointer(
+    service: ServiceCatalogItem,
+    event: PointerEvent
+  ): void {
+
+    event.preventDefault();
+
+    event.stopPropagation();
+
+    this.selectService(service);
+
+  }
+
   onServiceInputChange(): void {
 
     const quill: any =
