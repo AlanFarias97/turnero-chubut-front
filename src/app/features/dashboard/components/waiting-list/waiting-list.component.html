@@ -17,7 +17,8 @@
 
     <app-vehicle-card
       *ngFor="let vehicle of vehicles"
-      [vehicle]="vehicle">
+      [vehicle]="vehicle"
+      [draggable]="vehicle.status !== 'completed'">
     </app-vehicle-card>
 
     <div

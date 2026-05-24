@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Bay } from '../../models/bay';
 import { VehicleCardComponent } from '../vehicle-card/vehicle-card.component';
+import { Vehicle } from '../../models/vehicle';
 
 @Component({
   selector: 'app-bay-card',
@@ -25,6 +26,11 @@ export class BayCardComponent {
   new EventEmitter<number>();
   @Output() vehicleEditRequested =
   new EventEmitter<number>();
+
+  canEnter = (
+    drag: { data?: Vehicle }
+  ): boolean =>
+    drag.data?.status !== 'completed';
 
   onDrop(event: any) {
 

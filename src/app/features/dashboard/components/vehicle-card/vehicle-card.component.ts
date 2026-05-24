@@ -19,4 +19,23 @@ export class VehicleCardComponent {
 
   @Input() vehicle!: Vehicle;
 
+  @Input() draggable = true;
+
+  get statusLabel(): string {
+
+    switch (this.vehicle.status) {
+      case 'in_queue':
+        return 'En espera';
+      case 'in_progress':
+        return 'En proceso';
+      case 'partial_completed':
+        return 'Parcial';
+      case 'not_completed':
+        return 'No realizado';
+      default:
+        return 'Completo';
+    }
+
+  }
+
 }

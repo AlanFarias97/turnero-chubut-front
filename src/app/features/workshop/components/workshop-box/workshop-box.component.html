@@ -39,6 +39,19 @@
 
       </div>
 
+      <div
+        class="pending-work"
+        *ngIf="box.currentVehicle.pendingWorkDetail">
+
+        {{
+          box.currentVehicle.status === 'not_completed'
+            ? 'Motivo'
+            : 'Pendiente'
+        }}:
+        {{ box.currentVehicle.pendingWorkDetail }}
+
+      </div>
+
       <div class="operator">
 
         Operarios: {{ box.currentVehicle.assignedOperators?.join(', ') }}

@@ -221,6 +221,10 @@ app-vehicle-card {
     padding: 14px;
   }
 
+  .bay-card.empty-bay-card {
+    min-height: 190px;
+  }
+
   .bay-content {
     flex-direction: column;
     gap: 12px;

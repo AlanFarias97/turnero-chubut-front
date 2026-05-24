@@ -28,9 +28,21 @@ export class WaitingListComponent {
 
   canEnter = (
     drag: any
-  ): boolean =>
-    this.listId !== 'completed-list' ||
-    drag.dropContainer.id === 'completed-list';
+  ): boolean => {
+
+    const vehicle: Vehicle =
+      drag.data;
+
+    if (vehicle?.status === 'completed') {
+      return false;
+    }
+
+    return (
+      this.listId !== 'completed-list' ||
+      drag.dropContainer.id === 'completed-list'
+    );
+
+  };
 
   get connectedDropLists(): string[] {
 

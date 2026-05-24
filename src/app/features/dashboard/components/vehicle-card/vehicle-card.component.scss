@@ -24,16 +24,12 @@
   border-radius: 8px;
   box-shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
   color: var(--card-text);
-  cursor: grab;
+  cursor: default;
   transition:
     transform 160ms ease,
     box-shadow 160ms ease,
     border-color 160ms ease;
   overflow: hidden;
-}
-
-.vehicle-card:active {
-  cursor: grabbing;
 }
 
 .vehicle-card:hover {
@@ -59,12 +55,24 @@
   opacity: 0.9;
 }
 
+.vehicle-card.partial {
+  --card-accent: #f59e0b;
+  --card-bg: #fffbeb;
+  --card-border: #fde68a;
+}
+
+.vehicle-card.not-completed {
+  --card-accent: #f97316;
+  --card-bg: #fff7ed;
+  --card-border: #fdba74;
+}
+
 .vehicle-top {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr) auto;
   grid-template-areas:
-    "ticket time"
-    "plate plate";
+    "ticket handle time"
+    "plate plate plate";
   align-items: center;
   column-gap: 10px;
   row-gap: 6px;
@@ -77,6 +85,41 @@
   font-weight: 800;
   color: var(--card-muted);
   white-space: nowrap;
+}
+
+.drag-handle {
+  grid-area: handle;
+  justify-self: end;
+  width: 28px;
+  height: 30px;
+  display: grid;
+  grid-template-columns: repeat(2, 4px);
+  grid-template-rows: repeat(3, 4px);
+  place-content: center;
+  gap: 3px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0;
+  background: transparent;
+  color: #9ca3af;
+  cursor: grab;
+  touch-action: none;
+}
+
+.drag-handle:hover {
+  background: rgba(17, 24, 39, 0.06);
+  color: #4b5563;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.drag-handle span {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: currentColor;
 }
 
 .plate {
@@ -103,6 +146,36 @@
   white-space: nowrap;
 }
 
+.status-chip {
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.status-chip.in_progress {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.status-chip.partial_completed {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status-chip.not_completed {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.status-chip.completed {
+  background: #e5e7eb;
+  color: #4b5563;
+}
+
 .vehicle-info,
 .operators {
   color: #4b5563;
@@ -111,6 +184,17 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.pending-work {
+  padding: 8px;
+  border-radius: 6px;
+  background: #fff7ed;
+  color: #9a3412;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .service {

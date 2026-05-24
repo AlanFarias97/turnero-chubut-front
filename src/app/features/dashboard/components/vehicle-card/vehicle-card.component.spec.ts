@@ -18,7 +18,7 @@ describe('VehicleCardComponent', () => {
       patent: 'AB123CD',
       service: 'Cambio x2 delanteras',
       waitingMinutes: 10,
-      status: 'WAITING',
+      status: 'in_queue',
       ticketNumber: 1,
       createdAt: new Date(),
       description: 'Gris',

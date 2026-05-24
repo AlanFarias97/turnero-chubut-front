@@ -1,7 +1,9 @@
 export type VehicleStatus =
-  | 'WAITING'
-  | 'IN_BAY'
-  | 'COMPLETED';
+  | 'in_queue'
+  | 'in_progress'
+  | 'completed'
+  | 'partial_completed'
+  | 'not_completed';
 
 export interface Vehicle {
 
@@ -22,5 +24,7 @@ export interface Vehicle {
   description: string;
 
   assignedOperators?: string[];
+
+  pendingWorkDetail?: string;
 
 }

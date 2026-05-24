@@ -60,9 +60,15 @@ app-vehicle-card {
 }
 
 @media (max-width: 680px) {
+  :host {
+    height: auto;
+  }
+
   .waiting-container {
     min-height: 280px;
+    height: auto;
     padding: 14px;
+    overflow: visible;
   }
 
   .waiting-header {
@@ -72,6 +78,8 @@ app-vehicle-card {
   .waiting-list {
     grid-template-columns: minmax(0, 1fr);
     min-height: 190px;
+    max-height: none;
     padding: 12px;
+    overflow: visible;
   }
 }

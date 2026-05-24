@@ -179,11 +179,29 @@ export class WorkshopStateService {
         currentVehicle:
           bay.currentVehicle
             ? {
-                ...bay.currentVehicle
+                ...bay.currentVehicle,
+                status:
+                  this.normalizeStatus(
+                    bay.currentVehicle.status
+                  )
               }
             : null
       })
     );
+
+  }
+
+  private normalizeStatus(
+    status: string
+  ): string {
+
+    const statusMap: Record<string, string> = {
+      WAITING: 'in_queue',
+      IN_BAY: 'in_progress',
+      COMPLETED: 'completed'
+    };
+
+    return statusMap[status] || status;
 
   }
 

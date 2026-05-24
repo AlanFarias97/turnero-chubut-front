@@ -1,11 +1,14 @@
 <div
   class="vehicle-card"
   [ngClass]="{
-    'waiting': vehicle.status === 'WAITING',
-    'in-bay': vehicle.status === 'IN_BAY',
-    'completed': vehicle.status === 'COMPLETED'
+    'waiting': vehicle.status === 'in_queue',
+    'in-bay': vehicle.status === 'in_progress',
+    'completed': vehicle.status === 'completed',
+    'partial': vehicle.status === 'partial_completed',
+    'not-completed': vehicle.status === 'not_completed'
   }"
   cdkDrag
+  [cdkDragDisabled]="!draggable"
   [cdkDragData]="vehicle">
 
   <div class="vehicle-top">
@@ -15,6 +18,23 @@
       #{{ vehicle.ticketNumber }}
 
     </div>
+
+    <button
+      *ngIf="draggable"
+      type="button"
+      class="drag-handle"
+      cdkDragHandle
+      aria-label="Mover vehiculo"
+      title="Mover vehiculo">
+
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+
+    </button>
 
     <div class="plate">
 
@@ -27,6 +47,14 @@
       {{ vehicle.waitingMinutes }} min
 
     </div>
+
+  </div>
+
+  <div
+    class="status-chip"
+    [ngClass]="vehicle.status">
+
+    {{ statusLabel }}
 
   </div>
 
@@ -45,6 +73,15 @@
   <div class="operators">
 
     {{ vehicle.assignedOperators?.join(', ') }}
+
+  </div>
+
+  <div
+    class="pending-work"
+    *ngIf="vehicle.pendingWorkDetail">
+
+    {{ vehicle.status === 'not_completed' ? 'Motivo' : 'Pendiente' }}:
+    {{ vehicle.pendingWorkDetail }}
 
   </div>
 

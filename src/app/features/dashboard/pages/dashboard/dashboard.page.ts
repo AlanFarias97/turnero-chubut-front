@@ -75,6 +75,20 @@ implements OnInit, OnDestroy {
 
   showAssignOperatorModal = false;
 
+  showCompletionModal = false;
+
+  completionBayId: number | null = null;
+
+  completionStatus:
+    | 'completed'
+    | 'partial_completed'
+    | 'not_completed' =
+    'completed';
+
+  pendingWorkDetail = '';
+
+  completionError = '';
+
   selectedVehicleForBay: Vehicle | null = null;
 
   selectedBayId: number | null = null;
@@ -159,7 +173,7 @@ implements OnInit, OnDestroy {
     {
       id: 1,
       patent: 'AB123CD',
-      status: 'WAITING',
+      status: 'in_queue',
       description: 'Gris',
       service: 'Cambio x2 delanteras',
       waitingMinutes: 15,
@@ -675,6 +689,10 @@ implements OnInit, OnDestroy {
     const draggedVehicle: Vehicle =
       data.event.item.data;
 
+    if (draggedVehicle.status === 'completed') {
+      return;
+    }
+
     const bay = this.bays.find(
       b => b.id === data.bayId
     );
@@ -750,7 +768,7 @@ implements OnInit, OnDestroy {
       [...this.selectedOperators];
 
     this.selectedVehicleForBay
-      .status = 'IN_BAY';
+      .status = 'in_progress';
 
     bay.currentVehicle =
       {
@@ -813,6 +831,10 @@ implements OnInit, OnDestroy {
     const vehicle: Vehicle =
       dropEvent.item.data;
 
+    if (vehicle.status === 'completed') {
+      return;
+    }
+
     const previousContainerId =
       dropEvent.previousContainer.id;
 
@@ -840,7 +862,7 @@ implements OnInit, OnDestroy {
 
       ...vehicle,
 
-      status: 'WAITING',
+      status: 'in_queue',
 
       assignedOperators: []
 
@@ -942,13 +964,86 @@ implements OnInit, OnDestroy {
       return;
     }
 
-    bay.currentVehicle.status =
-      'COMPLETED';
+    this.completionBayId =
+      bayId;
+
+    this.completionStatus =
+      'completed';
+
+    this.pendingWorkDetail = '';
+
+    this.completionError = '';
+
+    this.showCompletionModal =
+      true;
+
+  }
+
+  setCompletionStatus(
+    status:
+      | 'completed'
+      | 'partial_completed'
+      | 'not_completed'
+  ): void {
+
+    this.completionStatus =
+      status;
+
+    this.completionError = '';
+
+    if (status === 'completed') {
+      this.pendingWorkDetail = '';
+    }
+
+  }
+
+  confirmVehicleCompletion(): void {
+
+    if (this.completionBayId === null) {
+      return;
+    }
+
+    const bay = this.bays.find(
+      b => b.id === this.completionBayId
+    );
+
+    if (!bay?.currentVehicle) {
+      this.closeCompletionModal();
+      return;
+    }
+
+    if (
+      this.completionStatus !==
+        'completed' &&
+      !this.pendingWorkDetail.trim()
+    ) {
+
+      this.completionError =
+        this.completionStatus ===
+          'not_completed'
+          ? 'Detalla por que no pudo realizarse ningun servicio.'
+          : 'Detalla el trabajo pendiente o por que no pudo realizarse.';
+
+      return;
+
+    }
+
+    const completedVehicle: Vehicle = {
+
+      ...bay.currentVehicle,
+
+      status: this.completionStatus,
+
+      pendingWorkDetail:
+        this.completionStatus !==
+          'completed'
+          ? this.pendingWorkDetail.trim()
+          : undefined
+
+    };
 
     this.completedVehicles.unshift(
-      {
-        ...bay.currentVehicle
-      }
+      completedVehicle
     );
 
     bay.currentVehicle = null;
@@ -957,6 +1052,23 @@ implements OnInit, OnDestroy {
 
     this.workshopStateService
       .updateBays(this.bays);
+
+    this.closeCompletionModal();
+
+  }
+
+  closeCompletionModal(): void {
+
+    this.showCompletionModal = false;
+
+    this.completionBayId = null;
+
+    this.completionStatus =
+      'completed';
+
+    this.pendingWorkDetail = '';
+
+    this.completionError = '';
 
   }
 
@@ -991,7 +1103,7 @@ implements OnInit, OnDestroy {
 
       createdAt: new Date(),
 
-      status: 'WAITING',
+      status: 'in_queue',
 
       assignedOperators: []
 

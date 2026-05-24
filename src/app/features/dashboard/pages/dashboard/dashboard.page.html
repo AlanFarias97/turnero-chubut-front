@@ -241,7 +241,7 @@
 
           <!-- FINALIZADOS -->
           <app-waiting-list
-          title="Finalizados"
+          title="Trabajos cerrados"
           listId="completed-list"
           [vehicles]="completedVehicles"
           (vehicleReturned)="onCompletedVehicleReturned($event)">
@@ -306,4 +306,108 @@
   </div>
 
 </div>
+
+  <div
+    class="modal-backdrop"
+    *ngIf="showCompletionModal">
+
+    <div class="modal-container completion-modal">
+
+      <h2>Finalizar trabajo</h2>
+
+      <p>
+        Indica si el vehiculo queda finalizado o necesita volver al taller.
+      </p>
+
+      <div class="completion-options">
+
+        <button
+          type="button"
+          class="completion-option"
+          [class.selected]="completionStatus === 'completed'"
+          (click)="setCompletionStatus('completed')">
+
+          <strong>Completo</strong>
+
+          <span>Todos los servicios realizados</span>
+
+        </button>
+
+        <button
+          type="button"
+          class="completion-option"
+          [class.selected]="completionStatus === 'partial_completed'"
+          (click)="setCompletionStatus('partial_completed')">
+
+          <strong>Parcial</strong>
+
+          <span>Queda trabajo pendiente</span>
+
+        </button>
+
+        <button
+          type="button"
+          class="completion-option"
+          [class.selected]="completionStatus === 'not_completed'"
+          (click)="setCompletionStatus('not_completed')">
+
+          <strong>No realizado</strong>
+
+          <span>No se pudo ejecutar ningun servicio</span>
+
+        </button>
+
+      </div>
+
+      <label
+        class="pending-detail"
+        *ngIf="completionStatus !== 'completed'">
+
+        <span>
+          {{
+            completionStatus === 'not_completed'
+              ? 'Motivo por el que no se realizo'
+              : 'Trabajo pendiente o motivo'
+          }}
+        </span>
+
+        <textarea
+          rows="4"
+          [placeholder]="
+            completionStatus === 'not_completed'
+              ? 'Ej: no se pudo alinear por rotula con juego; requiere reparacion previa.'
+              : 'Ej: se realizo balanceo; falta alineacion por rotula con juego.'
+          "
+          [(ngModel)]="pendingWorkDetail">
+        </textarea>
+
+        <small *ngIf="completionError">
+          {{ completionError }}
+        </small>
+
+      </label>
+
+      <div class="modal-actions">
+
+        <button
+          class="new-vehicle-btn secondary-button"
+          (click)="closeCompletionModal()">
+
+          Cancelar
+
+        </button>
+
+        <button
+          class="save-button"
+          (click)="confirmVehicleCompletion()">
+
+          Confirmar finalizacion
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
 </ion-content>
