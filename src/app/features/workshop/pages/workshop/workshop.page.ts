@@ -7,7 +7,7 @@ import {
 
 import { CommonModule } from '@angular/common';
 
-import { IonicModule } from '@ionic/angular';
+import { IonContent } from '@ionic/angular/standalone';
 
 import { WorkshopBoxComponent }
 from '../../components/workshop-box/workshop-box.component';
@@ -25,7 +25,7 @@ import {
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule,
+    IonContent,
     WorkshopBoxComponent
   ]
 })

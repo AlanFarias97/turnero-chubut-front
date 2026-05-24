@@ -8,7 +8,7 @@ import {
 
 import { CommonModule } from '@angular/common';
 
-import { IonicModule } from '@ionic/angular';
+import { IonContent } from '@ionic/angular/standalone';
 
 import { FormsModule } from '@angular/forms';
 
@@ -44,7 +44,7 @@ interface ServiceCatalogItem {
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule,
+    IonContent,
     BayCardComponent,
     WaitingListComponent,
     FormsModule,

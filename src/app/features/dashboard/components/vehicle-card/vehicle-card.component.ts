@@ -6,7 +6,6 @@ import {
   Output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Vehicle } from '../../models/vehicle';
 
@@ -17,7 +16,6 @@ import { Vehicle } from '../../models/vehicle';
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule,
     DragDropModule
   ]
 })

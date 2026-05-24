@@ -1,7 +1,5 @@
 import { Component, Input,  Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-
 import { Vehicle } from '../../models/vehicle';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { VehicleCardComponent } from '../vehicle-card/vehicle-card.component';
@@ -13,7 +11,6 @@ import { VehicleCardComponent } from '../vehicle-card/vehicle-card.component';
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule,
     VehicleCardComponent,
     DragDropModule
   ]
