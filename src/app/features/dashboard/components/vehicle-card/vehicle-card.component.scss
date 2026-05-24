@@ -1,144 +1,152 @@
 :host {
+  display: block;
+  width: 100%;
+  min-width: 0;
 
-  --app-red: #DC2626;
-  --app-black: #111111;
-
+  --card-accent: #dc2626;
+  --card-bg: #ffffff;
+  --card-text: #111827;
+  --card-muted: #6b7280;
+  --card-border: #e5e7eb;
 }
 
 .vehicle-card {
-
-  background: white;
-
-  border-radius: 18px;
-
-  padding: 18px;
-
-  border-left: 6px solid var(--app-red);
-
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-
-  transition: 0.2s;
-
-  cursor: grab;
-
-  width: 240px;
-
-  min-height: 140px;
-
+  width: 100%;
+  min-width: 0;
+  min-height: 148px;
   display: flex;
-
-flex-direction: column;
-
-justify-content: space-between;
-
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-left: 6px solid var(--card-accent);
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
+  color: var(--card-text);
+  cursor: grab;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease;
+  overflow: hidden;
 }
 
-.vehicle-card.waiting {
-
-  background: white;
-
-  border-left-color: var(--app-red);
-
-}
-
-.vehicle-card.in-bay {
-
-  background: #ECFDF5;
-
-  border-left-color: #10B981;
-
-}
-
-.vehicle-card.completed {
-
-  background: #F3F4F6;
-
-  border-left-color: #9CA3AF;
-
-  opacity: 0.85;
-
+.vehicle-card:active {
+  cursor: grabbing;
 }
 
 .vehicle-card:hover {
-
   transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(17, 24, 39, 0.12);
+}
 
+.vehicle-card.waiting {
+  --card-accent: #dc2626;
+  --card-bg: #ffffff;
+}
+
+.vehicle-card.in-bay {
+  --card-accent: #10b981;
+  --card-bg: #ecfdf5;
+  --card-border: #bbf7d0;
+}
+
+.vehicle-card.completed {
+  --card-accent: #9ca3af;
+  --card-bg: #f9fafb;
+  --card-border: #e5e7eb;
+  opacity: 0.9;
 }
 
 .vehicle-top {
-
-  display: flex;
-
-  justify-content: space-between;
-
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "ticket time"
+    "plate plate";
   align-items: center;
-
+  column-gap: 10px;
+  row-gap: 6px;
+  min-width: 0;
 }
 
 .ticket-number {
-
+  grid-area: ticket;
   font-size: 12px;
-
-  font-weight: 700;
-
-  color: #6B7280;
-
-  margin-bottom: 4px;
-
+  font-weight: 800;
+  color: var(--card-muted);
+  white-space: nowrap;
 }
 
 .plate {
-
-  font-size: 22px;
-
-  font-weight: 700;
-
-  color: var(--app-black);
-
+  grid-area: plate;
+  min-width: 0;
+  color: var(--card-text);
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .waiting-time {
-
-  background: #FEF3C7;
-
-  color: #92400E;
-
-  padding: 6px 10px;
-
+  grid-area: time;
+  justify-self: end;
+  padding: 5px 9px;
   border-radius: 999px;
-
+  background: #fef3c7;
+  color: #92400e;
   font-size: 12px;
-
-  font-weight: 600;
-
+  font-weight: 800;
+  white-space: nowrap;
 }
 
-.vehicle-info {
-
-  margin-top: 10px;
-
-  color: #4B5563;
-
+.vehicle-info,
+.operators {
+  color: #4b5563;
   font-size: 14px;
-
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .service {
-
-  margin-top: 14px;
-
-  color: var(--app-red);
-
-  font-weight: 600;
-
+  color: #dc2626;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.35;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
 }
 
 .operators {
+  margin-top: auto;
+  color: var(--card-text);
+  font-weight: 800;
+}
 
-  margin-top: 14px;
+:host.cdk-drag-preview .vehicle-card,
+.cdk-drag-preview .vehicle-card {
+  box-shadow: 0 18px 42px rgba(17, 24, 39, 0.22);
+}
 
-  color: var(--app-black);
+@media (max-width: 680px) {
+  .vehicle-card {
+    min-height: 132px;
+    padding: 14px;
+  }
 
-  font-weight: 600;
+  .plate {
+    font-size: 19px;
+  }
 
+  .service {
+    -webkit-line-clamp: 3;
+  }
 }

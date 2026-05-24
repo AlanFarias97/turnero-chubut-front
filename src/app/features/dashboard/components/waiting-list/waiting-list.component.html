@@ -11,12 +11,8 @@
   cdkDropList
   [id]="listId"
   [cdkDropListData]="vehicles"
-  [cdkDropListConnectedTo]="[
-  'bay-1',
-  'bay-2',
-  'bay-3',
-  'completed-list'
-]"
+  [cdkDropListConnectedTo]="connectedDropLists"
+  [cdkDropListEnterPredicate]="canEnter"
   (cdkDropListDropped)="onDrop($event)">
 
     <app-vehicle-card

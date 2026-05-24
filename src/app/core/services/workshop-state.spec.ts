@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { WorkshopState } from './workshop-state';
+import { WorkshopStateService } from './workshop-state';
 
-describe('WorkshopState', () => {
-  let service: WorkshopState;
+describe('WorkshopStateService', () => {
+  let service: WorkshopStateService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(WorkshopState);
+    service = TestBed.inject(WorkshopStateService);
   });
 
   it('should be created', () => {

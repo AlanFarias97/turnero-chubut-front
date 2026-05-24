@@ -35,7 +35,8 @@
                 "output": "assets"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss"],
+            "styles": ["src/global.scss", "src/theme/variables.scss", "node_modules/quill/dist/quill.snow.css",
+  "node_modules/quill-mention/dist/quill.mention.min.css"],
             "scripts": [],
             "browser": "src/main.ts"
           },
@@ -49,8 +50,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "8kb",
+                  "maximumError": "10kb"
                 }
               ],
               "fileReplacements": [
@@ -109,7 +110,8 @@
                 "output": "assets"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss"],
+            "styles": ["src/global.scss", "src/theme/variables.scss", "node_modules/quill/dist/quill.snow.css",
+  "node_modules/quill-mention/dist/quill.mention.min.css"],
             "scripts": []
           },
           "configurations": {

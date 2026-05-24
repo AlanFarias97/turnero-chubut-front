@@ -9,12 +9,6 @@ export interface Vehicle {
 
   patent: string;
 
-  brand: string;
-
-  model: string;
-
-  color: string;
-
   service: string;
 
   waitingMinutes: number;
@@ -24,6 +18,8 @@ export interface Vehicle {
   ticketNumber: number;
 
   createdAt: Date;
+
+  description: string;
 
   assignedOperators?: string[];
 

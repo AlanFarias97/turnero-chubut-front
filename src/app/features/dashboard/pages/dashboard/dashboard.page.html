@@ -48,7 +48,7 @@
 
           <button
           class="new-vehicle-btn"
-          (click)="showCreateVehicle = true">
+          (click)="openCreateVehicleModal()">
 
             + Nuevo vehículo
 
@@ -67,45 +67,150 @@
         <div class="create-vehicle-card">
           <h3>Nuevo vehículo</h3>
 
+          <h3 class="form-title">
+            {{
+              isEditingVehicle
+                ? 'Editar vehiculo'
+                : 'Nuevo vehiculo'
+            }}
+          </h3>
+
           <input
             type="text"
             placeholder="Patente"
             [(ngModel)]="newVehicle.patent"
           />
-
           <input
-            type="text"
-            placeholder="Marca"
-            [(ngModel)]="newVehicle.brand"
-          />
+          type="text"
+          placeholder="Descripción del vehículo"
+          [(ngModel)]="newVehicle.description"
+        />
 
-          <input
-            type="text"
-            placeholder="Modelo"
-            [(ngModel)]="newVehicle.model"
-          />
+        <div class="service-input-container">
 
-          <input
-            type="text"
-            placeholder="Color"
-            [(ngModel)]="newVehicle.color"
-          />
+          <quill-editor
 
-          <input
-            type="text"
-            placeholder="Servicio"
+            #editor
+
+            class="service-editor"
+
+            [modules]="editorModules"
+
             [(ngModel)]="newVehicle.service"
-          />
 
+            (keydown)="
+              onServiceEditorKeydown($event)
+            "
+
+            (onContentChanged)="
+              onServiceInputChange()
+            "
+
+            (onEditorCreated)="
+              onEditorCreated($event)
+            ">
+
+          </quill-editor>
+
+          <div
+
+            class="autocomplete-dropdown"
+
+            *ngIf="showAutocomplete"
+          >
+
+            <div
+
+              class="autocomplete-item"
+
+              *ngFor="
+                let service of filteredServices;
+                let i = index
+              "
+
+              [class.active]="
+                i === selectedAutocompleteIndex
+              "
+
+              (mousedown)="
+                $event.preventDefault()
+              "
+
+              (click)="
+                selectService(service)
+              ">
+
+              <div class="service-code">
+
+                {{ service.code }}
+
+              </div>
+
+              <div class="service-name">
+
+                {{ service.name }}
+
+              </div>
+
+            </div>
+
+            <div
+              class="autocomplete-empty"
+              *ngIf="filteredServices.length === 0">
+
+              Sin resultados
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+          <div
+            class="edit-operators-section"
+            *ngIf="isEditingVehicle">
+
+            <h4>
+              Operarios asignados
+            </h4>
+
+            <div class="operators-list compact">
+
+              <label
+                class="operator-option"
+                *ngFor="let operator of operators">
+
+                <input
+                  type="checkbox"
+                  [value]="operator"
+                  [checked]="selectedOperators.includes(operator)"
+                  (change)="onOperatorToggle(operator, $event)">
+
+                <span>
+                  {{ operator }}
+                </span>
+
+              </label>
+
+            </div>
+
+          </div>
 
           <div class="modal-actions">
             <button
-            class="new-vehicle-btn"
-            (click)="showCreateVehicle = false">
+            class="new-vehicle-btn secondary-button"
+            (click)="closeCreateVehicleModal()">
               Cancelar
             </button>
 
-            <button class="save-button" (click)="createVehicle()">Crear</button>
+            <button class="save-button" (click)="createVehicle()">
+              {{
+                isEditingVehicle
+                  ? 'Guardar cambios'
+                  : 'Crear'
+              }}
+            </button>
           </div>
         </div>
       </div>
@@ -118,6 +223,7 @@
             [bay]="bay"
             (vehicleDropped)="onVehicleDropped($event)"
             (vehicleCompleted)="onVehicleCompleted($event)"
+            (vehicleEditRequested)="openEditVehicleModal($event)"
           >
           </app-bay-card>
         </div>
@@ -166,6 +272,7 @@
         <input
           type="checkbox"
           [value]="operator"
+          [checked]="selectedOperators.includes(operator)"
           (change)="onOperatorToggle(operator, $event)">
 
         <span>
@@ -179,8 +286,8 @@
     <div class="modal-actions">
 
       <button
-        class="new-vehicle-btn"
-        (click)="showAssignOperatorModal = false">
+        class="new-vehicle-btn secondary-button"
+        (click)="cancelAssignOperator()">
 
         Cancelar
 

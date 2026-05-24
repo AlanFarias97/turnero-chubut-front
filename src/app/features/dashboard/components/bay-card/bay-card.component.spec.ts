@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { BayCardComponent } from './bay-card.component';
 
@@ -9,12 +8,16 @@ describe('BayCardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ BayCardComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [BayCardComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(BayCardComponent);
     component = fixture.componentInstance;
+    component.bay = {
+      id: 1,
+      name: 'BOX 1',
+      currentVehicle: null
+    };
     fixture.detectChanges();
   }));
 

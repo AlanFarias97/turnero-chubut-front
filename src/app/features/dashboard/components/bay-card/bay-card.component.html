@@ -32,20 +32,39 @@
 
     <ng-container *ngIf="bay.currentVehicle; else emptyBay">
 
-      <app-vehicle-card
-        [vehicle]="bay.currentVehicle">
-      </app-vehicle-card>
+      <div class="occupied-content">
 
-      <div class="finish-container">
+        <app-vehicle-card
+          [vehicle]="bay.currentVehicle">
+        </app-vehicle-card>
 
-        <button
-          *ngIf="bay.currentVehicle"
-          class="finish-button"
-          (click)="completeVehicle()">
+        <div class="bay-actions">
 
-          FINALIZAR
+          <button
+            type="button"
+            class="edit-button"
+            aria-label="Editar vehiculo"
+            title="Editar vehiculo"
+            (click)="editVehicle()">
 
-        </button>
+            <span class="edit-icon">
+            </span>
+
+          </button>
+
+          <button
+            type="button"
+            class="finish-button"
+            aria-label="Completar trabajo"
+            title="Completar trabajo"
+            (click)="completeVehicle()">
+
+            <span class="finish-icon">
+            </span>
+
+          </button>
+
+        </div>
 
       </div>
 

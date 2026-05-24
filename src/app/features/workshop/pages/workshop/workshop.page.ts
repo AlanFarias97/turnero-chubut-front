@@ -1,6 +1,8 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  inject,
+  DestroyRef
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -11,6 +13,9 @@ import { WorkshopBoxComponent }
 from '../../components/workshop-box/workshop-box.component';
 import { WorkshopStateService } from 'src/app/core/services/workshop-state';
 
+import {
+  takeUntilDestroyed
+} from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -27,17 +32,23 @@ import { WorkshopStateService } from 'src/app/core/services/workshop-state';
 export class WorkshopPage
 implements OnInit {
 
-  boxes: any[] = [];
+  private workshopStateService =
+    inject(WorkshopStateService);
 
-  constructor(
-    private workshopStateService:
-    WorkshopStateService
-  ) {}
+  private destroyRef =
+    inject(DestroyRef);
+
+  boxes: any[] = [];
 
   ngOnInit(): void {
 
     this.workshopStateService
       .bays$
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
       .subscribe(bays => {
 
         this.boxes = bays.map(

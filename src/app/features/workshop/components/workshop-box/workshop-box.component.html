@@ -29,8 +29,7 @@
 
       <div class="vehicle">
 
-        {{ box.currentVehicle.brand }}
-        {{ box.currentVehicle.model }}
+        {{ box.currentVehicle.description }}
 
       </div>
 
@@ -42,7 +41,7 @@
 
       <div class="operator">
 
-        👨‍🔧 {{ box.currentVehicle.assignedOperators?.join(', ') }}
+        Operarios: {{ box.currentVehicle.assignedOperators?.join(', ') }}
 
       </div>
 

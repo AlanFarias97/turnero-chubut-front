@@ -1,7 +1,9 @@
 import {
   Component,
   OnInit,
-  OnDestroy
+  OnDestroy,
+  inject,
+  DestroyRef
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -22,6 +24,19 @@ from '../../models/vehicle';
 import { WorkshopStateService }
 from 'src/app/core/services/workshop-state';
 
+import {
+  QuillModule
+} from 'ngx-quill';
+
+import {
+  takeUntilDestroyed
+} from '@angular/core/rxjs-interop';
+
+interface ServiceCatalogItem {
+  code: string;
+  name: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -32,11 +47,19 @@ from 'src/app/core/services/workshop-state';
     IonicModule,
     BayCardComponent,
     WaitingListComponent,
-    FormsModule
+    FormsModule,
+    QuillModule
+
   ]
 })
 export class DashboardPage
 implements OnInit, OnDestroy {
+
+  private workshopStateService =
+    inject(WorkshopStateService);
+
+  private destroyRef =
+    inject(DestroyRef);
 
   currentDate = new Date();
 
@@ -46,13 +69,39 @@ implements OnInit, OnDestroy {
 
   showCreateVehicle = false;
 
+  isEditingVehicle = false;
+
+  editingBayId: number | null = null;
+
   showAssignOperatorModal = false;
 
   selectedVehicleForBay: Vehicle | null = null;
 
   selectedBayId: number | null = null;
 
+  selectedSourceContainerId: string | null = null;
+
   selectedOperators: string[] = [];
+
+  filteredServices: ServiceCatalogItem[] = [];
+
+  showAutocomplete = false;
+
+  selectedAutocompleteIndex = 0;
+
+  currentSlashQuery = '';
+
+  activeServiceTokenStart: number | null = null;
+
+  serviceEditor: any = null;
+
+  autocompletePosition = {
+
+    top: 0,
+
+    left: 0
+
+  };
 
   operators: string[] = [
     'Juan',
@@ -63,16 +112,55 @@ implements OnInit, OnDestroy {
     'Beto'
   ];
 
+  editorModules = {
+
+    toolbar: [
+
+      ['bold', 'italic', 'underline'],
+
+      [{ list: 'ordered' }],
+
+      [{ list: 'bullet' }],
+
+      ['clean']
+
+    ]
+
+  };
+
+
+  serviceCatalog: ServiceCatalogItem[] = [
+
+    {
+      code: 'DE01',
+      name: 'Desarme y arme auto'
+    },
+
+    {
+      code: 'DE02',
+      name: 'Desarme y arme camioneta'
+    },
+
+    {
+      code: 'BAL01',
+      name: 'Balanceo auto'
+    },
+
+    {
+      code: 'ALI01',
+      name: 'Alineacion auto'
+    }
+
+  ];
+
   bays: any[] = [];
 
   waitingVehicles: Vehicle[] = [
     {
       id: 1,
       patent: 'AB123CD',
-      brand: 'Toyota',
-      model: 'Corolla',
       status: 'WAITING',
-      color: 'Gris',
+      description: 'Gris',
       service: 'Cambio x2 delanteras',
       waitingMinutes: 15,
       ticketNumber: 2,
@@ -87,20 +175,11 @@ implements OnInit, OnDestroy {
 
     patent: '',
 
-    brand: '',
-
-    model: '',
-
-    color: '',
+    description: '',
 
     service: ''
 
   };
-
-  constructor(
-    private workshopStateService:
-    WorkshopStateService
-  ) {}
 
   ngOnInit(): void {
 
@@ -116,6 +195,11 @@ implements OnInit, OnDestroy {
 
     this.workshopStateService
       .bays$
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
       .subscribe(bays => {
 
         this.bays = [...bays];
@@ -131,6 +215,428 @@ implements OnInit, OnDestroy {
     );
 
   }
+
+  openCreateVehicleModal(): void {
+
+    this.resetNewVehicleForm();
+
+    this.isEditingVehicle =
+      false;
+
+    this.editingBayId =
+      null;
+
+    this.showCreateVehicle =
+      true;
+
+  }
+
+  openEditVehicleModal(
+    bayId: number
+  ): void {
+
+    const bay =
+      this.bays.find(
+        item =>
+          item.id === bayId
+      );
+
+    if (!bay?.currentVehicle) {
+      return;
+    }
+
+    const vehicle: Vehicle =
+      bay.currentVehicle;
+
+    this.resetNewVehicleForm();
+
+    this.newVehicle = {
+
+      patent:
+        vehicle.patent,
+
+      description:
+        vehicle.description,
+
+      service:
+        vehicle.service
+
+    };
+
+    this.selectedOperators = [
+      ...(vehicle.assignedOperators || [])
+    ];
+
+    this.isEditingVehicle =
+      true;
+
+    this.editingBayId =
+      bayId;
+
+    this.showCreateVehicle =
+      true;
+
+  }
+
+  closeCreateVehicleModal(): void {
+
+    this.showCreateVehicle =
+      false;
+
+    this.resetNewVehicleForm();
+
+    this.hideServiceAutocomplete();
+
+  }
+
+  private resetNewVehicleForm(): void {
+
+    this.newVehicle = {
+
+      patent: '',
+
+      description: '',
+
+      service: ''
+
+    };
+
+    this.serviceEditor =
+      null;
+
+    this.selectedOperators = [];
+
+    this.isEditingVehicle =
+      false;
+
+    this.editingBayId =
+      null;
+
+  }
+
+  selectService(
+    service: ServiceCatalogItem
+  ): void {
+
+    const quill: any =
+      this.serviceEditor;
+
+    if (
+      !quill ||
+      this.activeServiceTokenStart === null
+    ) {
+      return;
+    }
+
+    const insertText =
+      `${service.name} `;
+
+    const tokenStart =
+      this.activeServiceTokenStart;
+
+    const tokenLength =
+      this.currentSlashQuery.length;
+
+    quill.deleteText(
+      tokenStart,
+      tokenLength
+    );
+
+    quill.insertText(
+      tokenStart,
+      insertText
+    );
+
+    quill.setSelection(
+      tokenStart +
+      insertText.length
+    );
+
+    this.hideServiceAutocomplete();
+
+  }
+
+  onServiceInputChange(): void {
+
+    const quill: any =
+      this.serviceEditor;
+
+    if (!quill) {
+      return;
+    }
+
+    const token =
+      this.getActiveSlashToken(quill);
+
+    if (!token) {
+
+      this.hideServiceAutocomplete();
+      return;
+
+    }
+
+    this.currentSlashQuery =
+      token.value;
+
+    this.activeServiceTokenStart =
+      token.start;
+
+    const query =
+      this.normalizeServiceTerm(
+        token.value.slice(1)
+      );
+
+    this.filteredServices =
+      this.serviceCatalog.filter(
+        service =>
+
+          this.normalizeServiceTerm(
+            service.code
+          )
+            .includes(query)
+
+      );
+
+    this.showAutocomplete = true;
+
+    this.selectedAutocompleteIndex =
+      0;
+
+  }
+
+  onServiceEditorKeydown(
+    event: KeyboardEvent
+  ): void {
+
+    if (!this.showAutocomplete) {
+      return;
+    }
+
+    if (event.key === 'Escape') {
+
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+
+      this.hideServiceAutocomplete();
+      return;
+
+    }
+
+    if (
+      this.filteredServices.length === 0
+    ) {
+      return;
+    }
+
+    if (event.key === 'ArrowDown') {
+
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+
+      this.selectedAutocompleteIndex =
+        (
+          this.selectedAutocompleteIndex + 1
+        ) %
+        this.filteredServices.length;
+
+      this.scrollActiveServiceIntoView();
+
+      return;
+
+    }
+
+    if (event.key === 'ArrowUp') {
+
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+
+      this.selectedAutocompleteIndex =
+        (
+          this.selectedAutocompleteIndex -
+          1 +
+          this.filteredServices.length
+        ) %
+        this.filteredServices.length;
+
+      this.scrollActiveServiceIntoView();
+
+      return;
+
+    }
+
+    if (event.key === 'Enter') {
+
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+
+      const selectedService =
+        this.filteredServices[
+          this.selectedAutocompleteIndex
+        ];
+
+      if (selectedService) {
+
+        this.selectService(
+          selectedService
+        );
+
+      }
+
+    }
+
+  }
+
+  private scrollActiveServiceIntoView(): void {
+
+    setTimeout(() => {
+
+      const dropdown =
+        document.querySelector(
+          '.autocomplete-dropdown'
+        ) as HTMLElement | null;
+
+      const activeItem =
+        dropdown?.querySelector(
+          '.autocomplete-item.active'
+        ) as HTMLElement | null;
+
+      if (
+        !dropdown ||
+        !activeItem
+      ) {
+        return;
+      }
+
+      const itemTop =
+        activeItem.offsetTop;
+
+      const itemBottom =
+        itemTop +
+        activeItem.offsetHeight;
+
+      const visibleTop =
+        dropdown.scrollTop;
+
+      const visibleBottom =
+        visibleTop +
+        dropdown.clientHeight;
+
+      if (itemTop < visibleTop) {
+
+        dropdown.scrollTop =
+          itemTop;
+
+        return;
+
+      }
+
+      if (itemBottom > visibleBottom) {
+
+        dropdown.scrollTop =
+          itemBottom -
+          dropdown.clientHeight;
+
+      }
+
+    });
+
+  }
+
+  hideServiceAutocomplete(): void {
+
+    this.showAutocomplete = false;
+
+    this.filteredServices = [];
+
+    this.currentSlashQuery = '';
+
+    this.activeServiceTokenStart = null;
+
+    this.selectedAutocompleteIndex = 0;
+
+  }
+
+  openServiceAutocompleteOnFocus(): void {
+
+    const quill: any =
+      this.serviceEditor;
+
+    if (!quill) {
+      return;
+    }
+
+    const editorText =
+      quill.getText()
+        .trim();
+
+    if (editorText.length > 0) {
+      return;
+    }
+
+    quill.insertText(
+      0,
+      '/'
+    );
+
+    quill.setSelection(1);
+
+    this.onServiceInputChange();
+
+  }
+
+  private getActiveSlashToken(
+    quill: any
+  ): { start: number; value: string } | null {
+
+    const range =
+      quill.getSelection();
+
+    if (!range) {
+      return null;
+    }
+
+    const textBeforeCursor =
+      quill.getText(
+        0,
+        range.index
+      );
+
+    const match =
+      /(?:^|\s)(\/[^\s]*)$/.exec(
+        textBeforeCursor
+      );
+
+    if (!match) {
+      return null;
+    }
+
+    const value =
+      match[1];
+
+    return {
+      start:
+        textBeforeCursor.length -
+        value.length,
+      value
+    };
+
+  }
+
+  private normalizeServiceTerm(
+    value: string
+  ): string {
+
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
+  }
+
 
   updateWaitingTimes(): void {
 
@@ -180,50 +686,37 @@ implements OnInit, OnDestroy {
     const previousContainerId =
       data.event.previousContainer.id;
 
-    /*
-     * SI VIENE DE OTRO BOX
-     */
+    const targetContainerId =
+      `bay-${bay.id}`;
+
     if (
-      previousContainerId.startsWith('bay-')
+      previousContainerId ===
+      targetContainerId
     ) {
-
-      const previousBayId =
-        Number(
-          previousContainerId.replace(
-            'bay-',
-            ''
-          )
-        );
-
-      const previousBay =
-        this.bays.find(
-          b => b.id === previousBayId
-        );
-
-      if (
-        previousBay &&
-        previousBay.currentVehicle
-      ) {
-
-        previousBay.currentVehicle =
-          null;
-
-      }
-
+      return;
     }
 
-    /*
-     * SI EL BOX YA ESTÁ OCUPADO
-     */
     if (bay.currentVehicle) {
       return;
     }
 
     this.selectedVehicleForBay =
-      draggedVehicle;
+      {
+        ...draggedVehicle,
+        assignedOperators: [
+          ...(draggedVehicle.assignedOperators || [])
+        ]
+      };
 
     this.selectedBayId =
       bay.id;
+
+    this.selectedSourceContainerId =
+      previousContainerId;
+
+    this.selectedOperators = [
+      ...(draggedVehicle.assignedOperators || [])
+    ];
 
     this.showAssignOperatorModal =
       true;
@@ -247,6 +740,11 @@ implements OnInit, OnDestroy {
       return;
     }
 
+    this.removeVehicleFromSource(
+      this.selectedVehicleForBay.id,
+      this.selectedSourceContainerId
+    );
+
     this.selectedVehicleForBay
       .assignedOperators =
       [...this.selectedOperators];
@@ -258,13 +756,6 @@ implements OnInit, OnDestroy {
       {
         ...this.selectedVehicleForBay
       };
-
-    this.waitingVehicles =
-      this.waitingVehicles.filter(
-        vehicle =>
-          vehicle.id !==
-          this.selectedVehicleForBay?.id
-      );
 
     this.bays = [...this.bays];
 
@@ -280,6 +771,27 @@ implements OnInit, OnDestroy {
     this.selectedBayId =
       null;
 
+    this.selectedSourceContainerId =
+      null;
+
+    this.selectedOperators = [];
+
+  }
+
+  cancelAssignOperator(): void {
+
+    this.showAssignOperatorModal =
+      false;
+
+    this.selectedVehicleForBay =
+      null;
+
+    this.selectedBayId =
+      null;
+
+    this.selectedSourceContainerId =
+      null;
+
     this.selectedOperators = [];
 
   }
@@ -288,40 +800,55 @@ implements OnInit, OnDestroy {
     event: any
   ): void {
 
+    const dropEvent =
+      event.event;
+
+    if (
+      event.listId !== 'waiting-list' ||
+      !dropEvent
+    ) {
+      return;
+    }
+
+    const vehicle: Vehicle =
+      dropEvent.item.data;
+
     const previousContainerId =
-      event.previousContainer.id;
+      dropEvent.previousContainer.id;
 
-    const bayId =
-      Number(
-        previousContainerId
-          .replace('bay-', '')
-      );
+    if (
+      previousContainerId ===
+      'waiting-list'
+    ) {
+      return;
+    }
 
-    const bay = this.bays.find(
-      b => b.id === bayId
+    if (
+      previousContainerId !==
+      'completed-list' &&
+      !previousContainerId.startsWith('bay-')
+    ) {
+      return;
+    }
+
+    this.removeVehicleFromSource(
+      vehicle.id,
+      previousContainerId
     );
 
-    if (!bay) {
-      return;
-    }
+    const returnedVehicle: Vehicle = {
 
-    if (!bay.currentVehicle) {
-      return;
-    }
+      ...vehicle,
 
-    bay.currentVehicle
-      .assignedOperators = [];
+      status: 'WAITING',
 
-    bay.currentVehicle.status =
-      'WAITING';
+      assignedOperators: []
+
+    };
 
     this.waitingVehicles.push(
-      {
-        ...bay.currentVehicle
-      }
+      returnedVehicle
     );
-
-    bay.currentVehicle = null;
 
     this.waitingVehicles.sort(
       (a, b) =>
@@ -333,6 +860,69 @@ implements OnInit, OnDestroy {
 
     this.workshopStateService
       .updateBays(this.bays);
+
+  }
+
+  private removeVehicleFromSource(
+    vehicleId: number,
+    sourceContainerId: string | null
+  ): void {
+
+    if (!sourceContainerId) {
+      return;
+    }
+
+    if (sourceContainerId === 'waiting-list') {
+
+      this.waitingVehicles =
+        this.waitingVehicles.filter(
+          vehicle =>
+            vehicle.id !== vehicleId
+        );
+
+      return;
+
+    }
+
+    if (sourceContainerId === 'completed-list') {
+
+      this.completedVehicles =
+        this.completedVehicles.filter(
+          vehicle =>
+            vehicle.id !== vehicleId
+        );
+
+      return;
+
+    }
+
+    if (
+      sourceContainerId.startsWith('bay-')
+    ) {
+
+      const bayId =
+        Number(
+          sourceContainerId.replace(
+            'bay-',
+            ''
+          )
+        );
+
+      const bay =
+        this.bays.find(
+          item =>
+            item.id === bayId
+        );
+
+      if (
+        bay?.currentVehicle?.id === vehicleId
+      ) {
+
+        bay.currentVehicle = null;
+
+      }
+
+    }
 
   }
 
@@ -372,6 +962,13 @@ implements OnInit, OnDestroy {
 
   createVehicle(): void {
 
+    if (this.isEditingVehicle) {
+
+      this.updateEditedVehicle();
+      return;
+
+    }
+
     const vehicle: Vehicle = {
 
       id: Date.now(),
@@ -382,17 +979,13 @@ implements OnInit, OnDestroy {
       patent:
         this.newVehicle.patent,
 
-      brand:
-        this.newVehicle.brand,
-
-      model:
-        this.newVehicle.model,
-
-      color:
-        this.newVehicle.color,
+      description:
+      this.newVehicle.description,
 
       service:
-        this.newVehicle.service,
+      this.extractPlainText(
+        this.newVehicle.service
+      ),
 
       waitingMinutes: 0,
 
@@ -416,22 +1009,52 @@ implements OnInit, OnDestroy {
 
     this.nextTicketNumber++;
 
-    this.showCreateVehicle =
-      false;
+    this.closeCreateVehicleModal();
 
-    this.newVehicle = {
+  }
 
-      patent: '',
+  private updateEditedVehicle(): void {
 
-      brand: '',
+    if (this.editingBayId === null) {
+      return;
+    }
 
-      model: '',
+    const bay =
+      this.bays.find(
+        item =>
+          item.id === this.editingBayId
+      );
 
-      color: '',
+    if (!bay?.currentVehicle) {
+      return;
+    }
 
-      service: ''
+    bay.currentVehicle = {
+
+      ...bay.currentVehicle,
+
+      patent:
+        this.newVehicle.patent,
+
+      description:
+        this.newVehicle.description,
+
+      service:
+        this.extractPlainText(
+          this.newVehicle.service
+        ),
+
+      assignedOperators:
+        [...this.selectedOperators]
 
     };
+
+    this.bays = [...this.bays];
+
+    this.workshopStateService
+      .updateBays(this.bays);
+
+    this.closeCreateVehicleModal();
 
   }
 
@@ -442,9 +1065,17 @@ implements OnInit, OnDestroy {
 
     if (event.target.checked) {
 
-      this.selectedOperators.push(
-        operator
-      );
+      if (
+        !this.selectedOperators.includes(
+          operator
+        )
+      ) {
+
+        this.selectedOperators.push(
+          operator
+        );
+
+      }
 
     } else {
 
@@ -460,26 +1091,180 @@ implements OnInit, OnDestroy {
     event: any
   ): void {
 
-    const vehicle: Vehicle =
-      event.item.data;
+    const dropEvent =
+      event.event;
 
-    this.completedVehicles =
-      this.completedVehicles.filter(
-        v => v.id !== vehicle.id
-      );
+    if (
+      event.listId !== 'completed-list' ||
+      !dropEvent
+    ) {
+      return;
+    }
 
-    vehicle.status = 'WAITING';
+    if (
+      dropEvent.previousContainer.id !==
+      'completed-list'
+    ) {
+      return;
+    }
 
-    this.waitingVehicles.push(
+  }
+  extractPlainText(
+    html: string
+  ): string {
+
+    const div =
+      document.createElement('div');
+
+    div.innerHTML = html;
+
+    return (
+      div.textContent ||
+      div.innerText ||
+      ''
+    ).trim();
+
+  }
+
+  onEditorCreated(
+    quill: any
+  ): void {
+
+    this.serviceEditor =
+      quill;
+
+    quill.root.addEventListener(
+      'keydown',
+      (event: KeyboardEvent) =>
+        this.onServiceEditorKeydown(event),
+      true
+    );
+
+    quill.root.addEventListener(
+      'focus',
+      () =>
+        this.openServiceAutocompleteOnFocus()
+    );
+
+    quill.root.addEventListener(
+      'click',
+      () =>
+        this.openServiceAutocompleteOnFocus()
+    );
+
+    quill.keyboard.addBinding(
       {
-        ...vehicle
+        key: 40 // ArrowDown
+      },
+      () => {
+
+        if (!this.showAutocomplete) {
+          return true;
+        }
+
+        if (
+          this.filteredServices.length === 0
+        ) {
+          return false;
+        }
+
+        this.selectedAutocompleteIndex++;
+
+        if (
+          this.selectedAutocompleteIndex >=
+          this.filteredServices.length
+        ) {
+
+          this.selectedAutocompleteIndex = 0;
+
+        }
+
+        return false;
+
       }
     );
 
-    this.waitingVehicles.sort(
-      (a, b) =>
-        a.ticketNumber -
-        b.ticketNumber
+    quill.keyboard.addBinding(
+      {
+        key: 38 // ArrowUp
+      },
+      () => {
+
+        if (!this.showAutocomplete) {
+          return true;
+        }
+
+        if (
+          this.filteredServices.length === 0
+        ) {
+          return false;
+        }
+
+        this.selectedAutocompleteIndex--;
+
+        if (
+          this.selectedAutocompleteIndex < 0
+        ) {
+
+          this.selectedAutocompleteIndex =
+            this.filteredServices.length - 1;
+
+        }
+
+        return false;
+
+      }
+    );
+
+    quill.keyboard.addBinding(
+      {
+        key: 13 // Enter
+      },
+      () => {
+
+        if (!this.showAutocomplete) {
+          return true;
+        }
+
+        if (
+          this.filteredServices.length === 0
+        ) {
+          return true;
+        }
+
+        const selectedService =
+          this.filteredServices[
+            this.selectedAutocompleteIndex
+          ];
+
+        if (selectedService) {
+
+          this.selectService(
+            selectedService
+          );
+
+        }
+
+        return false;
+
+      }
+    );
+
+    quill.keyboard.addBinding(
+      {
+        key: 27 // Escape
+      },
+      () => {
+
+        if (!this.showAutocomplete) {
+          return true;
+        }
+
+        this.hideServiceAutocomplete();
+
+        return false;
+
+      }
     );
 
   }

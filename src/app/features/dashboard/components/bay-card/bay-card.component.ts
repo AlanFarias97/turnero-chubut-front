@@ -23,6 +23,8 @@ export class BayCardComponent {
   @Output() vehicleDropped = new EventEmitter<any>();
   @Output() vehicleCompleted =
   new EventEmitter<number>();
+  @Output() vehicleEditRequested =
+  new EventEmitter<number>();
 
   onDrop(event: any) {
 
@@ -35,6 +37,14 @@ export class BayCardComponent {
   completeVehicle() {
 
     this.vehicleCompleted.emit(
+      this.bay.id
+    );
+
+  }
+
+  editVehicle() {
+
+    this.vehicleEditRequested.emit(
       this.bay.id
     );
 

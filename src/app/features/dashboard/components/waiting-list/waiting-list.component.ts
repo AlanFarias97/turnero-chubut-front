@@ -25,9 +25,42 @@ export class WaitingListComponent {
   new EventEmitter<any>();
   @Input() title = '';
   @Input() listId = 'waiting-list';
+
+  canEnter = (
+    drag: any
+  ): boolean =>
+    this.listId !== 'completed-list' ||
+    drag.dropContainer.id === 'completed-list';
+
+  get connectedDropLists(): string[] {
+
+    if (
+      this.listId === 'completed-list'
+    ) {
+
+      return [
+        'waiting-list',
+        'bay-1',
+        'bay-2',
+        'bay-3'
+      ];
+
+    }
+
+    return [
+      'bay-1',
+      'bay-2',
+      'bay-3'
+    ];
+
+  }
+
   onDrop(event: any) {
 
-    this.vehicleReturned.emit(event);
+    this.vehicleReturned.emit({
+      listId: this.listId,
+      event
+    });
 
   }
 }

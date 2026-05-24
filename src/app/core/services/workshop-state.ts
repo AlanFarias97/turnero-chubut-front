@@ -1,13 +1,38 @@
-import { Injectable } from '@angular/core';
+import {
+  Injectable,
+  NgZone,
+  inject
+} from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
-
-import { NgZone } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WorkshopStateService {
+
+  private ngZone = inject(NgZone);
+
+  private readonly storageKey =
+    'turnero-chubut:bays';
+
+  private readonly defaultBays = [
+    {
+      id: 1,
+      name: 'BOX 1',
+      currentVehicle: null
+    },
+    {
+      id: 2,
+      name: 'BOX 2',
+      currentVehicle: null
+    },
+    {
+      id: 3,
+      name: 'BOX 3',
+      currentVehicle: null
+    }
+  ];
 
   private channel =
     new BroadcastChannel(
@@ -15,30 +40,14 @@ export class WorkshopStateService {
     );
 
   private baysSubject =
-    new BehaviorSubject<any[]>([
-      {
-        id: 1,
-        name: 'BOX 1',
-        currentVehicle: null
-      },
-      {
-        id: 2,
-        name: 'BOX 2',
-        currentVehicle: null
-      },
-      {
-        id: 3,
-        name: 'BOX 3',
-        currentVehicle: null
-      }
-    ]);
+    new BehaviorSubject<any[]>(
+      this.getInitialBays()
+    );
 
   bays$ =
     this.baysSubject.asObservable();
 
-    constructor(
-      private ngZone: NgZone
-    ) {
+    constructor() {
 
       this.channel.onmessage = (
         event
@@ -51,18 +60,17 @@ export class WorkshopStateService {
 
           this.ngZone.run(() => {
 
+            const clonedBays =
+              this.cloneBays(
+                event.data.payload
+              );
+
             this.baysSubject.next(
-              event.data.payload.map(
-                (bay: any) => ({
-                  ...bay,
-                  currentVehicle:
-                    bay.currentVehicle
-                      ? {
-                          ...bay.currentVehicle
-                        }
-                      : null
-                })
-              )
+              clonedBays
+            );
+
+            this.saveBays(
+              clonedBays
             );
 
           });
@@ -83,19 +91,16 @@ export class WorkshopStateService {
     bays: any[]
   ): void {
 
-    const clonedBays = bays.map(
-      bay => ({
-        ...bay,
-        currentVehicle:
-          bay.currentVehicle
-            ? {
-                ...bay.currentVehicle
-              }
-            : null
-      })
-    );
+    const clonedBays =
+      this.cloneBays(
+        bays
+      );
 
     this.baysSubject.next(
+      clonedBays
+    );
+
+    this.saveBays(
       clonedBays
     );
 
@@ -106,6 +111,79 @@ export class WorkshopStateService {
       payload: clonedBays
 
     });
+
+  }
+
+  private getInitialBays(): any[] {
+
+    const savedBays =
+      this.loadBays();
+
+    if (savedBays) {
+      return savedBays;
+    }
+
+    return this.cloneBays(
+      this.defaultBays
+    );
+
+  }
+
+  private loadBays(): any[] | null {
+
+    const rawBays =
+      localStorage.getItem(
+        this.storageKey
+      );
+
+    if (!rawBays) {
+      return null;
+    }
+
+    try {
+
+      return this.cloneBays(
+        JSON.parse(rawBays)
+      );
+
+    } catch {
+
+      localStorage.removeItem(
+        this.storageKey
+      );
+
+      return null;
+
+    }
+
+  }
+
+  private saveBays(
+    bays: any[]
+  ): void {
+
+    localStorage.setItem(
+      this.storageKey,
+      JSON.stringify(bays)
+    );
+
+  }
+
+  private cloneBays(
+    bays: any[]
+  ): any[] {
+
+    return bays.map(
+      bay => ({
+        ...bay,
+        currentVehicle:
+          bay.currentVehicle
+            ? {
+                ...bay.currentVehicle
+              }
+            : null
+      })
+    );
 
   }
 

@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { WaitingListComponent } from './waiting-list.component';
 
@@ -9,8 +8,7 @@ describe('WaitingListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ WaitingListComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [WaitingListComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(WaitingListComponent);
