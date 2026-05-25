@@ -401,6 +401,9 @@ implements OnInit, OnDestroy {
     if (
       !this.syncServiceAutocomplete(
         quill
+      ) &&
+      this.hasPendingSlashCommand(
+        quill
       )
     ) {
 
@@ -427,7 +430,10 @@ implements OnInit, OnDestroy {
 
     if (!token) {
 
-      this.hideServiceAutocomplete();
+      if (this.showAutocomplete) {
+        this.hideServiceAutocomplete();
+      }
+
       return false;
 
     }
@@ -463,6 +469,18 @@ implements OnInit, OnDestroy {
       0;
 
     return true;
+
+  }
+
+  private hasPendingSlashCommand(
+    quill: any
+  ): boolean {
+
+    const value =
+      quill.getText()
+        .trimEnd();
+
+    return value.endsWith('/');
 
   }
 

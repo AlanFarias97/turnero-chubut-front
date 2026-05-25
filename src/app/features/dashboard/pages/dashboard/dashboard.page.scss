@@ -663,12 +663,26 @@
     padding: 12px;
   }
 
+  .create-vehicle-modal {
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .create-vehicle-card,
   .modal-container {
     max-height: calc(100dvh - 24px);
     padding: 18px;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .create-vehicle-card {
+    max-height: none;
+    margin: 0 auto 12px;
+    overflow: visible;
   }
 
   .service-editor {
@@ -678,6 +692,10 @@
   ::ng-deep .service-editor .ql-container,
   ::ng-deep .service-editor .ql-editor {
     min-height: 132px;
+  }
+
+  ::ng-deep .service-editor .ql-editor {
+    touch-action: manipulation;
   }
 
   .operators-list {
