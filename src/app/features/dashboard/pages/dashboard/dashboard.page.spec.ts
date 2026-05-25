@@ -60,6 +60,22 @@ describe('DashboardPage', () => {
       'Alineacion auto '
     );
   });
+
+  it('should filter and replace duplicated slash input on mobile', () => {
+    const fakeQuill =
+      createFakeQuill('//bal');
+
+    component.serviceEditor = fakeQuill;
+
+    component.onServiceInputChange();
+    component.selectService(
+      component.filteredServices[0]
+    );
+
+    expect(fakeQuill.value).toBe(
+      'Balanceo auto '
+    );
+  });
 });
 
 function createFakeQuill(

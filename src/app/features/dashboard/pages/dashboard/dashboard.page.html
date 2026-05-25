@@ -117,11 +117,14 @@
             class="autocomplete-dropdown"
 
             *ngIf="showAutocomplete"
+            role="listbox"
+            aria-label="Servicios disponibles"
           >
 
             <div
 
               class="autocomplete-item"
+              role="option"
 
               *ngFor="
                 let service of filteredServices;
@@ -129,6 +132,9 @@
               "
 
               [class.active]="
+                i === selectedAutocompleteIndex
+              "
+              [attr.aria-selected]="
                 i === selectedAutocompleteIndex
               "
 

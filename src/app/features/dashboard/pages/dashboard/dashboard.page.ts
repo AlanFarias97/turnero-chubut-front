@@ -398,13 +398,37 @@ implements OnInit, OnDestroy {
       return;
     }
 
+    if (
+      !this.syncServiceAutocomplete(
+        quill
+      )
+    ) {
+
+      queueMicrotask(() => {
+
+        if (this.serviceEditor === quill) {
+          this.syncServiceAutocomplete(
+            quill
+          );
+        }
+
+      });
+
+    }
+
+  }
+
+  private syncServiceAutocomplete(
+    quill: any
+  ): boolean {
+
     const token =
       this.getActiveSlashToken(quill);
 
     if (!token) {
 
       this.hideServiceAutocomplete();
-      return;
+      return false;
 
     }
 
@@ -437,6 +461,8 @@ implements OnInit, OnDestroy {
 
     this.selectedAutocompleteIndex =
       0;
+
+    return true;
 
   }
 
@@ -593,34 +619,6 @@ implements OnInit, OnDestroy {
     this.activeServiceTokenStart = null;
 
     this.selectedAutocompleteIndex = 0;
-
-  }
-
-  openServiceAutocompleteOnFocus(): void {
-
-    const quill: any =
-      this.serviceEditor;
-
-    if (!quill) {
-      return;
-    }
-
-    const editorText =
-      quill.getText()
-        .trim();
-
-    if (editorText.length > 0) {
-      return;
-    }
-
-    quill.insertText(
-      0,
-      '/'
-    );
-
-    quill.setSelection(1);
-
-    this.onServiceInputChange();
 
   }
 
@@ -1401,18 +1399,6 @@ implements OnInit, OnDestroy {
       (event: KeyboardEvent) =>
         this.onServiceEditorKeydown(event),
       true
-    );
-
-    quill.root.addEventListener(
-      'focus',
-      () =>
-        this.openServiceAutocompleteOnFocus()
-    );
-
-    quill.root.addEventListener(
-      'click',
-      () =>
-        this.openServiceAutocompleteOnFocus()
     );
 
     quill.keyboard.addBinding(
