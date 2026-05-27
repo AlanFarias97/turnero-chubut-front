@@ -15,6 +15,12 @@ export const routes: Routes = [
         .then(m => m.DashboardPage)
   },
   {
+    path: 'catalogs',
+    loadComponent: () =>
+      import('./features/catalogs/pages/catalogs/catalogs.page')
+        .then(m => m.CatalogsPage)
+  },
+  {
     path: 'workshop',
     loadComponent: () => import('./features/workshop/pages/workshop/workshop.page').then( m => m.WorkshopPage)
   }

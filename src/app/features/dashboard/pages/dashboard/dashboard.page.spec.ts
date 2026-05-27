@@ -1,11 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { DashboardPage } from './dashboard.page';
+import { CatalogService } from 'src/app/core/services/catalog.service';
 
 describe('DashboardPage', () => {
   let component: DashboardPage;
   let fixture: ComponentFixture<DashboardPage>;
 
   beforeEach(() => {
+    localStorage.clear();
+
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([]),
+        CatalogService
+      ]
+    });
+
     fixture = TestBed.createComponent(DashboardPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -17,7 +28,7 @@ describe('DashboardPage', () => {
 
   it('should filter services from the active slash token', () => {
     const fakeQuill =
-      createFakeQuill('Servicio /bal');
+      createFakeQuill('Servicio /bd01');
 
     component.serviceEditor = fakeQuill;
 
@@ -25,12 +36,12 @@ describe('DashboardPage', () => {
 
     expect(component.showAutocomplete).toBeTrue();
     expect(component.filteredServices.length).toBe(1);
-    expect(component.filteredServices[0].code).toBe('BAL01');
+    expect(component.filteredServices[0].code).toBe('BD01');
   });
 
   it('should replace only the active slash token when selecting a service', () => {
     const fakeQuill =
-      createFakeQuill('Servicio /bal');
+      createFakeQuill('Servicio /bd01');
 
     component.serviceEditor = fakeQuill;
 
@@ -40,14 +51,14 @@ describe('DashboardPage', () => {
     );
 
     expect(fakeQuill.value).toBe(
-      'Servicio Balanceo auto '
+      'Servicio BALANCEO AUTO DEPORTIVO '
     );
     expect(component.showAutocomplete).toBeFalse();
   });
 
   it('should insert the service name instead of the code', () => {
     const fakeQuill =
-      createFakeQuill('/ali');
+      createFakeQuill('/a01');
 
     component.serviceEditor = fakeQuill;
 
@@ -57,13 +68,13 @@ describe('DashboardPage', () => {
     );
 
     expect(fakeQuill.value).toBe(
-      'Alineacion auto '
+      'ALINEACION AUTO '
     );
   });
 
   it('should filter and replace duplicated slash input on mobile', () => {
     const fakeQuill =
-      createFakeQuill('//bal');
+      createFakeQuill('//bd01');
 
     component.serviceEditor = fakeQuill;
 
@@ -73,7 +84,7 @@ describe('DashboardPage', () => {
     );
 
     expect(fakeQuill.value).toBe(
-      'Balanceo auto '
+      'BALANCEO AUTO DEPORTIVO '
     );
   });
 

@@ -1,0 +1,233 @@
+<ion-content fullscreen>
+  <div class="catalog-layout">
+    <aside class="sidebar">
+      <div>
+        <div class="logo-container">
+          <h1>TURNERO</h1>
+          <span>CHUBUT</span>
+        </div>
+
+        <nav class="menu">
+          <a
+            class="menu-item"
+            routerLink="/dashboard">Dashboard</a>
+          <div class="menu-item disabled">Fila</div>
+          <a
+            class="menu-item active"
+            routerLink="/catalogs">Catalogos</a>
+          <div class="menu-item disabled">Historial</div>
+          <a
+            class="menu-item"
+            href="/workshop"
+            target="_blank">Pantalla taller</a>
+        </nav>
+      </div>
+      <div class="sidebar-footer">
+        Sistema operativo del taller
+      </div>
+    </aside>
+
+    <main class="catalog-content">
+      <header class="page-header">
+        <div>
+          <h2>Catalogos</h2>
+          <p>Servicios y reparaciones</p>
+        </div>
+
+        <button
+          class="primary-action"
+          type="button"
+          (click)="addItem('service')">
+          + Nuevo item
+        </button>
+      </header>
+
+      <section class="metrics" aria-label="Resumen de catalogos">
+        <button
+          class="metric"
+          [class.selected]="selectedFilter === 'service'"
+          type="button"
+          (click)="setFilter('service')">
+          <span>Servicios</span>
+          <strong>{{ count('service') }}</strong>
+        </button>
+        <button
+          class="metric"
+          [class.selected]="selectedFilter === 'repair'"
+          type="button"
+          (click)="setFilter('repair')">
+          <span>Reparaciones</span>
+          <strong>{{ count('repair') }}</strong>
+        </button>
+        <button
+          class="metric"
+          [class.selected]="selectedFilter === 'all'"
+          type="button"
+          (click)="setFilter('all')">
+          <span>Total</span>
+          <strong>{{ items.length }}</strong>
+        </button>
+      </section>
+
+      <div class="workspace">
+        <section class="catalog-panel">
+          <div class="toolbar">
+            <div
+              class="filters"
+              role="tablist"
+              aria-label="Tipo de catalogo">
+              <button
+                type="button"
+                [class.active]="selectedFilter === 'all'"
+                (click)="setFilter('all')">Todos</button>
+              <button
+                type="button"
+                [class.active]="selectedFilter === 'service'"
+                (click)="setFilter('service')">Servicios</button>
+              <button
+                type="button"
+                [class.active]="selectedFilter === 'repair'"
+                (click)="setFilter('repair')">Reparaciones</button>
+            </div>
+
+            <input
+              class="search"
+              type="search"
+              placeholder="Buscar codigo o descripcion"
+              [(ngModel)]="searchTerm"
+            />
+          </div>
+
+          <div class="table-header">
+            <span>Codigo</span>
+            <span>Descripcion</span>
+            <span>Tipo</span>
+            <span>Estado</span>
+            <span></span>
+          </div>
+
+          <div class="items" *ngIf="filteredItems.length; else noItems">
+            <div
+              class="item-row"
+              *ngFor="
+                let item of filteredItems;
+                trackBy: trackByItem
+              "
+              [class.selected]="selectedItem?.id === item.id">
+              <strong class="code">{{ item.code }}</strong>
+              <span class="name">{{ item.name }}</span>
+              <span class="category">
+                {{ categoryLabel(item.category) }}
+              </span>
+              <span
+                class="state"
+                [class.off]="!item.active">
+                {{ item.active ? 'Activo' : 'Inactivo' }}
+              </span>
+              <div class="row-actions">
+                <button
+                  class="text-action"
+                  type="button"
+                  (click)="editItem(item)">Editar</button>
+                <button
+                  class="toggle-action"
+                  type="button"
+                  (click)="toggleItem(item)">
+                  {{ item.active ? 'Desactivar' : 'Activar' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #noItems>
+            <div class="empty-state">
+              Sin items para este filtro
+            </div>
+          </ng-template>
+        </section>
+
+        <aside class="edit-panel">
+          <div class="edit-title">
+            <div>
+              <h3>
+                {{ selectedItem ? 'Editar item' : 'Nuevo item' }}
+              </h3>
+              <p>
+                {{
+                  selectedItem
+                    ? selectedItem.code
+                    : categoryLabel(draft.category)
+                }}
+              </p>
+            </div>
+            <button
+              class="new-secondary"
+              type="button"
+              (click)="addItem('repair')">
+              + Reparacion
+            </button>
+          </div>
+
+          <label>
+            Codigo
+            <input
+              type="text"
+              name="code"
+              [(ngModel)]="draft.code"
+              placeholder="Ej: ALI01"
+            />
+          </label>
+
+          <label>
+            Descripcion
+            <input
+              type="text"
+              name="name"
+              [(ngModel)]="draft.name"
+              placeholder="Nombre visible en la comanda"
+            />
+          </label>
+
+          <label>
+            Tipo
+            <select
+              name="category"
+              [(ngModel)]="draft.category">
+              <option value="service">Servicio</option>
+              <option value="repair">Reparacion</option>
+            </select>
+          </label>
+
+          <div
+            class="source-row"
+            *ngIf="draft.sourceRubro">
+            <span>Rubro origen</span>
+            <strong>{{ draft.sourceRubro }}</strong>
+          </div>
+
+          <label class="switch-row">
+            <span>Disponible para cargar</span>
+            <input
+              type="checkbox"
+              name="active"
+              [(ngModel)]="draft.active"
+            />
+          </label>
+
+          <p
+            class="form-error"
+            *ngIf="formError">
+            {{ formError }}
+          </p>
+
+          <button
+            class="save-action"
+            type="button"
+            (click)="saveItem()">
+            Guardar cambios
+          </button>
+        </aside>
+      </div>
+    </main>
+  </div>
+</ion-content>

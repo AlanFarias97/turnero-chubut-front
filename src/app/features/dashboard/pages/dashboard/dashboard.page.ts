@@ -12,6 +12,8 @@ import { IonContent } from '@ionic/angular/standalone';
 
 import { FormsModule } from '@angular/forms';
 
+import { RouterLink } from '@angular/router';
+
 import { BayCardComponent }
 from '../../components/bay-card/bay-card.component';
 
@@ -24,6 +26,12 @@ from '../../models/vehicle';
 import { WorkshopStateService }
 from 'src/app/core/services/workshop-state';
 
+import { CatalogService }
+from 'src/app/core/services/catalog.service';
+
+import { CatalogItem }
+from 'src/app/core/models/catalog-item';
+
 import {
   QuillModule
 } from 'ngx-quill';
@@ -31,11 +39,6 @@ import {
 import {
   takeUntilDestroyed
 } from '@angular/core/rxjs-interop';
-
-interface ServiceCatalogItem {
-  code: string;
-  name: string;
-}
 
 @Component({
   selector: 'app-dashboard',
@@ -48,7 +51,8 @@ interface ServiceCatalogItem {
     BayCardComponent,
     WaitingListComponent,
     FormsModule,
-    QuillModule
+    QuillModule,
+    RouterLink
 
   ]
 })
@@ -57,6 +61,9 @@ implements OnInit, OnDestroy {
 
   private workshopStateService =
     inject(WorkshopStateService);
+
+  private catalogService =
+    inject(CatalogService);
 
   private destroyRef =
     inject(DestroyRef);
@@ -103,7 +110,7 @@ implements OnInit, OnDestroy {
 
   selectedOperators: string[] = [];
 
-  filteredServices: ServiceCatalogItem[] = [];
+  filteredServices: CatalogItem[] = [];
 
   showAutocomplete = false;
 
@@ -149,29 +156,7 @@ implements OnInit, OnDestroy {
   };
 
 
-  serviceCatalog: ServiceCatalogItem[] = [
-
-    {
-      code: 'DE01',
-      name: 'Desarme y arme auto'
-    },
-
-    {
-      code: 'DE02',
-      name: 'Desarme y arme camioneta'
-    },
-
-    {
-      code: 'BAL01',
-      name: 'Balanceo auto'
-    },
-
-    {
-      code: 'ALI01',
-      name: 'Alineacion auto'
-    }
-
-  ];
+  serviceCatalog: CatalogItem[] = [];
 
   bays: any[] = [];
 
@@ -223,6 +208,21 @@ implements OnInit, OnDestroy {
       .subscribe(bays => {
 
         this.bays = [...bays];
+
+      });
+
+    this.catalogService
+      .items$
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe(() => {
+
+        this.serviceCatalog =
+          this.catalogService
+            .getActiveItems();
 
       });
 
@@ -335,7 +335,7 @@ implements OnInit, OnDestroy {
   }
 
   selectService(
-    service: ServiceCatalogItem
+    service: CatalogItem
   ): void {
 
     const quill: any =
@@ -397,7 +397,7 @@ implements OnInit, OnDestroy {
   }
 
   selectServiceFromPointer(
-    service: ServiceCatalogItem,
+    service: CatalogItem,
     event: Event
   ): void {
 

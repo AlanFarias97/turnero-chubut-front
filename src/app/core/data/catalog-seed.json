@@ -1,0 +1,1306 @@
+[
+  {
+    "id": 1,
+    "code": "A01",
+    "name": "ALINEACION AUTO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 2,
+    "code": "AB01",
+    "name": "ALINEACION AUTO BAJO - SIN GARANTIA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 3,
+    "code": "A03",
+    "name": "ALINEACION AUTO GOL POWER + DAEWO CON REGULADOR",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 4,
+    "code": "A02",
+    "name": "ALINEACION AUTO GRANDE +17\"",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 5,
+    "code": "A08",
+    "name": "ALINEACION CAMION CHICO (F-350 H7800)(MINI BUS CHICO)",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 6,
+    "code": "A09",
+    "name": "ALINEACION CAMION GRANDE COLECTIVO BUS",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 7,
+    "code": "A04",
+    "name": "ALINEACION CAMIONETA CHICA ( SAVEIRO ECOSPORT)",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 8,
+    "code": "A05",
+    "name": "ALINEACION CAMIONETA GRANDE NUEVAS AMAROK FRONTIER",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 9,
+    "code": "A06",
+    "name": "ALINEACION CAMIONETA (LAND ROVER SIMILAR-MARRUAS-RAM)",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 10,
+    "code": "ACC05",
+    "name": "ALINEACION CASILLAS / MOTORHOME",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 11,
+    "code": "AT01",
+    "name": "ALINEACION DELANTERA Y TRASERA AUTO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 12,
+    "code": "AT05",
+    "name": "ALINEACION DELANTERA Y TRASERA CAMIONETA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 13,
+    "code": "A07",
+    "name": "ALINEACION TOYOTA / MITSUBISHI VIEJA H1 - SPRINTER - MASTER - DUCATO -",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ALINEACION"
+  },
+  {
+    "id": 14,
+    "code": "A17.5R25",
+    "name": "ARME 17.5R25 CARGADORA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 15,
+    "code": "B01",
+    "name": "BALANCEO AUTO CHAPA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "BALANCEO"
+  },
+  {
+    "id": 16,
+    "code": "BD01",
+    "name": "BALANCEO AUTO DEPORTIVO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "BALANCEO"
+  },
+  {
+    "id": 17,
+    "code": "B02",
+    "name": "BALANCEO AUTO DEPORTIVO 17\" +",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "BALANCEO"
+  },
+  {
+    "id": 18,
+    "code": "B04",
+    "name": "BALANCEO CAMIONETA CHICA CHAPA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "BALANCEO"
+  },
+  {
+    "id": 19,
+    "code": "BD04",
+    "name": "BALANCEO CAMIONETA CHICA DEPORTIVA (SAVEIRO ECOESPORT HRV SIMILAR",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "BALANCEO"
+  },
+  {
+    "id": 20,
+    "code": "B05",
+    "name": "BALANCEO CAMIONETA GRANDE CHAPA (215/80R16)",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "BALANCEO"
+  },
+  {
+    "id": 21,
+    "code": "BD05",
+    "name": "BALANCEO CAMIONETA GRANDE DEPORTIVO + 17\"",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "BALANCEO"
+  },
+  {
+    "id": 22,
+    "code": "B07",
+    "name": "BALANCEO CAMIONETA (H100-MASTER-DUCATO-SPRINTER )",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "BALANCEO"
+  },
+  {
+    "id": 23,
+    "code": "BD07",
+    "name": "BALANCEO (RAM-MARRUAS)",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "BALANCEO"
+  },
+  {
+    "id": 24,
+    "code": "BD06",
+    "name": "BALANCEO RUEDA MARRUA FORD AMERICANA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 25,
+    "code": "02",
+    "name": "BUENOS AIRES USHUAIA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 26,
+    "code": "CAL01",
+    "name": "CALIBRADO AUTO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 27,
+    "code": "CAL09",
+    "name": "CALIBRADO CAMION CHICO 10 R",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 28,
+    "code": "CAL08",
+    "name": "CALIBRADO CAMION CHICO 6 R",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 29,
+    "code": "CAL10",
+    "name": "CALIBRADO CAMION GRANDE BUS 6 R",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 30,
+    "code": "CAL11",
+    "name": "CALIBRADO CAMION GRANDE C SEMI/FURGON HASTA 18R",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 31,
+    "code": "CAL05",
+    "name": "CALIBRADO CAMIONETA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 32,
+    "code": "CAL07",
+    "name": "CALIBRADO CAMIONETA SPRINTER 6 R",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 33,
+    "code": "CEX01",
+    "name": "CAMBIO EXTREMO AUTO CHICO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 34,
+    "code": "CEX02",
+    "name": "CAMBIO EXTREMO AUTO GRANDE Y GOL POWER(SIMILAR)",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 35,
+    "code": "CEX03",
+    "name": "CAMBIO EXTREMO CAMIONETA CHICA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 36,
+    "code": "CEX05",
+    "name": "CAMBIO EXTREMO CAMIONETA GRANDE",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 37,
+    "code": "EP02",
+    "name": "CAMBIO EXTREMO Y PRECAP AUTO CHICO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 38,
+    "code": "EP03",
+    "name": "CAMBIO EXTREMO Y PRECAP AUTO GRANDE",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 39,
+    "code": "CEP01",
+    "name": "CAMBIO EXTREMO Y PRECAP CAMIONETA CHICA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 40,
+    "code": "CAMPREXT",
+    "name": "CAMBIO EXTREMO Y PRECAP CAMIONETA GRANDE",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "MECANICA"
+  },
+  {
+    "id": 41,
+    "code": "CPF01",
+    "name": "CAMBIO DE PASTILLAS DE FRENO DELANTERAS AUTO CHICO PAR",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 42,
+    "code": "CAMBPAST05",
+    "name": "CAMBIO DE PASTILLAS DE FRENO DELANTERAS CAMIONETA PAR",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 43,
+    "code": "CP01",
+    "name": "CAMBIO PRECAP AUTO CHICO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 44,
+    "code": "CAMBPRG",
+    "name": "CAMBIO PRECAP AUTO GRANDE (BORA FLUENCE COROLLA CIVIC VENTO )",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 45,
+    "code": "CAMBPRC",
+    "name": "CAMBIO PRECAP CAMIONETA CHICA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 46,
+    "code": "CAMBPRCG",
+    "name": "CAMBIO PRECAP CAMIONETA GRANDE",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 47,
+    "code": "CPSPI0001",
+    "name": "CAMBIO PRECAP SPRINTER Y SIMILARES",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 48,
+    "code": "CAMVIEL01",
+    "name": "CAMBIO VIELETAS AUTOS CHICOS MEDIANOS",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 49,
+    "code": "CARGAVAT01",
+    "name": "CARGA DE BATERIA AUTO (2 HORAS)",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 50,
+    "code": "CARGABAT02",
+    "name": "CARGA BATERIA CAMIONETA (2HORAS)",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 51,
+    "code": "CH01",
+    "name": "COMBA AUTO POR 1/2 HORA SERVICIO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "MECANICA"
+  },
+  {
+    "id": 52,
+    "code": "CO02",
+    "name": "COMBA CAMIONETA F-100",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "MECANICA"
+  },
+  {
+    "id": 53,
+    "code": "CO05",
+    "name": "COMBA CAMIONETA HILUX RANGER S10 FRONTIER",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "MECANICA"
+  },
+  {
+    "id": 54,
+    "code": "CS01",
+    "name": "COMBA SPRINTER SIMILAR",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "MECANICA"
+  },
+  {
+    "id": 55,
+    "code": "C01",
+    "name": "COMBO AUTO (ALINEACION + BALANCEO)",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 56,
+    "code": "C04",
+    "name": "COMBO CAMIONETA CHICA (ALINEACION+BALANCEO)",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 57,
+    "code": "C05",
+    "name": "COMBO CAMIONETA GRANDE (ALINEACION + BALANCEO)",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 58,
+    "code": "CC01",
+    "name": "COMBO COMPLETO DESARME Y ARME + BALANCEO+ALINEACION AUTO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 59,
+    "code": "CC02",
+    "name": "COMBO COMPLETO DESARME Y ARME+BALANCEO+ALINEACION AUTO GRANDE",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 60,
+    "code": "CC05",
+    "name": "COMBO COMPLETO DESARME Y ARME+BALANCEO +ALINEACION CAMIONETA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 61,
+    "code": "CC04",
+    "name": "COMBO COMPLETO DESARME Y ARME +BALANCEO + ALINEACION CAMIONETA CHICA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 62,
+    "code": "ADICONTRA01",
+    "name": "CONTRAPESO ADICIONAL ADHESIVO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 63,
+    "code": "FLETE",
+    "name": "CORDOBA BS AS",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 64,
+    "code": "FLETE02",
+    "name": "CORDOBA USHUAIA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 65,
+    "code": "DES16.5",
+    "name": "DESARME Y ARME 10L16.5",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 66,
+    "code": "D11L",
+    "name": "DESARME Y ARME 11/12L16 RETRO EXCAVADORA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 67,
+    "code": "D125",
+    "name": "DESARME Y ARME 12.5/80R18 RETROEXCAVADORA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 68,
+    "code": "D13001400",
+    "name": "DESARME Y ARME 1300/1400 R24 MOTONIVELADORA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 69,
+    "code": "DC1400",
+    "name": "DESARME Y ARME 1400X24 36T CONTAINERAS ELEVADOR",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 70,
+    "code": "D195",
+    "name": "DESARME Y ARME 16.9*24/19.5*24 8/12 RETROEXCAVADORAS TRASERAS",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 71,
+    "code": "D17.5",
+    "name": "DESARME Y ARME 17.5 CAMION CHICO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 72,
+    "code": "DE18",
+    "name": "DESARME Y ARME 18X7X8 ELEVADOR",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 73,
+    "code": "D021",
+    "name": "DESARME Y ARME 21X8X9",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 74,
+    "code": "D23.5",
+    "name": "DESARME Y ARME 23.5",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 75,
+    "code": "D2400",
+    "name": "DESARME Y ARME 24 R21",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 76,
+    "code": "D28X9",
+    "name": "DESARME Y ARME 28X9R15 BOBCAT",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 77,
+    "code": "D500",
+    "name": "DESARME Y ARME 500X8",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 78,
+    "code": "D600",
+    "name": "DESARME Y ARME 600X9",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 79,
+    "code": "D650",
+    "name": "DESARME Y ARME 650X10",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 80,
+    "code": "D700",
+    "name": "DESARME Y ARME 700X12",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 81,
+    "code": "DARO",
+    "name": "DESARME Y ARME 750/700 R16 CON ARO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 82,
+    "code": "D750",
+    "name": "DESARME Y ARME 750X15 ELEVADOR",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 83,
+    "code": "DA1000",
+    "name": "DESARME Y ARME APLANADORA 1000/1100X20",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 84,
+    "code": "D01",
+    "name": "DESARME Y ARME AUTO CHICO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 85,
+    "code": "D02",
+    "name": "DESARME Y ARME AUTO GRANDE 17\"+",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 86,
+    "code": "D0027",
+    "name": "DESARME Y ARME AUTOS CHOCADORES SHOPING",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 87,
+    "code": "DB01",
+    "name": "DESARME Y ARME BICI",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 88,
+    "code": "D11",
+    "name": "DESARME Y ARME CAMION 1100/1200R20 / 315/80R22.5 GOMON",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 89,
+    "code": "D385",
+    "name": "DESARME Y ARME CAMION 385/80 R 22.5",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 90,
+    "code": "D10",
+    "name": "DESARME Y ARME CAMION GRANDE SIN CAMARA 275/295R22.5",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 91,
+    "code": "D09",
+    "name": "DESARME Y ARME CAMION RDO 20\"C/ARO 900/1000",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 92,
+    "code": "D06",
+    "name": "DESARME Y ARME CAMIONETA C/ARO RODADO 16",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 93,
+    "code": "D04",
+    "name": "DESARME Y ARME CAMIONETA CHICA SAVEIRO ECO HRV",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 94,
+    "code": "D05",
+    "name": "DESARME Y ARME CAMIONETA GRANDE TOYOTA MITS NISSAN AMAROK H1",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 95,
+    "code": "D17.5R25",
+    "name": "DESARME Y ARME CARGADORA 17.5R25",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 96,
+    "code": "D20.5",
+    "name": "DESARME Y ARME CARGADORA 20.5R25",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 97,
+    "code": "D1600",
+    "name": "DESARME Y ARME CONTAINERAS 1600R25 36/40T",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 98,
+    "code": "D1800",
+    "name": "DESARME Y ARME CONTAINERAS 1800R25 40T",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 99,
+    "code": "DC01",
+    "name": "DESARME Y ARME CUATRI",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 100,
+    "code": "DK01",
+    "name": "DESARME Y ARME KARTING",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 101,
+    "code": "DMO",
+    "name": "DESARME Y ARME MOTO CHICA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 102,
+    "code": "DMG",
+    "name": "DESARME Y ARME MOTO GRANDE",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 103,
+    "code": "DH07",
+    "name": "DESARME Y ARME MOTOR HOME/CASILLLA RODANTE R16",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 104,
+    "code": "D020",
+    "name": "DESARME Y ARME PISANIEVE",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 105,
+    "code": "DRAM",
+    "name": "DESARME Y ARME RAM-MARRUAS",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 106,
+    "code": "D07",
+    "name": "DESARME Y ARME SPRINTER SIMILAR COMBI GRANDE",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESARME Y ARME"
+  },
+  {
+    "id": 107,
+    "code": "D002",
+    "name": "DESARME AUTO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESRME DE RUEDAS"
+  },
+  {
+    "id": 108,
+    "code": "03",
+    "name": "FLETES RIO GRANDE USHUAIA - AUTOS",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 109,
+    "code": "04",
+    "name": "FLETES RIO GRANDE USHUAIA CAMIONETA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 110,
+    "code": "GASTENV01",
+    "name": "GASTOS DE ENVIO WURTH",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 111,
+    "code": "GUARDERIA",
+    "name": "GUARDERIA CUBIERTA AUTO X 2 CUBIERTA X MES",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 112,
+    "code": "000000001",
+    "name": "GUIA DE REMOVIDO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 113,
+    "code": "REMITO",
+    "name": "REMITO N",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 114,
+    "code": "R16.5",
+    "name": "REPARACION 10.5 R16.5 MINICARGADORA",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 115,
+    "code": "R11L",
+    "name": "REPARACION 11L16",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 116,
+    "code": "R28",
+    "name": "REPARACION 12.4 R28 TRACTOR",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 117,
+    "code": "R125",
+    "name": "REPARACION 12.5/80R18 RETROEXCAVADORA",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 118,
+    "code": "R1300",
+    "name": "REPARACION 1300/1400 R 24 MOTONIVELADORA",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 119,
+    "code": "RC1400",
+    "name": "REPARACION 1400 R 25 36T CONTAINERAS",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 120,
+    "code": "CH00524",
+    "name": "REPARACION 16.00 X 25 ELEVADOR",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 121,
+    "code": "R195",
+    "name": "REPARACION 16.9 R 24 19.5R24 RETRO",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 122,
+    "code": "R1600",
+    "name": "REPARACION 1600 R 24 8/12T MOTONIVELADORAS",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 123,
+    "code": "CH00525",
+    "name": "REPARACION 18.00 X 25 ELEVADOR",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 124,
+    "code": "RE18",
+    "name": "REPARACION 18X7X8 ELEVADOR",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 125,
+    "code": "R20.5",
+    "name": "REPARACION 20.5 R25 CARGADORA",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 126,
+    "code": "R21X8-9",
+    "name": "REPARACION 21X8-9",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 127,
+    "code": "R23.5",
+    "name": "REPARACION 23.5",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 128,
+    "code": "REP28",
+    "name": "REPARACION 28X9R15",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 129,
+    "code": "R385",
+    "name": "REPARACION 385/65R22.5 GOMON",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 130,
+    "code": "R500",
+    "name": "REPARACION 500X8",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 131,
+    "code": "R600",
+    "name": "REPARACION 600X9",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 132,
+    "code": "R650",
+    "name": "REPARACION 650X10 ELEVADOR",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 133,
+    "code": "RARO",
+    "name": "REPARACION 700/750R16 CON ARO",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 134,
+    "code": "R700",
+    "name": "REPARACION 700X12",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 135,
+    "code": "R750",
+    "name": "REPARACION 750R15 ELEVADOR",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 136,
+    "code": "R16",
+    "name": "REPARACION APLANADORA R 20",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 137,
+    "code": "R01",
+    "name": "REPARACION AUTO CHICO",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 138,
+    "code": "R02",
+    "name": "REPARACION AUTO GRANDE +17\"",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 139,
+    "code": "RB02",
+    "name": "REPARACION BARREDORA",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 140,
+    "code": "RB01",
+    "name": "REPARACION BICI",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 141,
+    "code": "R10",
+    "name": "REPARACION CAMION 275/295/80R-22.5",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 142,
+    "code": "R17.5",
+    "name": "REPARACION CAMION CHICO 17.5 COLECTIVO CHICO",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 143,
+    "code": "R11",
+    "name": "REPARACION CAMION GRANDE 1100/1200R20 / 315/80 R 22.5",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 144,
+    "code": "R20",
+    "name": "REPARACION CAMION R-20-900/1000R20",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 145,
+    "code": "R05",
+    "name": "REPARACION CAMIONETA (215/80R16HASTA 265/70R17) H1",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 146,
+    "code": "R04",
+    "name": "REPARACION CAMIONETA CHICAS (ECOSPOR KANGOO SAVEIRO TIGO)",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 147,
+    "code": "CH00540",
+    "name": "REPARACION CARRETILLA",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 148,
+    "code": "RC01",
+    "name": "REPARACION CUATRI",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 149,
+    "code": "RRAM",
+    "name": "REPARACION LAND ROVER-RAM-MARRUAS 235/85R16",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 150,
+    "code": "RM",
+    "name": "REPARACION MOTO CHICA",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 151,
+    "code": "RMG",
+    "name": "REPARACION MOTO GRANDE",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 152,
+    "code": "RM17.5R25",
+    "name": "REPARACION MOTONIVELADORA 17.5X25/1400X24 CON O SIN CAMARA",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 153,
+    "code": "R07",
+    "name": "REPARACION SPRINTER (MINIBUS)",
+    "category": "repair",
+    "active": true,
+    "sourceRubro": "REPARACION"
+  },
+  {
+    "id": 154,
+    "code": "ROT08",
+    "name": "ROTACION 750R16 215/75R17.5",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ROTACION"
+  },
+  {
+    "id": 155,
+    "code": "ROT01",
+    "name": "ROTACION AUTO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ROTACION"
+  },
+  {
+    "id": 156,
+    "code": "ROT02",
+    "name": "ROTACION AUTO GRANDE +17",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ROTACION"
+  },
+  {
+    "id": 157,
+    "code": "ROT10",
+    "name": "ROTACION CAMION GRANDE BUSS RDO20/22.5",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS PESADOS"
+  },
+  {
+    "id": 158,
+    "code": "ROT04",
+    "name": "ROTACION CAMIONETA CHICA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ROTACION"
+  },
+  {
+    "id": 159,
+    "code": "ROT05",
+    "name": "ROTACION CAMIONETA GRANDE",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ROTACION"
+  },
+  {
+    "id": 160,
+    "code": "ROT07",
+    "name": "ROTACION COMBI SPRINTER/SIMILAR-LAND ROVER/ RAM",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "ROTACION"
+  },
+  {
+    "id": 161,
+    "code": "SEGURO",
+    "name": "SEGURO MERCADERIA EN VIAJE",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "SERVICIOS"
+  },
+  {
+    "id": 162,
+    "code": "D001",
+    "name": "SOLO DESARME AUTO",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESRME DE RUEDAS"
+  },
+  {
+    "id": 163,
+    "code": "D004",
+    "name": "SOLO DESARME CAMIONETA",
+    "category": "service",
+    "active": true,
+    "sourceRubro": "DESRME DE RUEDAS"
+  }
+]
