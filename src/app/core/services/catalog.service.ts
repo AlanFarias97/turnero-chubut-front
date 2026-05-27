@@ -84,7 +84,9 @@ export class CatalogService {
         code: normalizedCode,
         name: normalizedName,
         category: entry.category,
-        active: entry.active
+        active: entry.active,
+        sourceRubro:
+          entry.sourceRubro
       };
 
       const index =
@@ -108,7 +110,9 @@ export class CatalogService {
         code: normalizedCode,
         name: normalizedName,
         category: entry.category,
-        active: entry.active
+        active: entry.active,
+        sourceRubro:
+          entry.sourceRubro
       };
 
       items.unshift(
@@ -140,6 +144,32 @@ export class CatalogService {
 
     this.updateItems(
       items
+    );
+
+  }
+
+  deleteItem(
+    id: number
+  ): void {
+
+    const items =
+      this.getItems();
+
+    const itemExists =
+      items.some(item =>
+        item.id === id
+      );
+
+    if (!itemExists) {
+      throw new Error(
+        'El item no existe.'
+      );
+    }
+
+    this.updateItems(
+      items.filter(item =>
+        item.id !== id
+      )
     );
 
   }

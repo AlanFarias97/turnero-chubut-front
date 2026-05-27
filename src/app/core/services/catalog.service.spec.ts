@@ -47,4 +47,13 @@ describe('CatalogService', () => {
         .some(item => item.code === 'A01')
     ).toBeFalse();
   });
+
+  it('should delete an item from the catalog', () => {
+    service.deleteItem(1);
+
+    expect(
+      service.getItems()
+        .some(item => item.id === 1)
+    ).toBeFalse();
+  });
 });

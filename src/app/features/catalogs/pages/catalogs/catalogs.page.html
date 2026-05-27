@@ -135,6 +135,12 @@
                   (click)="toggleItem(item)">
                   {{ item.active ? 'Desactivar' : 'Activar' }}
                 </button>
+                <button
+                  class="delete-action"
+                  type="button"
+                  (click)="requestDelete(item)">
+                  Eliminar
+                </button>
               </div>
             </div>
           </div>
@@ -146,7 +152,23 @@
           </ng-template>
         </section>
 
-        <aside class="edit-panel">
+      </div>
+    </main>
+  </div>
+
+  <div
+    class="catalog-form-modal"
+    *ngIf="showForm">
+    <div
+      class="modal-backdrop"
+      (click)="closeForm()">
+    </div>
+
+    <section
+      class="edit-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Formulario de catalogo">
           <div class="edit-title">
             <div>
               <h3>
@@ -165,6 +187,13 @@
               type="button"
               (click)="addItem('repair')">
               + Reparacion
+            </button>
+            <button
+              class="close-action"
+              type="button"
+              aria-label="Cerrar"
+              (click)="closeForm()">
+              x
             </button>
           </div>
 
@@ -226,8 +255,45 @@
             (click)="saveItem()">
             Guardar cambios
           </button>
-        </aside>
+    </section>
+  </div>
+
+  <div
+    class="confirm-modal"
+    *ngIf="itemToDelete">
+    <div
+      class="modal-backdrop"
+      (click)="cancelDelete()">
+    </div>
+
+    <section
+      class="confirm-card"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Confirmar eliminacion">
+      <h3>Eliminar item</h3>
+      <p>
+        Se eliminara
+        <strong>
+          {{ itemToDelete.code }} - {{ itemToDelete.name }}
+        </strong>
+        del catalogo y dejara de aparecer en el dropdown.
+      </p>
+
+      <div class="confirm-actions">
+        <button
+          class="secondary-action"
+          type="button"
+          (click)="cancelDelete()">
+          Cancelar
+        </button>
+        <button
+          class="danger-action"
+          type="button"
+          (click)="confirmDelete()">
+          Eliminar
+        </button>
       </div>
-    </main>
+    </section>
   </div>
 </ion-content>

@@ -60,6 +60,11 @@ export class CatalogsPage implements OnInit {
   selectedItem: CatalogItem | null =
     null;
 
+  itemToDelete: CatalogItem | null =
+    null;
+
+  showForm = false;
+
   draft: Omit<CatalogItem, 'id'>
     & { id?: number } =
       this.emptyDraft('service');
@@ -128,6 +133,9 @@ export class CatalogsPage implements OnInit {
 
     this.formError = '';
 
+    this.showForm =
+      true;
+
   }
 
   editItem(
@@ -140,6 +148,18 @@ export class CatalogsPage implements OnInit {
     this.draft = {
       ...item
     };
+
+    this.formError = '';
+
+    this.showForm =
+      true;
+
+  }
+
+  closeForm(): void {
+
+    this.showForm =
+      false;
 
     this.formError = '';
 
@@ -171,6 +191,9 @@ export class CatalogsPage implements OnInit {
         savedItem
       );
 
+      this.showForm =
+        false;
+
     } catch (error) {
 
       this.formError =
@@ -179,6 +202,54 @@ export class CatalogsPage implements OnInit {
           : 'No se pudo guardar.';
 
     }
+
+  }
+
+  requestDelete(
+    item: CatalogItem
+  ): void {
+
+    this.itemToDelete =
+      item;
+
+  }
+
+  cancelDelete(): void {
+
+    this.itemToDelete =
+      null;
+
+  }
+
+  confirmDelete(): void {
+
+    if (!this.itemToDelete) {
+      return;
+    }
+
+    const deletedId =
+      this.itemToDelete.id;
+
+    this.catalogService
+      .deleteItem(deletedId);
+
+    this.refreshItems();
+
+    if (
+      this.selectedItem?.id === deletedId
+    ) {
+      this.selectedItem =
+        null;
+
+      this.draft =
+        this.emptyDraft('service');
+
+      this.showForm =
+        false;
+    }
+
+    this.itemToDelete =
+      null;
 
   }
 
