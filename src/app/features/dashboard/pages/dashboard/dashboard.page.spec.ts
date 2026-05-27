@@ -76,6 +76,33 @@ describe('DashboardPage', () => {
       'Balanceo auto '
     );
   });
+
+  it('should preserve bullet services when creating a vehicle', () => {
+    component.newVehicle = {
+      patent: 'LISTA01',
+      description: 'Prueba',
+      service:
+        '<ol><li data-list="bullet">' +
+        '<span class="ql-ui"></span>' +
+        'Balanceo auto</li>' +
+        '<li data-list="bullet">' +
+        '<span class="ql-ui"></span>' +
+        'Alineacion auto</li></ol>'
+    };
+
+    component.createVehicle();
+
+    const createdVehicle =
+      component.waitingVehicles.find(
+        vehicle =>
+          vehicle.patent === 'LISTA01'
+      );
+
+    expect(createdVehicle?.service).toBe(
+      '<ul><li>Balanceo auto</li>' +
+      '<li>Alineacion auto</li></ul>'
+    );
+  });
 });
 
 function createFakeQuill(

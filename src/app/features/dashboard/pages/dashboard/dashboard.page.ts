@@ -117,7 +117,7 @@ implements OnInit, OnDestroy {
 
   autocompletePosition = {
 
-    top: 0,
+    top: 58,
 
     left: 0
 
@@ -367,18 +367,38 @@ implements OnInit, OnDestroy {
       insertText
     );
 
-    quill.setSelection(
-      tokenStart +
-      insertText.length
-    );
+    if (
+      typeof quill.root?.innerHTML ===
+      'string'
+    ) {
+      this.newVehicle.service =
+        quill.root.innerHTML;
+    }
 
     this.hideServiceAutocomplete();
+
+    setTimeout(() => {
+
+      if (this.serviceEditor !== quill) {
+        return;
+      }
+
+      quill.focus?.();
+
+      quill.setSelection(
+        tokenStart +
+        insertText.length,
+        0,
+        'silent'
+      );
+
+    });
 
   }
 
   selectServiceFromPointer(
     service: ServiceCatalogItem,
-    event: PointerEvent
+    event: Event
   ): void {
 
     event.preventDefault();
@@ -468,7 +488,53 @@ implements OnInit, OnDestroy {
     this.selectedAutocompleteIndex =
       0;
 
+    this.updateAutocompletePosition(
+      quill
+    );
+
     return true;
+
+  }
+
+  private updateAutocompletePosition(
+    quill: any
+  ): void {
+
+    const range =
+      quill.getSelection();
+
+    const root =
+      quill.root as HTMLElement;
+
+    const container =
+      root?.closest?.(
+        '.service-input-container'
+      ) as HTMLElement | null;
+
+    if (
+      !range ||
+      !container ||
+      typeof root.getBoundingClientRect !==
+        'function'
+    ) {
+      return;
+    }
+
+    const cursorBounds =
+      quill.getBounds(range.index);
+
+    const rootRect =
+      root.getBoundingClientRect();
+
+    const containerRect =
+      container.getBoundingClientRect();
+
+    this.autocompletePosition.top =
+      rootRect.top -
+      containerRect.top +
+      cursorBounds.top +
+      cursorBounds.height +
+      6;
 
   }
 
@@ -1262,7 +1328,7 @@ implements OnInit, OnDestroy {
       this.newVehicle.description,
 
       service:
-      this.extractPlainText(
+      this.serializeServiceMarkup(
         this.newVehicle.service
       ),
 
@@ -1319,7 +1385,7 @@ implements OnInit, OnDestroy {
         this.newVehicle.description,
 
       service:
-        this.extractPlainText(
+        this.serializeServiceMarkup(
           this.newVehicle.service
         ),
 
@@ -1405,12 +1471,109 @@ implements OnInit, OnDestroy {
 
   }
 
+  private serializeServiceMarkup(
+    html: string
+  ): string {
+
+    const wrapper =
+      document.createElement('div');
+
+    wrapper.innerHTML =
+      html;
+
+    wrapper.querySelectorAll(
+      '.ql-ui'
+    ).forEach(element =>
+      element.remove()
+    );
+
+    wrapper.querySelectorAll(
+      'ol'
+    ).forEach(list => {
+
+      const items =
+        Array.from(
+          list.querySelectorAll(
+            ':scope > li'
+          )
+        );
+
+      const fragment =
+        document.createDocumentFragment();
+
+      let currentList:
+        HTMLUListElement |
+        HTMLOListElement |
+        null = null;
+
+      let currentType = '';
+
+      items.forEach(item => {
+
+        const type =
+          item.getAttribute(
+            'data-list'
+          ) === 'bullet'
+            ? 'ul'
+            : 'ol';
+
+        item.removeAttribute(
+          'data-list'
+        );
+
+        if (type !== currentType) {
+
+          currentList =
+            document.createElement(
+              type
+            );
+
+          fragment.appendChild(
+            currentList
+          );
+
+          currentType = type;
+
+        }
+
+        currentList?.appendChild(
+          item
+        );
+
+      });
+
+      list.replaceWith(
+        fragment
+      );
+
+    });
+
+    return wrapper.innerHTML;
+
+  }
+
   onEditorCreated(
     quill: any
   ): void {
 
     this.serviceEditor =
       quill;
+
+    if (
+      !this.isEditingVehicle &&
+      quill.getText().trim().length === 0
+    ) {
+
+      quill.formatLine(
+        0,
+        1,
+        'list',
+        'bullet'
+      );
+
+      quill.setSelection(0);
+
+    }
 
     quill.root.addEventListener(
       'keydown',

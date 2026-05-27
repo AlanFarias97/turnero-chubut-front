@@ -78,9 +78,49 @@
   line-height: 1.12;
   overflow: hidden;
   overflow-wrap: anywhere;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 6;
+  max-height: calc(1.12em * 6);
+  text-align: left;
+}
+
+:host ::ng-deep .service-rich-text p {
+  margin: 0;
+  text-align: center;
+}
+
+:host ::ng-deep .service-rich-text ul,
+:host ::ng-deep .service-rich-text ol {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  padding-left: 1.15em;
+}
+
+:host ::ng-deep .service-rich-text li {
+  padding-left: 0.1em;
+}
+
+:host ::ng-deep .service-rich-text li + li {
+  margin-top: 0.2em;
+}
+
+:host ::ng-deep .service-rich-text ul li {
+  list-style-type: disc;
+}
+
+:host ::ng-deep .service-rich-text ol li {
+  list-style-type: decimal;
+}
+
+:host ::ng-deep .service-rich-text ol li[data-list="bullet"] {
+  list-style-type: disc;
+}
+
+:host ::ng-deep .service-rich-text ol li[data-list="ordered"] {
+  list-style-type: decimal;
+}
+
+:host ::ng-deep .service-rich-text .ql-ui {
+  display: none;
 }
 
 .operator {
@@ -131,6 +171,6 @@
   }
 
   .service {
-    -webkit-line-clamp: 5;
+    max-height: calc(1.12em * 5);
   }
 }

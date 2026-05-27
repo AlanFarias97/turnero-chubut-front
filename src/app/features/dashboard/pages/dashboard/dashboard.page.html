@@ -117,6 +117,7 @@
             class="autocomplete-dropdown"
 
             *ngIf="showAutocomplete"
+            [style.top.px]="autocompletePosition.top"
             role="listbox"
             aria-label="Servicios disponibles"
           >
@@ -142,15 +143,11 @@
                 $event.preventDefault()
               "
 
-              (pointerup)="
+              (click)="
                 selectServiceFromPointer(
                   service,
                   $event
                 )
-              "
-
-              (click)="
-                selectService(service)
               ">
 
               <div class="service-code">
