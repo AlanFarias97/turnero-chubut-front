@@ -118,3 +118,45 @@
   width: 10px;
 
 }
+
+app-dashboard .operator-option.payment-status-option {
+  font-weight: 700;
+  -webkit-tap-highlight-color: transparent;
+}
+
+app-dashboard .operator-option.payment-status-option input {
+  appearance: none;
+  flex: 0 0 auto;
+  width: 18px !important;
+  height: 18px !important;
+  min-height: 18px !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  border: 2px solid #9ca3af;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+app-dashboard .operator-option.payment-status-option input:checked {
+  border-color: var(--app-red);
+  background:
+    radial-gradient(
+      circle,
+      var(--app-red) 0 48%,
+      transparent 52%
+    );
+}
+
+app-dashboard .operator-option.payment-status-option input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+@media (max-width: 760px) {
+  app-dashboard .operator-option.payment-status-option {
+    min-height: 56px;
+    font-size: 15px;
+    font-weight: 650;
+  }
+}
