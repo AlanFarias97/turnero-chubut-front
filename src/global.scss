@@ -160,3 +160,53 @@ app-dashboard .operator-option.payment-status-option input:focus {
     font-weight: 650;
   }
 }
+
+app-dashboard .logo-container {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+app-dashboard .logo-container img {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+app-dashboard .logo-container h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+app-dashboard .logo-container span {
+  display: block;
+  margin-top: 8px;
+  color: #ff3434;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+  app-dashboard .logo-container img {
+    width: 44px;
+    height: 44px;
+  }
+
+  app-dashboard .logo-container h1 {
+    font-size: 24px;
+  }
+
+  app-dashboard .logo-container span {
+    margin-top: 4px;
+    font-size: 11px;
+  }
+}
