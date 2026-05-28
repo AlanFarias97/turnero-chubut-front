@@ -165,6 +165,7 @@ implements OnInit, OnDestroy {
       id: 1,
       patent: 'AB123CD',
       status: 'in_queue',
+      paymentStatus: 'unpaid',
       description: 'Gris',
       service: 'Cambio x2 delanteras',
       waitingMinutes: 15,
@@ -182,7 +183,10 @@ implements OnInit, OnDestroy {
 
     description: '',
 
-    service: ''
+    service: '',
+
+    paymentStatus: 'unpaid' as
+      Vehicle['paymentStatus']
 
   };
 
@@ -279,7 +283,11 @@ implements OnInit, OnDestroy {
         vehicle.description,
 
       service:
-        vehicle.service
+        vehicle.service,
+
+      paymentStatus:
+        vehicle.paymentStatus ||
+        'unpaid'
 
     };
 
@@ -317,7 +325,10 @@ implements OnInit, OnDestroy {
 
       description: '',
 
-      service: ''
+      service: '',
+
+      paymentStatus: 'unpaid' as
+        Vehicle['paymentStatus']
 
     };
 
@@ -1338,6 +1349,9 @@ implements OnInit, OnDestroy {
 
       status: 'in_queue',
 
+      paymentStatus:
+        this.newVehicle.paymentStatus,
+
       assignedOperators: []
 
     };
@@ -1388,6 +1402,9 @@ implements OnInit, OnDestroy {
         this.serializeServiceMarkup(
           this.newVehicle.service
         ),
+
+      paymentStatus:
+        this.newVehicle.paymentStatus,
 
       assignedOperators:
         [...this.selectedOperators]

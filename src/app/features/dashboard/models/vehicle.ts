@@ -5,6 +5,11 @@ export type VehicleStatus =
   | 'partial_completed'
   | 'not_completed';
 
+export type VehiclePaymentStatus =
+  | 'unpaid'
+  | 'partial'
+  | 'paid';
+
 export interface Vehicle {
 
   id: number;
@@ -16,6 +21,8 @@ export interface Vehicle {
   waitingMinutes: number;
 
   status: VehicleStatus;
+
+  paymentStatus: VehiclePaymentStatus;
 
   ticketNumber: number;
 

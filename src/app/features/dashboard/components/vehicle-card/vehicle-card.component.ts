@@ -90,4 +90,24 @@ implements OnInit {
 
   }
 
+  get paymentStatusLabel(): string {
+
+    switch (this.vehicle.paymentStatus) {
+      case 'paid':
+        return 'Pagado';
+      case 'partial':
+        return 'Pago parcial';
+      default:
+        return 'No pagado';
+    }
+
+  }
+
+  get paymentStatusClass(): string {
+
+    return this.vehicle.paymentStatus ||
+      'unpaid';
+
+  }
+
 }

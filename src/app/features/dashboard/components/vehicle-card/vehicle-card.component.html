@@ -62,11 +62,23 @@
 
   </div>
 
-  <div
-    class="status-chip"
-    [ngClass]="vehicle.status">
+  <div class="chips-row">
 
-    {{ statusLabel }}
+    <div
+      class="status-chip"
+      [ngClass]="vehicle.status">
+
+      {{ statusLabel }}
+
+    </div>
+
+    <div
+      class="payment-chip"
+      [ngClass]="paymentStatusClass">
+
+      {{ paymentStatusLabel }}
+
+    </div>
 
   </div>
 

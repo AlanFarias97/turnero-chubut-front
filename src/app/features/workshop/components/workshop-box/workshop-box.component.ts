@@ -14,4 +14,27 @@ export class WorkshopBoxComponent {
 
   @Input() box: any;
 
+  paymentStatusLabel(): string {
+
+    switch (
+      this.box?.currentVehicle
+        ?.paymentStatus
+    ) {
+      case 'paid':
+        return 'Pagado';
+      case 'partial':
+        return 'Pago parcial';
+      default:
+        return 'No pagado';
+    }
+
+  }
+
+  paymentStatusClass(): string {
+
+    return this.box?.currentVehicle
+      ?.paymentStatus || 'unpaid';
+
+  }
+
 }

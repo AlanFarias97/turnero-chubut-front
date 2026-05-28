@@ -92,6 +92,7 @@ describe('DashboardPage', () => {
     component.newVehicle = {
       patent: 'LISTA01',
       description: 'Prueba',
+      paymentStatus: 'partial',
       service:
         '<ol><li data-list="bullet">' +
         '<span class="ql-ui"></span>' +
@@ -112,6 +113,9 @@ describe('DashboardPage', () => {
     expect(createdVehicle?.service).toBe(
       '<ul><li>Balanceo auto</li>' +
       '<li>Alineacion auto</li></ul>'
+    );
+    expect(createdVehicle?.paymentStatus).toBe(
+      'partial'
     );
   });
 });

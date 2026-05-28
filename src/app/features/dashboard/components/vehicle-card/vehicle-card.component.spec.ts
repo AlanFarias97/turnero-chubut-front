@@ -19,6 +19,7 @@ describe('VehicleCardComponent', () => {
       service: 'Cambio x2 delanteras',
       waitingMinutes: 10,
       status: 'in_queue',
+      paymentStatus: 'unpaid',
       ticketNumber: 1,
       createdAt: new Date(),
       description: 'Gris',
@@ -29,5 +30,14 @@ describe('VehicleCardComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should label partial payments', () => {
+    component.vehicle.paymentStatus =
+      'partial';
+
+    expect(
+      component.paymentStatusLabel
+    ).toBe('Pago parcial');
   });
 });

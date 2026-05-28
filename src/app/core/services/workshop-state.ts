@@ -183,6 +183,11 @@ export class WorkshopStateService {
                 status:
                   this.normalizeStatus(
                     bay.currentVehicle.status
+                  ),
+                paymentStatus:
+                  this.normalizePaymentStatus(
+                    bay.currentVehicle
+                      .paymentStatus
                   )
               }
             : null
@@ -202,6 +207,22 @@ export class WorkshopStateService {
     };
 
     return statusMap[status] || status;
+
+  }
+
+  private normalizePaymentStatus(
+    status?: string
+  ): string {
+
+    const statusMap: Record<string, string> = {
+      NOT_PAID: 'unpaid',
+      PARTIALLY_PAID: 'partial',
+      PAID: 'paid'
+    };
+
+    return status
+      ? statusMap[status] || status
+      : 'unpaid';
 
   }
 

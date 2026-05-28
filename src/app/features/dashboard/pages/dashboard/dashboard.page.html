@@ -90,6 +90,60 @@
           [(ngModel)]="newVehicle.description"
         />
 
+        <div
+          class="payment-status-field"
+          role="radiogroup"
+          aria-label="Estado de pago">
+
+          <span>
+            Estado de pago
+          </span>
+
+          <div class="payment-status-options">
+
+            <label
+              class="operator-option payment-status-option"
+              [class.selected]="
+                newVehicle.paymentStatus === 'unpaid'
+              ">
+              <input
+                type="radio"
+                name="paymentStatus"
+                value="unpaid"
+                [(ngModel)]="newVehicle.paymentStatus">
+              <span>No pagado</span>
+            </label>
+
+            <label
+              class="operator-option payment-status-option"
+              [class.selected]="
+                newVehicle.paymentStatus === 'partial'
+              ">
+              <input
+                type="radio"
+                name="paymentStatus"
+                value="partial"
+                [(ngModel)]="newVehicle.paymentStatus">
+              <span>Pago parcial</span>
+            </label>
+
+            <label
+              class="operator-option payment-status-option"
+              [class.selected]="
+                newVehicle.paymentStatus === 'paid'
+              ">
+              <input
+                type="radio"
+                name="paymentStatus"
+                value="paid"
+                [(ngModel)]="newVehicle.paymentStatus">
+              <span>Pagado</span>
+            </label>
+
+          </div>
+
+        </div>
+
         <div class="service-input-container">
 
           <quill-editor
