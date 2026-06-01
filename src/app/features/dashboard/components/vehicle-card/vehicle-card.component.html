@@ -65,15 +65,11 @@
   <div class="timing-row">
 
     <span>
-      Creado {{ createdAtLabel }}
-    </span>
-
-    <span *ngIf="boxStartedAtLabel">
-      Box {{ boxStartedAtLabel }}
+      Espera {{ waitingTimeLabel }}
     </span>
 
     <span *ngIf="hasBoxTiming">
-      En box {{ boxElapsedLabel }}
+      Box {{ boxElapsedLabel }}
     </span>
 
   </div>

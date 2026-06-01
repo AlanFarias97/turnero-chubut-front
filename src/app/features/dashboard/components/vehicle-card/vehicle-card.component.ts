@@ -110,22 +110,10 @@ implements OnInit {
 
   }
 
-  get createdAtLabel(): string {
+  get waitingTimeLabel(): string {
 
-    return this.formatDateTime(
-      this.vehicle.createdAt
-    );
-
-  }
-
-  get boxStartedAtLabel(): string {
-
-    if (!this.vehicle.boxStartedAt) {
-      return '';
-    }
-
-    return this.formatDateTime(
-      this.vehicle.boxStartedAt
+    return this.formatDuration(
+      this.vehicle.waitingMinutes * 60000
     );
 
   }
@@ -216,33 +204,6 @@ implements OnInit {
     }
 
     return `${minutes} min`;
-
-  }
-
-  private formatDateTime(
-    value: Date | string
-  ): string {
-
-    const date =
-      new Date(value);
-
-    if (
-      Number.isNaN(
-        date.getTime()
-      )
-    ) {
-      return '';
-    }
-
-    return date.toLocaleString(
-      'es-AR',
-      {
-        day: '2-digit',
-        month: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      }
-    );
 
   }
 
