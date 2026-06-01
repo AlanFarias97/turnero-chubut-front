@@ -110,4 +110,140 @@ implements OnInit {
 
   }
 
+  get createdAtLabel(): string {
+
+    return this.formatDateTime(
+      this.vehicle.createdAt
+    );
+
+  }
+
+  get boxStartedAtLabel(): string {
+
+    if (!this.vehicle.boxStartedAt) {
+      return '';
+    }
+
+    return this.formatDateTime(
+      this.vehicle.boxStartedAt
+    );
+
+  }
+
+  get hasBoxTiming(): boolean {
+
+    return !!(
+      this.vehicle.boxStartedAt ||
+      this.vehicle.boxElapsedMs
+    );
+
+  }
+
+  get boxElapsedLabel(): string {
+
+    const elapsedMs =
+      this.getCurrentBoxElapsedMs();
+
+    return this.formatDuration(
+      elapsedMs
+    );
+
+  }
+
+  get timePillLabel(): string {
+
+    if (
+      this.vehicle.status ===
+      'in_progress'
+    ) {
+      return this.boxElapsedLabel;
+    }
+
+    return `${this.vehicle.waitingMinutes} min`;
+
+  }
+
+  private getCurrentBoxElapsedMs(): number {
+
+    const storedMs =
+      this.vehicle.boxElapsedMs || 0;
+
+    if (
+      this.vehicle.status !==
+        'in_progress' ||
+      (
+        !this.vehicle.boxTimerStartedAt &&
+        !this.vehicle.boxStartedAt
+      )
+    ) {
+      return storedMs;
+    }
+
+    const startedAt =
+      new Date(
+        this.vehicle.boxTimerStartedAt ||
+          this.vehicle.boxStartedAt as Date
+      ).getTime();
+
+    if (Number.isNaN(startedAt)) {
+      return storedMs;
+    }
+
+    return Math.max(
+      storedMs +
+        Date.now() -
+        startedAt,
+      0
+    );
+
+  }
+
+  private formatDuration(
+    valueMs: number
+  ): string {
+
+    const totalMinutes =
+      Math.floor(valueMs / 60000);
+
+    const hours =
+      Math.floor(totalMinutes / 60);
+
+    const minutes =
+      totalMinutes % 60;
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+
+    return `${minutes} min`;
+
+  }
+
+  private formatDateTime(
+    value: Date | string
+  ): string {
+
+    const date =
+      new Date(value);
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      return '';
+    }
+
+    return date.toLocaleString(
+      'es-AR',
+      {
+        day: '2-digit',
+        month: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }
+    );
+
+  }
+
 }

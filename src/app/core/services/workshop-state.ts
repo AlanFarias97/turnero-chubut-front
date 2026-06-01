@@ -188,7 +188,10 @@ export class WorkshopStateService {
                   this.normalizePaymentStatus(
                     bay.currentVehicle
                       .paymentStatus
-                  )
+                  ),
+                boxElapsedMs:
+                  bay.currentVehicle
+                    .boxElapsedMs || 0
               }
             : null
       })

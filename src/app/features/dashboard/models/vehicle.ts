@@ -28,6 +28,16 @@ export interface Vehicle {
 
   createdAt: Date;
 
+  boxStartedAt?: Date;
+
+  boxTimerStartedAt?: Date;
+
+  boxEndedAt?: Date;
+
+  boxElapsedMs?: number;
+
+  resetBoxTimerOnNextAssignment?: boolean;
+
   description: string;
 
   assignedOperators?: string[];

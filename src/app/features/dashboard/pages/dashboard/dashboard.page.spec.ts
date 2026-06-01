@@ -118,6 +118,109 @@ describe('DashboardPage', () => {
       'partial'
     );
   });
+
+  it('should start box timing when assigning a vehicle to a box', () => {
+    const vehicle =
+      component.waitingVehicles[0];
+
+    component.selectedVehicleForBay = {
+      ...vehicle
+    };
+    component.selectedBayId = 1;
+    component.selectedSourceContainerId =
+      'waiting-list';
+    component.selectedOperators = ['Chino'];
+
+    component.confirmAssignOperator();
+
+    const assignedVehicle =
+      component.bays[0].currentVehicle;
+
+    expect(assignedVehicle.status).toBe(
+      'in_progress'
+    );
+    expect(assignedVehicle.boxStartedAt)
+      .toBeTruthy();
+    expect(assignedVehicle.boxTimerStartedAt)
+      .toBeTruthy();
+    expect(assignedVehicle.boxElapsedMs)
+      .toBe(0);
+  });
+
+  it('should preserve box timing when moving between boxes', () => {
+    const startedAt =
+      new Date('2026-05-01T10:00:00');
+
+    component.bays[0].currentVehicle = {
+      ...component.waitingVehicles[0],
+      status: 'in_progress',
+      assignedOperators: ['Chino'],
+      boxStartedAt: startedAt,
+      boxTimerStartedAt: startedAt,
+      boxElapsedMs: 120000
+    };
+    component.waitingVehicles = [];
+
+    component.selectedVehicleForBay = {
+      ...component.bays[0].currentVehicle
+    };
+    component.selectedBayId = 2;
+    component.selectedSourceContainerId =
+      'bay-1';
+    component.selectedOperators = ['Chino'];
+
+    component.confirmAssignOperator();
+
+    expect(component.bays[1].currentVehicle.boxStartedAt)
+      .toEqual(startedAt);
+    expect(component.bays[1].currentVehicle.boxElapsedMs)
+      .toBe(120000);
+  });
+
+  it('should reset box timing when a partial vehicle returns to a box', () => {
+    const oldStartedAt =
+      new Date('2026-05-01T10:00:00');
+
+    const partialVehicle = {
+      ...component.waitingVehicles[0],
+      status: 'partial_completed' as const,
+      boxStartedAt: oldStartedAt,
+      boxElapsedMs: 900000,
+      resetBoxTimerOnNextAssignment: true
+    };
+
+    component.completedVehicles = [
+      partialVehicle
+    ];
+    component.waitingVehicles = [];
+
+    component.selectedVehicleForBay = {
+      ...partialVehicle
+    };
+    component.selectedBayId = 1;
+    component.selectedSourceContainerId =
+      'completed-list';
+    component.selectedOperators = ['Chino'];
+
+    component.confirmAssignOperator();
+
+    const assignedVehicle =
+      component.bays[0].currentVehicle;
+
+    expect(assignedVehicle.boxElapsedMs)
+      .toBe(0);
+    expect(
+      new Date(
+        assignedVehicle.boxStartedAt
+      ).getTime()
+    ).toBeGreaterThan(
+      oldStartedAt.getTime()
+    );
+    expect(
+      assignedVehicle
+        .resetBoxTimerOnNextAssignment
+    ).toBeFalse();
+  });
 });
 
 function createFakeQuill(

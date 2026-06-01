@@ -169,6 +169,7 @@ implements OnInit, OnDestroy {
       description: 'Gris',
       service: 'Cambio x2 delanteras',
       waitingMinutes: 15,
+      boxElapsedMs: 0,
       ticketNumber: 2,
       assignedOperators: [],
       createdAt: new Date()
@@ -799,6 +800,85 @@ implements OnInit, OnDestroy {
 
   }
 
+  private getBoxElapsedMs(
+    vehicle: Vehicle
+  ): number {
+
+    const storedMs =
+      vehicle.boxElapsedMs || 0;
+
+    if (
+      vehicle.status !== 'in_progress' ||
+      (
+        !vehicle.boxTimerStartedAt &&
+        !vehicle.boxStartedAt
+      )
+    ) {
+      return storedMs;
+    }
+
+    const startedAt =
+      new Date(
+        vehicle.boxTimerStartedAt ||
+          vehicle.boxStartedAt as Date
+      ).getTime();
+
+    if (Number.isNaN(startedAt)) {
+      return storedMs;
+    }
+
+    return Math.max(
+      storedMs +
+        new Date().getTime() -
+        startedAt,
+      0
+    );
+
+  }
+
+  private prepareVehicleForBox(
+    vehicle: Vehicle,
+    resetTimer: boolean
+  ): Vehicle {
+
+    const now =
+      new Date();
+
+    return {
+      ...vehicle,
+      status: 'in_progress',
+      boxStartedAt:
+        resetTimer ||
+        !vehicle.boxStartedAt
+          ? now
+          : vehicle.boxStartedAt,
+      boxTimerStartedAt: now,
+      boxEndedAt: undefined,
+      boxElapsedMs:
+        resetTimer
+          ? 0
+          : vehicle.boxElapsedMs || 0,
+      resetBoxTimerOnNextAssignment:
+        false
+    };
+
+  }
+
+  private pauseBoxTimer(
+    vehicle: Vehicle
+  ): Vehicle {
+
+    return {
+      ...vehicle,
+      boxElapsedMs:
+        this.getBoxElapsedMs(vehicle),
+      boxTimerStartedAt: undefined,
+      boxEndedAt:
+        new Date()
+    };
+
+  }
+
   onVehicleDropped(data: any): void {
 
     const draggedVehicle: Vehicle =
@@ -952,7 +1032,9 @@ implements OnInit, OnDestroy {
     );
 
     this.waitingVehicles.push({
-      ...this.selectedVehicleToMove,
+      ...this.pauseBoxTimer(
+        this.selectedVehicleToMove
+      ),
       status: 'in_queue',
       assignedOperators: []
     });
@@ -1011,13 +1093,17 @@ implements OnInit, OnDestroy {
       .assignedOperators =
       [...this.selectedOperators];
 
-    this.selectedVehicleForBay
-      .status = 'in_progress';
+    const shouldResetBoxTimer =
+      this.selectedSourceContainerId ===
+        'completed-list' ||
+      !!this.selectedVehicleForBay
+        .resetBoxTimerOnNextAssignment;
 
     bay.currentVehicle =
-      {
-        ...this.selectedVehicleForBay
-      };
+      this.prepareVehicleForBox(
+        this.selectedVehicleForBay,
+        shouldResetBoxTimer
+      );
 
     this.bays = [...this.bays];
 
@@ -1104,7 +1190,7 @@ implements OnInit, OnDestroy {
 
     const returnedVehicle: Vehicle = {
 
-      ...vehicle,
+      ...this.pauseBoxTimer(vehicle),
 
       status: 'in_queue',
 
@@ -1274,9 +1360,15 @@ implements OnInit, OnDestroy {
 
     const completedVehicle: Vehicle = {
 
-      ...bay.currentVehicle,
+      ...this.pauseBoxTimer(
+        bay.currentVehicle
+      ),
 
       status: this.completionStatus,
+
+      resetBoxTimerOnNextAssignment:
+        this.completionStatus !==
+          'completed',
 
       pendingWorkDetail:
         this.completionStatus !==
@@ -1344,6 +1436,8 @@ implements OnInit, OnDestroy {
       ),
 
       waitingMinutes: 0,
+
+      boxElapsedMs: 0,
 
       createdAt: new Date(),
 

@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  OnDestroy,
   inject,
   DestroyRef
 } from '@angular/core';
@@ -30,7 +31,7 @@ import {
   ]
 })
 export class WorkshopPage
-implements OnInit {
+implements OnInit, OnDestroy {
 
   private workshopStateService =
     inject(WorkshopStateService);
@@ -40,7 +41,16 @@ implements OnInit {
 
   boxes: any[] = [];
 
+  private clockInterval: any;
+
   ngOnInit(): void {
+
+    this.clockInterval =
+      setInterval(() => {
+
+        this.boxes = [...this.boxes];
+
+      }, 1000);
 
     this.workshopStateService
       .bays$
@@ -63,6 +73,14 @@ implements OnInit {
           })
         );
       });
+
+  }
+
+  ngOnDestroy(): void {
+
+    clearInterval(
+      this.clockInterval
+    );
 
   }
 

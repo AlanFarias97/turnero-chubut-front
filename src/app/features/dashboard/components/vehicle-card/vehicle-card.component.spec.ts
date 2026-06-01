@@ -18,6 +18,7 @@ describe('VehicleCardComponent', () => {
       patent: 'AB123CD',
       service: 'Cambio x2 delanteras',
       waitingMinutes: 10,
+      boxElapsedMs: 0,
       status: 'in_queue',
       paymentStatus: 'unpaid',
       ticketNumber: 1,
@@ -39,5 +40,25 @@ describe('VehicleCardComponent', () => {
     expect(
       component.paymentStatusLabel
     ).toBe('Pago parcial');
+  });
+
+  it('should show box time while vehicle is in progress', () => {
+    const startedAt =
+      new Date(
+        Date.now() - 11 * 60000 - 1000
+      );
+
+    component.vehicle = {
+      ...component.vehicle,
+      status: 'in_progress',
+      boxStartedAt: startedAt,
+      boxTimerStartedAt: startedAt,
+      boxElapsedMs: 0
+    };
+
+    expect(component.timePillLabel)
+      .toBe('11 min');
+    expect(component.boxElapsedLabel)
+      .toBe('11 min');
   });
 });
