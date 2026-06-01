@@ -4,6 +4,8 @@ import {
 
 import {
   Component,
+  ElementRef,
+  HostListener,
   OnInit,
   inject
 } from '@angular/core';
@@ -61,6 +63,9 @@ export class NotesPage implements OnInit {
   private notesService =
     inject(AdministrativeNotesService);
 
+  private elementRef =
+    inject(ElementRef<HTMLElement>);
+
   notes: AdministrativeNote[] = [];
 
   searchTerm = '';
@@ -103,6 +108,40 @@ export class NotesPage implements OnInit {
         this.notes = notes;
 
       });
+
+  }
+
+  @HostListener(
+    'document:click',
+    ['$event']
+  )
+  closeCalendarWhenClickingOutside(
+    event: MouseEvent
+  ): void {
+
+    if (!this.showCalendar) {
+      return;
+    }
+
+    const target =
+      event.target as HTMLElement | null;
+
+    if (
+      target?.closest('.date-picker') &&
+      this.elementRef.nativeElement
+        .contains(target)
+    ) {
+      return;
+    }
+
+    this.showCalendar = false;
+
+  }
+
+  @HostListener('document:keydown.escape')
+  closeCalendarOnEscape(): void {
+
+    this.showCalendar = false;
 
   }
 
@@ -299,6 +338,15 @@ export class NotesPage implements OnInit {
 
   }
 
+  trackByCalendarDay(
+    _: number,
+    day: CalendarDay
+  ): string {
+
+    return day.dateString;
+
+  }
+
   toggleCalendar(): void {
 
     this.showCalendar =
@@ -360,12 +408,16 @@ export class NotesPage implements OnInit {
       this.dateFrom =
         day.dateString;
 
+      this.showCalendar = false;
+
       return;
 
     }
 
     this.dateTo =
       day.dateString;
+
+    this.showCalendar = false;
 
   }
 
