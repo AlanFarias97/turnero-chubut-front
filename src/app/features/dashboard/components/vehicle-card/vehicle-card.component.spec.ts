@@ -57,7 +57,7 @@ describe('VehicleCardComponent', () => {
     };
 
     expect(component.timePillLabel)
-      .toBe('11 min');
+      .toBe('Box 11 min');
     expect(component.boxElapsedLabel)
       .toBe('11 min');
   });

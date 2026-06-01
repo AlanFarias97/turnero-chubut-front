@@ -144,10 +144,10 @@ implements OnInit {
       this.vehicle.status ===
       'in_progress'
     ) {
-      return this.boxElapsedLabel;
+      return `Box ${this.boxElapsedLabel}`;
     }
 
-    return `${this.vehicle.waitingMinutes} min`;
+    return `Espera ${this.waitingTimeLabel}`;
 
   }
 
