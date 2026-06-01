@@ -454,7 +454,7 @@
 
         <button
           type="button"
-          class="completion-option"
+          class="completion-option completed"
           [class.selected]="completionStatus === 'completed'"
           (click)="setCompletionStatus('completed')">
 
@@ -466,7 +466,7 @@
 
         <button
           type="button"
-          class="completion-option"
+          class="completion-option partial"
           [class.selected]="completionStatus === 'partial_completed'"
           (click)="setCompletionStatus('partial_completed')">
 
@@ -478,7 +478,7 @@
 
         <button
           type="button"
-          class="completion-option"
+          class="completion-option not-completed"
           [class.selected]="completionStatus === 'not_completed'"
           (click)="setCompletionStatus('not_completed')">
 

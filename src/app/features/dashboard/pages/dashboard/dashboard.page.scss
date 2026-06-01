@@ -341,9 +341,23 @@
   cursor: pointer;
 }
 
-.completion-option.selected,
 .payment-status-option.selected {
   border-color: var(--app-red);
+  background: #fef2f2;
+}
+
+.completion-option.completed.selected {
+  border-color: #10b981;
+  background: #ecfdf5;
+}
+
+.completion-option.partial.selected {
+  border-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.completion-option.not-completed.selected {
+  border-color: #ef4444;
   background: #fef2f2;
 }
 
