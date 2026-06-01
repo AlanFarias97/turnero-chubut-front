@@ -1,0 +1,153 @@
+<ion-content fullscreen>
+  <div class="notes-layout">
+    <aside class="sidebar">
+      <div>
+        <div class="logo-container">
+          <img
+            src="assets/brand/chubut-mark.png"
+            alt="Neumaticos Chubut" />
+
+          <div>
+            <h1>Turnero</h1>
+            <span>Neumaticos Chubut</span>
+          </div>
+        </div>
+
+        <nav class="menu">
+          <a
+            class="menu-item"
+            routerLink="/dashboard">Dashboard</a>
+          <div class="menu-item disabled">Fila</div>
+          <a
+            class="menu-item"
+            routerLink="/catalogs">Catalogos</a>
+          <a
+            class="menu-item active"
+            routerLink="/notes">Notas</a>
+          <div class="menu-item disabled">Historial</div>
+          <a
+            class="menu-item"
+            href="/workshop"
+            target="_blank">Pantalla taller</a>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        Sistema operativo del taller
+      </div>
+    </aside>
+
+    <main class="notes-content">
+      <header class="page-header">
+        <div>
+          <h2>Notas administrativas</h2>
+          <p>Pedidos, consultas y pendientes del dia a dia</p>
+        </div>
+
+        <button
+          class="primary-action"
+          type="button"
+          (click)="openForm()">
+          + Agregar nota
+        </button>
+      </header>
+
+      <section class="notes-panel">
+        <div class="toolbar">
+          <input
+            class="search"
+            type="search"
+            placeholder="Buscar por titulo o descripcion"
+            [(ngModel)]="searchTerm" />
+
+          <span class="result-count">
+            {{ filteredNotes.length }} notas
+          </span>
+        </div>
+
+        <div class="table-header">
+          <span>Fecha</span>
+          <span>Titulo</span>
+          <span>Descripcion</span>
+        </div>
+
+        <div
+          class="note-list"
+          *ngIf="filteredNotes.length; else noNotes">
+          <article
+            class="note-row"
+            *ngFor="
+              let note of filteredNotes;
+              trackBy: trackByNote
+            ">
+            <time>
+              {{ formatDate(note.createdAt) }}
+            </time>
+
+            <strong>
+              {{ note.title }}
+            </strong>
+
+            <p>
+              {{ note.description }}
+            </p>
+          </article>
+        </div>
+
+        <ng-template #noNotes>
+          <div class="empty-state">
+            No hay notas para mostrar.
+          </div>
+        </ng-template>
+      </section>
+    </main>
+
+    <div
+      class="modal-backdrop"
+      *ngIf="showForm">
+      <form
+        class="note-modal"
+        (ngSubmit)="saveNote()">
+        <h2>Agregar nota</h2>
+
+        <label>
+          <span>Titulo</span>
+          <input
+            name="title"
+            type="text"
+            placeholder="Ej: averiguar cubiertas R20 cliente Gonzales"
+            [(ngModel)]="draft.title" />
+        </label>
+
+        <label>
+          <span>Descripcion</span>
+          <textarea
+            name="description"
+            rows="5"
+            placeholder="Ej: conseguir cubiertas 285/60R20 para RAM"
+            [(ngModel)]="draft.description">
+          </textarea>
+        </label>
+
+        <small *ngIf="formError">
+          {{ formError }}
+        </small>
+
+        <div class="modal-actions">
+          <button
+            class="secondary-action"
+            type="button"
+            (click)="closeForm()">
+            Cancelar
+          </button>
+
+          <button
+            class="primary-action"
+            type="submit">
+            Guardar nota
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ion-content>
