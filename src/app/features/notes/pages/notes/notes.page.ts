@@ -49,6 +49,10 @@ export class NotesPage implements OnInit {
 
   searchTerm = '';
 
+  dateFrom = '';
+
+  dateTo = '';
+
   showForm = false;
 
   draft = this.emptyDraft();
@@ -74,15 +78,22 @@ export class NotesPage implements OnInit {
         this.searchTerm
       );
 
-    if (!query) {
-      return this.notes;
-    }
-
     return this.notes.filter(note =>
-      this.normalizeTerm(note.title)
-        .includes(query) ||
-      this.normalizeTerm(note.description)
-        .includes(query)
+      this.matchesTextFilter(
+        note,
+        query
+      ) &&
+      this.matchesDateFilter(note)
+    );
+
+  }
+
+  get hasActiveFilters(): boolean {
+
+    return !!(
+      this.searchTerm.trim() ||
+      this.dateFrom ||
+      this.dateTo
     );
 
   }
@@ -176,6 +187,122 @@ export class NotesPage implements OnInit {
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase()
       .trim();
+
+  }
+
+  clearFilters(): void {
+
+    this.searchTerm = '';
+
+    this.dateFrom = '';
+
+    this.dateTo = '';
+
+  }
+
+  private matchesTextFilter(
+    note: AdministrativeNote,
+    query: string
+  ): boolean {
+
+    if (!query) {
+      return true;
+    }
+
+    return (
+      this.normalizeTerm(note.title)
+        .includes(query) ||
+      this.normalizeTerm(note.description)
+        .includes(query)
+    );
+
+  }
+
+  private matchesDateFilter(
+    note: AdministrativeNote
+  ): boolean {
+
+    const noteTime =
+      new Date(note.createdAt)
+        .getTime();
+
+    const fromTime =
+      this.dateFrom
+        ? this.startOfDate(
+            this.dateFrom
+          ).getTime()
+        : null;
+
+    const toTime =
+      this.dateTo
+        ? this.endOfDate(
+            this.dateTo
+          ).getTime()
+        : null;
+
+    if (
+      fromTime !== null &&
+      noteTime < fromTime
+    ) {
+      return false;
+    }
+
+    if (
+      toTime !== null &&
+      noteTime > toTime
+    ) {
+      return false;
+    }
+
+    return true;
+
+  }
+
+  private startOfDate(
+    value: string
+  ): Date {
+
+    const [
+      year,
+      month,
+      day
+    ] = value
+      .split('-')
+      .map(Number);
+
+    return new Date(
+      year,
+      month - 1,
+      day,
+      0,
+      0,
+      0,
+      0
+    );
+
+  }
+
+  private endOfDate(
+    value: string
+  ): Date {
+
+    const [
+      year,
+      month,
+      day
+    ] = value
+      .split('-')
+      .map(Number);
+
+    return new Date(
+      year,
+      month - 1,
+      day,
+      23,
+      59,
+      59,
+      999
+    );
 
   }
 

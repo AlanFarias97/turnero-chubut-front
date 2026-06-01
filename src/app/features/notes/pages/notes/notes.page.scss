@@ -145,20 +145,64 @@
 .toolbar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 14px;
   padding: 16px;
   border-bottom: 1px solid var(--app-border);
 }
 
+.filters-row {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 10px;
+}
+
 .search {
-  width: min(420px, 100%);
+  width: auto;
+  flex: 1 1 320px;
   min-height: 42px;
   border: 1px solid #d0d5dd;
   border-radius: 8px;
   padding: 0 12px;
   color: var(--app-text);
   font-size: 14px;
+}
+
+.date-filter {
+  flex: 0 0 140px;
+  display: grid;
+  gap: 5px;
+}
+
+.date-filter span {
+  color: var(--app-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.date-filter input {
+  min-height: 42px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  padding: 0 10px;
+  color: var(--app-text);
+  font-size: 14px;
+}
+
+.clear-filters {
+  flex: 0 0 auto;
+  min-height: 42px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  padding: 0 12px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .result-count {
@@ -311,6 +355,14 @@
   .modal-actions {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .filters-row,
+  .search,
+  .date-filter,
+  .date-filter input,
+  .clear-filters {
+    width: 100%;
   }
 
   .page-header h2 {

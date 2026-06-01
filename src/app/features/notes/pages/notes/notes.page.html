@@ -54,11 +54,35 @@
 
       <section class="notes-panel">
         <div class="toolbar">
-          <input
-            class="search"
-            type="search"
-            placeholder="Buscar por titulo o descripcion"
-            [(ngModel)]="searchTerm" />
+          <div class="filters-row">
+            <input
+              class="search"
+              type="search"
+              placeholder="Buscar por titulo o descripcion"
+              [(ngModel)]="searchTerm" />
+
+            <label class="date-filter">
+              <span>Desde</span>
+              <input
+                type="date"
+                [(ngModel)]="dateFrom" />
+            </label>
+
+            <label class="date-filter">
+              <span>Hasta</span>
+              <input
+                type="date"
+                [(ngModel)]="dateTo" />
+            </label>
+
+            <button
+              class="clear-filters"
+              type="button"
+              *ngIf="hasActiveFilters"
+              (click)="clearFilters()">
+              Limpiar
+            </button>
+          </div>
 
           <span class="result-count">
             {{ filteredNotes.length }} notas
