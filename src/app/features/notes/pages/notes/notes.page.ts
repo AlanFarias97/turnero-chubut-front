@@ -28,6 +28,22 @@ import {
   AdministrativeNotesService
 } from 'src/app/core/services/administrative-notes.service';
 
+interface CalendarDay {
+
+  dateString: string;
+
+  day: number;
+
+  currentMonth: boolean;
+
+  selected: boolean;
+
+  inRange: boolean;
+
+  today: boolean;
+
+}
+
 @Component({
   selector: 'app-notes',
   templateUrl: './notes.page.html',
@@ -52,6 +68,25 @@ export class NotesPage implements OnInit {
   dateFrom = '';
 
   dateTo = '';
+
+  showCalendar = false;
+
+  calendarMonth =
+    new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      1
+    );
+
+  readonly calendarWeekDays = [
+    'L',
+    'M',
+    'M',
+    'J',
+    'V',
+    'S',
+    'D'
+  ];
 
   showForm = false;
 
@@ -95,6 +130,104 @@ export class NotesPage implements OnInit {
       this.dateFrom ||
       this.dateTo
     );
+
+  }
+
+  get calendarTitle(): string {
+
+    return this.calendarMonth
+      .toLocaleDateString(
+        'es-AR',
+        {
+          month: 'long',
+          year: 'numeric'
+        }
+      );
+
+  }
+
+  get calendarDays(): CalendarDay[] {
+
+    const firstDay =
+      new Date(
+        this.calendarMonth.getFullYear(),
+        this.calendarMonth.getMonth(),
+        1
+      );
+
+    const mondayOffset =
+      (
+        firstDay.getDay() + 6
+      ) % 7;
+
+    const startDate =
+      new Date(firstDay);
+
+    startDate.setDate(
+      firstDay.getDate() -
+        mondayOffset
+    );
+
+    return Array.from(
+      {
+        length: 42
+      },
+      (_, index) => {
+
+        const date =
+          new Date(startDate);
+
+        date.setDate(
+          startDate.getDate() +
+            index
+        );
+
+        const dateString =
+          this.toDateInputValue(date);
+
+        return {
+          dateString,
+          day: date.getDate(),
+          currentMonth:
+            date.getMonth() ===
+            this.calendarMonth.getMonth(),
+          selected:
+            dateString === this.dateFrom ||
+            dateString === this.dateTo,
+          inRange:
+            this.isDateInsideRange(
+              dateString
+            ),
+          today:
+            dateString ===
+            this.toDateInputValue(
+              new Date()
+            )
+        };
+
+      }
+    );
+
+  }
+
+  get dateRangeLabel(): string {
+
+    if (
+      this.dateFrom &&
+      this.dateTo
+    ) {
+      return `${this.formatShortDate(this.dateFrom)} - ${this.formatShortDate(this.dateTo)}`;
+    }
+
+    if (this.dateFrom) {
+      return `Desde ${this.formatShortDate(this.dateFrom)}`;
+    }
+
+    if (this.dateTo) {
+      return `Hasta ${this.formatShortDate(this.dateTo)}`;
+    }
+
+    return 'Seleccionar fecha';
 
   }
 
@@ -166,6 +299,76 @@ export class NotesPage implements OnInit {
 
   }
 
+  toggleCalendar(): void {
+
+    this.showCalendar =
+      !this.showCalendar;
+
+  }
+
+  previousCalendarMonth(): void {
+
+    this.calendarMonth =
+      new Date(
+        this.calendarMonth.getFullYear(),
+        this.calendarMonth.getMonth() - 1,
+        1
+      );
+
+  }
+
+  nextCalendarMonth(): void {
+
+    this.calendarMonth =
+      new Date(
+        this.calendarMonth.getFullYear(),
+        this.calendarMonth.getMonth() + 1,
+        1
+      );
+
+  }
+
+  selectCalendarDay(
+    day: CalendarDay
+  ): void {
+
+    if (
+      !this.dateFrom ||
+      (
+        this.dateFrom &&
+        this.dateTo
+      )
+    ) {
+
+      this.dateFrom =
+        day.dateString;
+
+      this.dateTo = '';
+
+      return;
+
+    }
+
+    if (
+      day.dateString <
+      this.dateFrom
+    ) {
+
+      this.dateTo =
+        this.dateFrom;
+
+      this.dateFrom =
+        day.dateString;
+
+      return;
+
+    }
+
+    this.dateTo =
+      day.dateString;
+
+  }
+
   private emptyDraft(): Pick<
     AdministrativeNote,
     'title' | 'description'
@@ -197,6 +400,65 @@ export class NotesPage implements OnInit {
     this.dateFrom = '';
 
     this.dateTo = '';
+
+    this.showCalendar = false;
+
+  }
+
+  private isDateInsideRange(
+    dateString: string
+  ): boolean {
+
+    if (
+      !this.dateFrom ||
+      !this.dateTo
+    ) {
+      return false;
+    }
+
+    return (
+      dateString > this.dateFrom &&
+      dateString < this.dateTo
+    );
+
+  }
+
+  private toDateInputValue(
+    date: Date
+  ): string {
+
+    const year =
+      date.getFullYear();
+
+    const month =
+      String(
+        date.getMonth() + 1
+      ).padStart(2, '0');
+
+    const day =
+      String(
+        date.getDate()
+      ).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+
+  }
+
+  private formatShortDate(
+    value: string
+  ): string {
+
+    const date =
+      this.startOfDate(value);
+
+    return date.toLocaleDateString(
+      'es-AR',
+      {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }
+    );
 
   }
 

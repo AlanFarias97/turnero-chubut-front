@@ -61,19 +61,60 @@
               placeholder="Buscar por titulo o descripcion"
               [(ngModel)]="searchTerm" />
 
-            <label class="date-filter">
-              <span>Desde</span>
-              <input
-                type="date"
-                [(ngModel)]="dateFrom" />
-            </label>
+            <div class="date-picker">
+              <button
+                class="calendar-trigger"
+                type="button"
+                (click)="toggleCalendar()">
+                <span>Fecha</span>
+                <strong>{{ dateRangeLabel }}</strong>
+              </button>
 
-            <label class="date-filter">
-              <span>Hasta</span>
-              <input
-                type="date"
-                [(ngModel)]="dateTo" />
-            </label>
+              <div
+                class="calendar-panel"
+                *ngIf="showCalendar">
+                <div class="calendar-header">
+                  <button
+                    type="button"
+                    aria-label="Mes anterior"
+                    (click)="previousCalendarMonth()">
+                    ‹
+                  </button>
+
+                  <strong>
+                    {{ calendarTitle }}
+                  </strong>
+
+                  <button
+                    type="button"
+                    aria-label="Mes siguiente"
+                    (click)="nextCalendarMonth()">
+                    ›
+                  </button>
+                </div>
+
+                <div class="calendar-weekdays">
+                  <span
+                    *ngFor="let weekday of calendarWeekDays">
+                    {{ weekday }}
+                  </span>
+                </div>
+
+                <div class="calendar-grid">
+                  <button
+                    *ngFor="let day of calendarDays"
+                    type="button"
+                    class="calendar-day"
+                    [class.muted]="!day.currentMonth"
+                    [class.today]="day.today"
+                    [class.selected]="day.selected"
+                    [class.in-range]="day.inRange"
+                    (click)="selectCalendarDay(day)">
+                    {{ day.day }}
+                  </button>
+                </div>
+              </div>
+            </div>
 
             <button
               class="clear-filters"
