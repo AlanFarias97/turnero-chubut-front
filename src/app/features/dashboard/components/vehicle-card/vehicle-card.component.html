@@ -54,9 +54,18 @@
 
     </div>
 
-    <div class="waiting-time">
+    <div class="time-pills">
 
-      {{ timePillLabel }}
+      <span
+        class="time-pill"
+        *ngFor="
+          let pill of timePills;
+          trackBy: trackByTimePill
+        ">
+
+        {{ pill.label }} {{ pill.value }}
+
+      </span>
 
     </div>
 

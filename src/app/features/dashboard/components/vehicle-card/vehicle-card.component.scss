@@ -148,14 +148,25 @@
   white-space: nowrap;
 }
 
-.waiting-time {
+.time-pills {
   grid-area: time;
   justify-self: end;
+  max-width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.time-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   padding: 5px 9px;
   border-radius: 999px;
   background: #fef3c7;
   color: #92400e;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   white-space: nowrap;
 }
@@ -305,6 +316,12 @@
 
   .plate {
     font-size: 19px;
+  }
+
+  .time-pill {
+    min-height: 22px;
+    padding: 4px 7px;
+    font-size: 10px;
   }
 
   .service {

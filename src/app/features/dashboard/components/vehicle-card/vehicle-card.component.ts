@@ -9,6 +9,14 @@ import { CommonModule } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Vehicle } from '../../models/vehicle';
 
+interface TimePill {
+
+  label: string;
+
+  value: string;
+
+}
+
 @Component({
   selector: 'app-vehicle-card',
   templateUrl: './vehicle-card.component.html',
@@ -113,7 +121,7 @@ implements OnInit {
   get waitingTimeLabel(): string {
 
     return this.formatDuration(
-      this.vehicle.waitingMinutes * 60000
+      this.getWaitingElapsedMs()
     );
 
   }
@@ -138,16 +146,143 @@ implements OnInit {
 
   }
 
-  get timePillLabel(): string {
+  get totalElapsedLabel(): string {
 
-    if (
-      this.vehicle.status ===
-      'in_progress'
-    ) {
-      return `Box ${this.boxElapsedLabel}`;
+    return this.formatDuration(
+      this.getTotalElapsedMs()
+    );
+
+  }
+
+  get timePills(): TimePill[] {
+
+    if (this.vehicle.status === 'in_queue') {
+      return [
+        {
+          label: 'Espera',
+          value: this.waitingTimeLabel
+        }
+      ];
     }
 
-    return `Espera ${this.waitingTimeLabel}`;
+    if (this.vehicle.status === 'in_progress') {
+      return [
+        {
+          label: 'Total',
+          value: this.totalElapsedLabel
+        },
+        {
+          label: 'Trabajado',
+          value: this.boxElapsedLabel
+        }
+      ];
+    }
+
+    return [
+      {
+        label: 'Espera',
+        value: this.waitingTimeLabel
+      },
+      {
+        label: 'Total',
+        value: this.totalElapsedLabel
+      }
+    ];
+
+  }
+
+  trackByTimePill(
+    _: number,
+    pill: TimePill
+  ): string {
+
+    return pill.label;
+
+  }
+
+  private getWaitingElapsedMs(): number {
+
+    const createdAt =
+      this.getDateTime(
+        this.vehicle.createdAt
+      );
+
+    if (createdAt === null) {
+      return this.vehicle.waitingMinutes *
+        60000;
+    }
+
+    const firstBoxStart =
+      this.getDateTime(
+        this.vehicle.boxStartedAt
+      );
+
+    if (firstBoxStart !== null) {
+      return Math.max(
+        firstBoxStart - createdAt,
+        0
+      );
+    }
+
+    if (this.vehicle.status === 'in_queue') {
+      return Math.max(
+        Date.now() - createdAt,
+        0
+      );
+    }
+
+    return this.vehicle.waitingMinutes *
+      60000;
+
+  }
+
+  private getTotalElapsedMs(): number {
+
+    const createdAt =
+      this.getDateTime(
+        this.vehicle.createdAt
+      );
+
+    if (createdAt === null) {
+      return this.vehicle.waitingMinutes *
+        60000;
+    }
+
+    if (this.vehicle.status === 'in_progress') {
+      return Math.max(
+        Date.now() - createdAt,
+        0
+      );
+    }
+
+    const endedAt =
+      this.getDateTime(
+        this.vehicle.boxEndedAt
+      );
+
+    if (endedAt !== null) {
+      return Math.max(
+        endedAt - createdAt,
+        0
+      );
+    }
+
+    const firstBoxStart =
+      this.getDateTime(
+        this.vehicle.boxStartedAt
+      );
+
+    if (firstBoxStart !== null) {
+      return Math.max(
+        firstBoxStart -
+          createdAt +
+          this.getCurrentBoxElapsedMs(),
+        0
+      );
+    }
+
+    return this.vehicle.waitingMinutes *
+      60000;
 
   }
 
@@ -183,6 +318,23 @@ implements OnInit {
         startedAt,
       0
     );
+
+  }
+
+  private getDateTime(
+    value?: Date
+  ): number | null {
+
+    if (!value) {
+      return null;
+    }
+
+    const time =
+      new Date(value).getTime();
+
+    return Number.isNaN(time)
+      ? null
+      : time;
 
   }
 

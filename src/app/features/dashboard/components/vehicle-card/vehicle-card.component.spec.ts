@@ -47,18 +47,62 @@ describe('VehicleCardComponent', () => {
       new Date(
         Date.now() - 11 * 60000 - 1000
       );
+    const createdAt =
+      new Date(
+        Date.now() - 21 * 60000 - 1000
+      );
 
     component.vehicle = {
       ...component.vehicle,
       status: 'in_progress',
+      createdAt,
       boxStartedAt: startedAt,
       boxTimerStartedAt: startedAt,
       boxElapsedMs: 0
     };
 
-    expect(component.timePillLabel)
-      .toBe('Box 11 min');
+    expect(component.timePills)
+      .toEqual([
+        {
+          label: 'Total',
+          value: '21 min'
+        },
+        {
+          label: 'Trabajado',
+          value: '11 min'
+        }
+      ]);
     expect(component.boxElapsedLabel)
       .toBe('11 min');
+  });
+
+  it('should show waiting and total time when vehicle is finished', () => {
+    const createdAt =
+      new Date('2026-06-03T08:00:00');
+    const boxStartedAt =
+      new Date('2026-06-03T08:12:00');
+    const boxEndedAt =
+      new Date('2026-06-03T08:42:00');
+
+    component.vehicle = {
+      ...component.vehicle,
+      status: 'completed',
+      createdAt,
+      boxStartedAt,
+      boxEndedAt,
+      boxElapsedMs: 30 * 60000
+    };
+
+    expect(component.timePills)
+      .toEqual([
+        {
+          label: 'Espera',
+          value: '12 min'
+        },
+        {
+          label: 'Total',
+          value: '42 min'
+        }
+      ]);
   });
 });
