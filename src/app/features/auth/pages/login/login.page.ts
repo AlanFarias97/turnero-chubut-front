@@ -4,7 +4,8 @@ import {
 
 import {
   Component,
-  inject
+  inject,
+  NgZone
 } from '@angular/core';
 
 import {
@@ -46,6 +47,9 @@ export class LoginPage {
   private route =
     inject(ActivatedRoute);
 
+  private zone =
+    inject(NgZone);
+
   email = '';
 
   password = '';
@@ -55,11 +59,18 @@ export class LoginPage {
   errorMessage = '';
 
   ionViewWillEnter(): void {
+    if (this.authService.isAuthenticated()) {
+      this.navigateAfterLogin();
+      return;
+    }
+
     this.isSubmitting = false;
     this.errorMessage = '';
   }
 
-  login(): void {
+  login(event?: Event): void {
+    event?.preventDefault();
+
     if (
       !this.email.trim() ||
       !this.password
@@ -82,14 +93,7 @@ export class LoginPage {
       .subscribe({
         next: () => {
           this.isSubmitting = false;
-
-          const returnUrl =
-            this.route.snapshot
-              .queryParamMap
-              .get('returnUrl') ||
-            '/dashboard';
-
-          this.router.navigateByUrl(returnUrl);
+          this.navigateAfterLogin();
         },
         error: () => {
           this.errorMessage =
@@ -97,5 +101,23 @@ export class LoginPage {
           this.isSubmitting = false;
         }
       });
+  }
+
+  private navigateAfterLogin(): void {
+    const returnUrl =
+      this.route.snapshot
+        .queryParamMap
+        .get('returnUrl') ||
+      '/dashboard';
+
+    this.zone.run(() => {
+      this.router
+        .navigateByUrl(returnUrl)
+        .then(navigated => {
+          if (!navigated) {
+            window.location.assign(returnUrl);
+          }
+        });
+    });
   }
 }
