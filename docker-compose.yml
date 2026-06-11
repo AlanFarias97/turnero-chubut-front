@@ -1,0 +1,11 @@
+services:
+  turnero-front:
+    build: .
+    container_name: turnero-front
+    restart: unless-stopped
+    networks:
+      - web
+
+networks:
+  web:
+    external: true

@@ -1,0 +1,9 @@
+.angular
+.git
+.codex-screenshots
+.vscode
+node_modules
+www
+npm-debug.log
+Dockerfile
+docker-compose.yml
