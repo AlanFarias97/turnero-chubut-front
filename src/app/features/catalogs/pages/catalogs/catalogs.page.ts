@@ -13,6 +13,7 @@ import {
 } from '@angular/forms';
 
 import {
+  Router,
   RouterLink
 } from '@angular/router';
 
@@ -28,6 +29,10 @@ import {
 import {
   CatalogService
 } from 'src/app/core/services/catalog.service';
+
+import {
+  AuthService
+} from 'src/app/core/auth/auth.service';
 
 type CatalogFilter =
   | 'all'
@@ -49,6 +54,15 @@ export class CatalogsPage implements OnInit {
 
   private catalogService =
     inject(CatalogService);
+
+  private authService =
+    inject(AuthService);
+
+  private router =
+    inject(Router);
+
+  userEmail =
+    this.authService.userEmail;
 
   items: CatalogItem[] = [];
 
@@ -74,6 +88,14 @@ export class CatalogsPage implements OnInit {
   ngOnInit(): void {
 
     this.refreshItems();
+
+  }
+
+  logout(): void {
+
+    this.authService.logout();
+
+    this.router.navigateByUrl('/login');
 
   }
 

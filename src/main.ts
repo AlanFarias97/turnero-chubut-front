@@ -16,9 +16,18 @@ import {
   importProvidersFrom
 } from '@angular/core';
 
+import {
+  provideHttpClient,
+  withInterceptors
+} from '@angular/common/http';
+
 import { AppComponent } from './app/app.component';
 
 import { routes } from './app/app.routes';
+
+import {
+  authInterceptor
+} from './app/core/auth/auth.interceptor';
 
 import {
   QuillModule
@@ -44,6 +53,12 @@ bootstrapApplication(
         withPreloading(
           PreloadAllModules
         )
+      ),
+
+      provideHttpClient(
+        withInterceptors([
+          authInterceptor
+        ])
       ),
 
       importProvidersFrom(

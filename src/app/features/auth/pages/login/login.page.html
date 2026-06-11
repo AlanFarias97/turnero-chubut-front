@@ -1,0 +1,86 @@
+<ion-content fullscreen>
+  <main class="login-page">
+    <section class="brand-panel">
+      <div class="brand-lockup">
+        <img
+          src="assets/brand/chubut-mark.png"
+          alt="Neumaticos Chubut" />
+
+        <div>
+          <span>Turnero</span>
+          <strong>Neumaticos Chubut</strong>
+        </div>
+      </div>
+
+      <div class="brand-copy">
+        <h1>Ingreso al sistema</h1>
+        <p>
+          Gestion de turnos, boxes y comunicacion operativa del taller.
+        </p>
+      </div>
+    </section>
+
+    <section class="login-card">
+      <div class="form-heading">
+        <h2>Iniciar sesion</h2>
+        <p>Usa tu email de trabajo para continuar.</p>
+      </div>
+
+      <form
+        class="login-form"
+        (ngSubmit)="login()">
+
+        <label>
+          <span>Email</span>
+          <input
+            name="email"
+            type="email"
+            autocomplete="email"
+            inputmode="email"
+            [(ngModel)]="email"
+            [disabled]="isSubmitting" />
+        </label>
+
+        <label>
+          <span>Contrasena</span>
+          <input
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            [(ngModel)]="password"
+            [disabled]="isSubmitting" />
+        </label>
+
+        <p
+          class="error-message"
+          *ngIf="errorMessage">
+          {{ errorMessage }}
+        </p>
+
+        <button
+          class="login-button"
+          type="submit"
+          [disabled]="isSubmitting">
+          {{
+            isSubmitting
+              ? 'Ingresando...'
+              : 'Ingresar'
+          }}
+        </button>
+      </form>
+
+      <div class="divider">
+        <span></span>
+        <small>o</small>
+        <span></span>
+      </div>
+
+      <button
+        class="google-button"
+        type="button"
+        disabled>
+        Continuar con Gmail
+      </button>
+    </section>
+  </main>
+</ion-content>

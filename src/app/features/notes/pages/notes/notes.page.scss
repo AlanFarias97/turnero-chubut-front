@@ -82,8 +82,38 @@
 }
 
 .sidebar-footer {
+  display: grid;
+  gap: 7px;
   color: rgba(255, 255, 255, 0.68);
   font-size: 13px;
+}
+
+.sidebar-footer strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-label {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.logout-button {
+  width: fit-content;
+  min-height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 7px 11px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
 }
 
 .notes-content {
@@ -431,6 +461,11 @@
   }
 
   .sidebar-footer {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .session-label {
     display: none;
   }
 }

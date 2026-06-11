@@ -33,7 +33,20 @@
       </div>
 
       <div class="sidebar-footer">
-        Sistema operativo del taller
+        <span class="session-label">
+          Sesion iniciada
+        </span>
+
+        <strong>
+          {{ userEmail() }}
+        </strong>
+
+        <button
+          type="button"
+          class="logout-button"
+          (click)="logout()">
+          Salir
+        </button>
       </div>
     </aside>
 

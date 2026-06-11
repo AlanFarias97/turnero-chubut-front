@@ -15,6 +15,7 @@ import {
 } from '@angular/forms';
 
 import {
+  Router,
   RouterLink
 } from '@angular/router';
 
@@ -29,6 +30,10 @@ import {
 import {
   AdministrativeNotesService
 } from 'src/app/core/services/administrative-notes.service';
+
+import {
+  AuthService
+} from 'src/app/core/auth/auth.service';
 
 interface CalendarDay {
 
@@ -65,6 +70,15 @@ export class NotesPage implements OnInit {
 
   private elementRef =
     inject(ElementRef<HTMLElement>);
+
+  private authService =
+    inject(AuthService);
+
+  private router =
+    inject(Router);
+
+  userEmail =
+    this.authService.userEmail;
 
   notes: AdministrativeNote[] = [];
 
@@ -108,6 +122,14 @@ export class NotesPage implements OnInit {
         this.notes = notes;
 
       });
+
+  }
+
+  logout(): void {
+
+    this.authService.logout();
+
+    this.router.navigateByUrl('/login');
 
   }
 

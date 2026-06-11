@@ -12,7 +12,10 @@ import { IonContent } from '@ionic/angular/standalone';
 
 import { FormsModule } from '@angular/forms';
 
-import { RouterLink } from '@angular/router';
+import {
+  Router,
+  RouterLink
+} from '@angular/router';
 
 import { BayCardComponent }
 from '../../components/bay-card/bay-card.component';
@@ -31,6 +34,9 @@ from 'src/app/core/services/catalog.service';
 
 import { CatalogItem }
 from 'src/app/core/models/catalog-item';
+
+import { AuthService }
+from 'src/app/core/auth/auth.service';
 
 import {
   QuillModule
@@ -67,6 +73,15 @@ implements OnInit, OnDestroy {
 
   private destroyRef =
     inject(DestroyRef);
+
+  private authService =
+    inject(AuthService);
+
+  private router =
+    inject(Router);
+
+  userEmail =
+    this.authService.userEmail;
 
   currentDate = new Date();
 
@@ -238,6 +253,14 @@ implements OnInit, OnDestroy {
     clearInterval(
       this.clockInterval
     );
+
+  }
+
+  logout(): void {
+
+    this.authService.logout();
+
+    this.router.navigateByUrl('/login');
 
   }
 
