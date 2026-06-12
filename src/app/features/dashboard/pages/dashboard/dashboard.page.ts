@@ -29,6 +29,11 @@ from '../../models/vehicle';
 import { WorkshopStateService }
 from 'src/app/core/services/workshop-state';
 
+import {
+  DashboardState,
+  VehicleService
+} from 'src/app/core/services/vehicle.service';
+
 import { CatalogService }
 from 'src/app/core/services/catalog.service';
 
@@ -67,6 +72,9 @@ implements OnInit, OnDestroy {
 
   private workshopStateService =
     inject(WorkshopStateService);
+
+  private vehicleService =
+    inject(VehicleService);
 
   private catalogService =
     inject(CatalogService);
@@ -178,21 +186,7 @@ implements OnInit, OnDestroy {
 
   bays: any[] = [];
 
-  waitingVehicles: Vehicle[] = [
-    {
-      id: 1,
-      patent: 'AB123CD',
-      status: 'in_queue',
-      paymentStatus: 'unpaid',
-      description: 'Gris',
-      service: 'Cambio x2 delanteras',
-      waitingMinutes: 15,
-      boxElapsedMs: 0,
-      ticketNumber: 2,
-      assignedOperators: [],
-      createdAt: new Date()
-    }
-  ];
+  waitingVehicles: Vehicle[] = [];
 
   completedVehicles: Vehicle[] = [];
 
@@ -257,6 +251,8 @@ implements OnInit, OnDestroy {
         )
       )
       .subscribe();
+
+    this.loadDashboardState();
 
   }
 
@@ -835,6 +831,45 @@ implements OnInit, OnDestroy {
 
   }
 
+  private loadDashboardState(): void {
+
+    this.vehicleService
+      .getDashboardState()
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe(state =>
+        this.applyDashboardState(state)
+      );
+
+  }
+
+  private applyDashboardState(
+    state: DashboardState
+  ): void {
+
+    this.bays = [...state.bays];
+
+    this.waitingVehicles = [
+      ...state.waitingVehicles
+    ];
+
+    this.completedVehicles = [
+      ...state.completedVehicles
+    ];
+
+    this.nextTicketNumber =
+      state.nextTicketNumber;
+
+    this.workshopStateService
+      .updateBays(this.bays);
+
+    this.updateWaitingTimes();
+
+  }
+
   private getBoxElapsedMs(
     vehicle: Vehicle
   ): number {
@@ -1061,29 +1096,18 @@ implements OnInit, OnDestroy {
       return;
     }
 
-    this.removeVehicleFromSource(
-      this.selectedVehicleToMove.id,
-      this.moveSourceContainerId
-    );
-
-    this.waitingVehicles.push({
-      ...this.pauseBoxTimer(
-        this.selectedVehicleToMove
-      ),
-      status: 'in_queue',
-      assignedOperators: []
-    });
-
-    this.waitingVehicles.sort(
-      (a, b) =>
-        a.ticketNumber -
-        b.ticketNumber
-    );
-
-    this.bays = [...this.bays];
-
-    this.workshopStateService
-      .updateBays(this.bays);
+    this.vehicleService
+      .moveToQueue(
+        this.selectedVehicleToMove.id
+      )
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe(state =>
+        this.applyDashboardState(state)
+      );
 
     this.closeMoveVehicleModal();
 
@@ -1119,31 +1143,20 @@ implements OnInit, OnDestroy {
       return;
     }
 
-    this.removeVehicleFromSource(
-      this.selectedVehicleForBay.id,
-      this.selectedSourceContainerId
-    );
-
-    this.selectedVehicleForBay
-      .assignedOperators =
-      [...this.selectedOperators];
-
-    const shouldResetBoxTimer =
-      this.selectedSourceContainerId ===
-        'completed-list' ||
-      !!this.selectedVehicleForBay
-        .resetBoxTimerOnNextAssignment;
-
-    bay.currentVehicle =
-      this.prepareVehicleForBox(
-        this.selectedVehicleForBay,
-        shouldResetBoxTimer
+    this.vehicleService
+      .assignToBay(
+        this.selectedVehicleForBay.id,
+        bay.id,
+        [...this.selectedOperators]
+      )
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe(state =>
+        this.applyDashboardState(state)
       );
-
-    this.bays = [...this.bays];
-
-    this.workshopStateService
-      .updateBays(this.bays);
 
     this.showAssignOperatorModal =
       false;
@@ -1218,35 +1231,16 @@ implements OnInit, OnDestroy {
       return;
     }
 
-    this.removeVehicleFromSource(
-      vehicle.id,
-      previousContainerId
-    );
-
-    const returnedVehicle: Vehicle = {
-
-      ...this.pauseBoxTimer(vehicle),
-
-      status: 'in_queue',
-
-      assignedOperators: []
-
-    };
-
-    this.waitingVehicles.push(
-      returnedVehicle
-    );
-
-    this.waitingVehicles.sort(
-      (a, b) =>
-        a.ticketNumber -
-        b.ticketNumber
-    );
-
-    this.bays = [...this.bays];
-
-    this.workshopStateService
-      .updateBays(this.bays);
+    this.vehicleService
+      .moveToQueue(vehicle.id)
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe(state =>
+        this.applyDashboardState(state)
+      );
 
   }
 
@@ -1393,36 +1387,20 @@ implements OnInit, OnDestroy {
 
     }
 
-    const completedVehicle: Vehicle = {
-
-      ...this.pauseBoxTimer(
-        bay.currentVehicle
-      ),
-
-      status: this.completionStatus,
-
-      resetBoxTimerOnNextAssignment:
-        this.completionStatus !==
-          'completed',
-
-      pendingWorkDetail:
-        this.completionStatus !==
-          'completed'
-          ? this.pendingWorkDetail.trim()
-          : undefined
-
-    };
-
-    this.completedVehicles.unshift(
-      completedVehicle
-    );
-
-    bay.currentVehicle = null;
-
-    this.bays = [...this.bays];
-
-    this.workshopStateService
-      .updateBays(this.bays);
+    this.vehicleService
+      .completeVehicle(
+        bay.currentVehicle.id,
+        this.completionStatus,
+        this.pendingWorkDetail.trim()
+      )
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe(state =>
+        this.applyDashboardState(state)
+      );
 
     this.closeCompletionModal();
 
@@ -1452,50 +1430,27 @@ implements OnInit, OnDestroy {
 
     }
 
-    const vehicle: Vehicle = {
-
-      id: Date.now(),
-
-      ticketNumber:
-        this.nextTicketNumber,
-
-      patent:
-        this.newVehicle.patent,
-
-      description:
-      this.newVehicle.description,
-
-      service:
-      this.serializeServiceMarkup(
-        this.newVehicle.service
-      ),
-
-      waitingMinutes: 0,
-
-      boxElapsedMs: 0,
-
-      createdAt: new Date(),
-
-      status: 'in_queue',
-
-      paymentStatus:
-        this.newVehicle.paymentStatus,
-
-      assignedOperators: []
-
-    };
-
-    this.waitingVehicles.push(
-      vehicle
-    );
-
-    this.waitingVehicles.sort(
-      (a, b) =>
-        a.ticketNumber -
-        b.ticketNumber
-    );
-
-    this.nextTicketNumber++;
+    this.vehicleService
+      .createVehicle({
+        patent:
+          this.newVehicle.patent,
+        description:
+          this.newVehicle.description,
+        service:
+          this.serializeServiceMarkup(
+            this.newVehicle.service
+          ),
+        paymentStatus:
+          this.newVehicle.paymentStatus
+      })
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe(() =>
+        this.loadDashboardState()
+      );
 
     this.closeCreateVehicleModal();
 
@@ -1517,33 +1472,32 @@ implements OnInit, OnDestroy {
       return;
     }
 
-    bay.currentVehicle = {
-
-      ...bay.currentVehicle,
-
-      patent:
-        this.newVehicle.patent,
-
-      description:
-        this.newVehicle.description,
-
-      service:
-        this.serializeServiceMarkup(
-          this.newVehicle.service
-        ),
-
-      paymentStatus:
-        this.newVehicle.paymentStatus,
-
-      assignedOperators:
-        [...this.selectedOperators]
-
-    };
-
-    this.bays = [...this.bays];
-
-    this.workshopStateService
-      .updateBays(this.bays);
+    this.vehicleService
+      .updateVehicle(
+        bay.currentVehicle.id,
+        {
+          patent:
+            this.newVehicle.patent,
+          description:
+            this.newVehicle.description,
+          service:
+            this.serializeServiceMarkup(
+              this.newVehicle.service
+            ),
+          paymentStatus:
+            this.newVehicle.paymentStatus,
+          assignedOperators:
+            [...this.selectedOperators]
+        }
+      )
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe(() =>
+        this.loadDashboardState()
+      );
 
     this.closeCreateVehicleModal();
 

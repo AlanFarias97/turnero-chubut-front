@@ -2,22 +2,66 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 import { DashboardPage } from './dashboard.page';
 import { CatalogService } from 'src/app/core/services/catalog.service';
+import {
+  DashboardState,
+  VehicleService
+} from 'src/app/core/services/vehicle.service';
+import { Vehicle } from '../../models/vehicle';
 
 describe('DashboardPage', () => {
   let component: DashboardPage;
   let fixture: ComponentFixture<DashboardPage>;
+  let vehicleServiceSpy:
+    jasmine.SpyObj<VehicleService>;
+
+  const baseVehicle: Vehicle = {
+    id: 1,
+    patent: 'AB123CD',
+    status: 'in_queue',
+    paymentStatus: 'unpaid',
+    description: 'Gris',
+    service: 'Cambio x2 delanteras',
+    waitingMinutes: 15,
+    boxElapsedMs: 0,
+    ticketNumber: 2,
+    assignedOperators: [],
+    createdAt: new Date('2026-05-01T09:00:00')
+  };
 
   beforeEach(() => {
     localStorage.clear();
+
+    vehicleServiceSpy =
+      jasmine.createSpyObj<VehicleService>(
+        'VehicleService',
+        [
+          'getDashboardState',
+          'createVehicle',
+          'updateVehicle',
+          'assignToBay',
+          'moveToQueue',
+          'completeVehicle'
+        ]
+      );
+
+    vehicleServiceSpy.getDashboardState
+      .and.returnValue(
+        of(createDashboardState())
+      );
 
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
-        CatalogService
+        CatalogService,
+        {
+          provide: VehicleService,
+          useValue: vehicleServiceSpy
+        }
       ]
     });
 
@@ -106,19 +150,39 @@ describe('DashboardPage', () => {
         'Alineacion auto</li></ol>'
     };
 
-    component.createVehicle();
-
-    const createdVehicle =
-      component.waitingVehicles.find(
-        vehicle =>
-          vehicle.patent === 'LISTA01'
+    vehicleServiceSpy.createVehicle
+      .and.returnValue(
+        of({
+          ...baseVehicle,
+          id: 99,
+          patent: 'LISTA01',
+          paymentStatus: 'partial'
+        })
       );
 
-    expect(createdVehicle?.service).toBe(
+    component.createVehicle();
+
+    expect(
+      vehicleServiceSpy.createVehicle
+    ).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        patent: 'LISTA01',
+        paymentStatus: 'partial',
+        service:
+          '<ul><li>Balanceo auto</li>' +
+          '<li>Alineacion auto</li></ul>'
+      })
+    );
+
+    const createRequest =
+      vehicleServiceSpy.createVehicle
+        .calls.mostRecent().args[0];
+
+    expect(createRequest.service).toBe(
       '<ul><li>Balanceo auto</li>' +
       '<li>Alineacion auto</li></ul>'
     );
-    expect(createdVehicle?.paymentStatus).toBe(
+    expect(createRequest.paymentStatus).toBe(
       'partial'
     );
   });
@@ -135,19 +199,60 @@ describe('DashboardPage', () => {
       'waiting-list';
     component.selectedOperators = ['Chino'];
 
+    const assignedVehicle: Vehicle = {
+      ...vehicle,
+      status: 'in_progress',
+      assignedOperators: ['Chino'],
+      boxStartedAt: new Date(),
+      boxTimerStartedAt: new Date(),
+      boxElapsedMs: 0
+    };
+
+    vehicleServiceSpy.assignToBay
+      .and.returnValue(
+        of(createDashboardState({
+          bays: [
+            {
+              id: 1,
+              name: 'BOX 1',
+              currentVehicle: assignedVehicle
+            },
+            {
+              id: 2,
+              name: 'BOX 2',
+              currentVehicle: null
+            },
+            {
+              id: 3,
+              name: 'BOX 3',
+              currentVehicle: null
+            }
+          ],
+          waitingVehicles: []
+        }))
+      );
+
     component.confirmAssignOperator();
 
-    const assignedVehicle =
+    expect(
+      vehicleServiceSpy.assignToBay
+    ).toHaveBeenCalledWith(
+      vehicle.id,
+      1,
+      ['Chino']
+    );
+
+    const currentVehicle =
       component.bays[0].currentVehicle;
 
-    expect(assignedVehicle.status).toBe(
+    expect(currentVehicle?.status).toBe(
       'in_progress'
     );
-    expect(assignedVehicle.boxStartedAt)
+    expect(currentVehicle?.boxStartedAt)
       .toBeTruthy();
-    expect(assignedVehicle.boxTimerStartedAt)
+    expect(currentVehicle?.boxTimerStartedAt)
       .toBeTruthy();
-    expect(assignedVehicle.boxElapsedMs)
+    expect(currentVehicle?.boxElapsedMs)
       .toBe(0);
   });
 
@@ -173,11 +278,42 @@ describe('DashboardPage', () => {
       'bay-1';
     component.selectedOperators = ['Chino'];
 
+    vehicleServiceSpy.assignToBay
+      .and.returnValue(
+        of(createDashboardState({
+          bays: [
+            {
+              id: 1,
+              name: 'BOX 1',
+              currentVehicle: null
+            },
+            {
+              id: 2,
+              name: 'BOX 2',
+              currentVehicle: {
+                ...component.bays[0].currentVehicle,
+                status: 'in_progress',
+                assignedOperators: ['Chino'],
+                boxStartedAt: startedAt,
+                boxTimerStartedAt: new Date(),
+                boxElapsedMs: 120000
+              } as Vehicle
+            },
+            {
+              id: 3,
+              name: 'BOX 3',
+              currentVehicle: null
+            }
+          ],
+          waitingVehicles: []
+        }))
+      );
+
     component.confirmAssignOperator();
 
-    expect(component.bays[1].currentVehicle.boxStartedAt)
+    expect(component.bays[1].currentVehicle?.boxStartedAt)
       .toEqual(startedAt);
-    expect(component.bays[1].currentVehicle.boxElapsedMs)
+    expect(component.bays[1].currentVehicle?.boxElapsedMs)
       .toBe(120000);
   });
 
@@ -206,26 +342,103 @@ describe('DashboardPage', () => {
       'completed-list';
     component.selectedOperators = ['Chino'];
 
+    vehicleServiceSpy.assignToBay
+      .and.returnValue(
+        of(createDashboardState({
+          bays: [
+            {
+              id: 1,
+              name: 'BOX 1',
+              currentVehicle: {
+                ...partialVehicle,
+                status: 'in_progress',
+                assignedOperators: ['Chino'],
+                boxStartedAt: new Date(),
+                boxTimerStartedAt: new Date(),
+                boxElapsedMs: 0,
+                resetBoxTimerOnNextAssignment: false
+              }
+            },
+            {
+              id: 2,
+              name: 'BOX 2',
+              currentVehicle: null
+            },
+            {
+              id: 3,
+              name: 'BOX 3',
+              currentVehicle: null
+            }
+          ],
+          waitingVehicles: [],
+          completedVehicles: []
+        }))
+      );
+
     component.confirmAssignOperator();
 
     const assignedVehicle =
       component.bays[0].currentVehicle;
 
-    expect(assignedVehicle.boxElapsedMs)
+    expect(assignedVehicle?.boxElapsedMs)
       .toBe(0);
     expect(
       new Date(
-        assignedVehicle.boxStartedAt
+        assignedVehicle?.boxStartedAt as Date
       ).getTime()
     ).toBeGreaterThan(
       oldStartedAt.getTime()
     );
     expect(
       assignedVehicle
-        .resetBoxTimerOnNextAssignment
+        ?.resetBoxTimerOnNextAssignment
     ).toBeFalse();
   });
 });
+
+function createDashboardState(
+  overrides: Partial<DashboardState> = {}
+): DashboardState {
+
+  return {
+    bays: [
+      {
+        id: 1,
+        name: 'BOX 1',
+        currentVehicle: null
+      },
+      {
+        id: 2,
+        name: 'BOX 2',
+        currentVehicle: null
+      },
+      {
+        id: 3,
+        name: 'BOX 3',
+        currentVehicle: null
+      }
+    ],
+    waitingVehicles: [
+      {
+        id: 1,
+        patent: 'AB123CD',
+        status: 'in_queue',
+        paymentStatus: 'unpaid',
+        description: 'Gris',
+        service: 'Cambio x2 delanteras',
+        waitingMinutes: 15,
+        boxElapsedMs: 0,
+        ticketNumber: 2,
+        assignedOperators: [],
+        createdAt: new Date('2026-05-01T09:00:00')
+      }
+    ],
+    completedVehicles: [],
+    nextTicketNumber: 3,
+    ...overrides
+  };
+
+}
 
 function createFakeQuill(
   initialValue: string
