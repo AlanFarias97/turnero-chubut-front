@@ -78,7 +78,7 @@ export class LoginPage {
       !this.password
     ) {
       this.errorMessage =
-        'Ingresa email y contrasena.';
+        'Ingresa email y contraseña.';
       return;
     }
 
@@ -99,7 +99,7 @@ export class LoginPage {
         },
         error: () => {
           this.errorMessage =
-            'Email o contrasena incorrectos.';
+            'Email o contraseña incorrectos.';
           this.isSubmitting = false;
         }
       });

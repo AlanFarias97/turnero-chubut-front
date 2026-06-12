@@ -92,7 +92,7 @@ export class RegisterPage {
 
     if (!this.isFormValid()) {
       this.errorMessage =
-        'Completa todos los campos y revisa la contrasena.';
+        'Completa todos los campos y revisa la contraseña.';
       return;
     }
 
