@@ -4,18 +4,14 @@ import {
 
 import {
   Component,
-  inject,
-  NgZone
+  inject
 } from '@angular/core';
 
 import {
   FormsModule
 } from '@angular/forms';
 
-import {
-  Router,
-  RouterLink
-} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 import {
   IonContent
@@ -45,12 +41,6 @@ export class RegisterPage {
 
   private authService =
     inject(AuthService);
-
-  private router =
-    inject(Router);
-
-  private zone =
-    inject(NgZone);
 
   form: RegisterRequest = {
     email: '',
@@ -152,14 +142,6 @@ export class RegisterPage {
   }
 
   private navigateToDashboard(): void {
-    this.zone.run(() => {
-      this.router
-        .navigateByUrl('/dashboard')
-        .then(navigated => {
-          if (!navigated) {
-            window.location.assign('/dashboard');
-          }
-        });
-    });
+    window.location.assign('/dashboard');
   }
 }
