@@ -64,6 +64,9 @@ export class CatalogsPage implements OnInit {
   userEmail =
     this.authService.userEmail;
 
+  isAdmin =
+    this.authService.isAdmin;
+
   items: CatalogItem[] = [];
 
   selectedFilter: CatalogFilter =

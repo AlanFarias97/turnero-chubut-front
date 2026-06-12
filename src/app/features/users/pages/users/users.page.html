@@ -1,0 +1,290 @@
+<ion-content fullscreen>
+  <div class="users-layout">
+    <aside class="sidebar">
+      <div>
+        <div class="logo-container">
+          <img
+            src="assets/brand/chubut-mark.png"
+            alt="Neumaticos Chubut" />
+
+          <div>
+            <h1>Turnero</h1>
+            <span>Neumaticos Chubut</span>
+          </div>
+        </div>
+
+        <nav class="menu">
+          <a
+            class="menu-item"
+            routerLink="/dashboard">Dashboard</a>
+
+          <a
+            class="menu-item"
+            routerLink="/catalogs">Catalogos</a>
+
+          <a
+            class="menu-item"
+            routerLink="/notes">Notas</a>
+
+          <a
+            class="menu-item active"
+            routerLink="/users">Usuarios</a>
+
+          <a
+            class="menu-item"
+            href="/workshop"
+            target="_blank">
+            Pantalla taller
+          </a>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <span class="session-label">Sesion iniciada</span>
+        <strong>{{ userEmail() }}</strong>
+
+        <button
+          type="button"
+          class="logout-button"
+          (click)="logout()">
+          Salir
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <h2>Usuarios</h2>
+          <p>Administracion de accesos del sistema</p>
+        </div>
+
+        <button
+          type="button"
+          class="primary-button"
+          (click)="openCreateForm()">
+          + Nuevo usuario
+        </button>
+      </header>
+
+      <section class="users-panel">
+        <div class="toolbar">
+          <input
+            type="search"
+            placeholder="Buscar por nombre, email o rol"
+            [(ngModel)]="searchTerm" />
+
+          <span>
+            {{ filteredUsers.length }} usuarios
+          </span>
+        </div>
+
+        <p
+          class="error-message"
+          *ngIf="errorMessage && !showForm">
+          {{ errorMessage }}
+        </p>
+
+        <div
+          class="empty-state"
+          *ngIf="!isLoading && filteredUsers.length === 0">
+          No hay usuarios para mostrar.
+        </div>
+
+        <div
+          class="table-wrap"
+          *ngIf="filteredUsers.length > 0">
+          <table>
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Telefono</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let user of filteredUsers">
+                <td>
+                  <strong>{{ user.displayName }}</strong>
+                  <span>{{ user.email }}</span>
+                  <small>{{ user.address }}</small>
+                </td>
+
+                <td>{{ user.phoneNumber }}</td>
+
+                <td>
+                  <span class="role-badge">
+                    {{ user.role }}
+                  </span>
+                </td>
+
+                <td>
+                  <span
+                    class="status-badge"
+                    [class.is-inactive]="!user.active">
+                    {{ user.active ? 'Activo' : 'Inactivo' }}
+                  </span>
+                </td>
+
+                <td class="actions">
+                  <button
+                    type="button"
+                    (click)="openEditForm(user)">
+                    Editar
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="toggleActive(user)">
+                    {{ user.active ? 'Desactivar' : 'Activar' }}
+                  </button>
+
+                  <button
+                    type="button"
+                    class="danger"
+                    (click)="deleteUser(user)">
+                    Borrar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div
+    class="modal-backdrop"
+    *ngIf="showForm">
+    <section class="user-modal">
+      <header>
+        <div>
+          <h3>{{ isEditing ? 'Editar usuario' : 'Nuevo usuario' }}</h3>
+          <p>
+            {{
+              isEditing
+                ? 'Modifica datos, rol o estado.'
+                : 'Crea un acceso para el sistema.'
+            }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="icon-button"
+          (click)="closeForm()">
+          ×
+        </button>
+      </header>
+
+      <form
+        class="user-form"
+        (submit)="saveUser($event)">
+        <label>
+          <span>Email</span>
+          <input
+            name="email"
+            type="email"
+            [(ngModel)]="form.email" />
+        </label>
+
+        <label>
+          <span>Nombre</span>
+          <input
+            name="firstName"
+            type="text"
+            [(ngModel)]="form.firstName" />
+        </label>
+
+        <label>
+          <span>Apellido</span>
+          <input
+            name="lastName"
+            type="text"
+            [(ngModel)]="form.lastName" />
+        </label>
+
+        <label>
+          <span>Telefono</span>
+          <input
+            name="phoneNumber"
+            type="tel"
+            [(ngModel)]="form.phoneNumber" />
+        </label>
+
+        <label class="full-row">
+          <span>Direccion</span>
+          <input
+            name="address"
+            type="text"
+            [(ngModel)]="form.address" />
+        </label>
+
+        <label>
+          <span>Rol</span>
+          <select
+            name="role"
+            [(ngModel)]="form.role">
+            <option value="ADMINISTRADOR">Administrador</option>
+            <option value="CAJERO">Cajero</option>
+            <option value="OPERARIO">Operario</option>
+          </select>
+        </label>
+
+        <label>
+          <span>
+            {{
+              isEditing
+                ? 'Nueva contraseña'
+                : 'Contraseña'
+            }}
+          </span>
+          <input
+            name="password"
+            type="password"
+            autocomplete="new-password"
+            [(ngModel)]="form.password" />
+        </label>
+
+        <label class="checkbox-row full-row">
+          <input
+            name="active"
+            type="checkbox"
+            [(ngModel)]="form.active" />
+          <span>Usuario activo</span>
+        </label>
+
+        <p
+          class="password-help full-row">
+          La contraseña debe tener minimo 6 caracteres, una mayuscula y un caracter especial.
+          En edicion podes dejarla vacia para mantener la actual.
+        </p>
+
+        <p
+          class="error-message full-row"
+          *ngIf="errorMessage">
+          {{ errorMessage }}
+        </p>
+
+        <div class="modal-actions full-row">
+          <button
+            type="button"
+            class="secondary-button"
+            (click)="closeForm()">
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="primary-button">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+</ion-content>

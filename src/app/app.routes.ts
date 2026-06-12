@@ -4,6 +4,10 @@ import {
   authGuard
 } from './core/auth/auth.guard';
 
+import {
+  adminGuard
+} from './core/auth/admin.guard';
+
 export const routes: Routes = [
 
   {
@@ -46,6 +50,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/notes/pages/notes/notes.page')
         .then(m => m.NotesPage)
+  },
+  {
+    path: 'users',
+    canActivate: [adminGuard],
+    loadComponent: () =>
+      import('./features/users/pages/users/users.page')
+        .then(m => m.UsersPage)
   },
   {
     path: 'workshop',

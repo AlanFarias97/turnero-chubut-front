@@ -80,6 +80,9 @@ export class NotesPage implements OnInit {
   userEmail =
     this.authService.userEmail;
 
+  isAdmin =
+    this.authService.isAdmin;
+
   notes: AdministrativeNote[] = [];
 
   searchTerm = '';

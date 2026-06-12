@@ -51,6 +51,11 @@ export class AuthService {
       this.userSignal()?.email ?? ''
     );
 
+  readonly isAdmin =
+    computed(() =>
+      this.userSignal()?.role === 'ADMINISTRADOR'
+    );
+
   readonly isAuthenticated =
     computed(() =>
       !!this.getToken() &&

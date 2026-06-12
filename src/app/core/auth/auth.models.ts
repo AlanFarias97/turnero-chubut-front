@@ -17,6 +17,7 @@ export interface AuthUser {
   address: string;
   role: UserRole;
   authProvider: AuthProvider;
+  active: boolean;
 }
 
 export interface AuthResponse {
@@ -37,4 +38,15 @@ export interface RegisterRequest {
   address: string;
   password: string;
   role: Exclude<UserRole, 'ADMINISTRADOR'>;
+}
+
+export interface AdminUserRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  address: string;
+  password?: string;
+  role: UserRole;
+  active: boolean;
 }

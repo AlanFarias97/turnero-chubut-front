@@ -83,6 +83,9 @@ implements OnInit, OnDestroy {
   userEmail =
     this.authService.userEmail;
 
+  isAdmin =
+    this.authService.isAdmin;
+
   currentDate = new Date();
 
   clockInterval: any;

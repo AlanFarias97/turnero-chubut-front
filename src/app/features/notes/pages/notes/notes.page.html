@@ -24,6 +24,12 @@
           <a
             class="menu-item active"
             routerLink="/notes">Notas</a>
+
+          <a
+            *ngIf="isAdmin()"
+            class="menu-item"
+            routerLink="/users">Usuarios</a>
+
           <div class="menu-item disabled">Historial</div>
           <a
             class="menu-item"
