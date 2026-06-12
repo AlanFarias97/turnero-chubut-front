@@ -20,7 +20,7 @@
 
           <a
             class="menu-item"
-            routerLink="/catalogs">Catalogos</a>
+            routerLink="/catalogs">Catálogos</a>
 
           <a
             class="menu-item"
@@ -40,7 +40,7 @@
       </div>
 
       <div class="sidebar-footer">
-        <span class="session-label">Sesion iniciada</span>
+        <span class="session-label">Sesión iniciada</span>
         <strong>{{ userEmail() }}</strong>
 
         <button
@@ -56,7 +56,7 @@
       <header class="topbar">
         <div>
           <h2>Usuarios</h2>
-          <p>Administracion de accesos del sistema</p>
+          <p>Administración de accesos del sistema</p>
         </div>
 
         <button
@@ -98,7 +98,7 @@
             <thead>
               <tr>
                 <th>Usuario</th>
-                <th>Telefono</th>
+                <th>Teléfono</th>
                 <th>Rol</th>
                 <th>Estado</th>
                 <th></th>
@@ -138,6 +138,7 @@
 
                   <button
                     type="button"
+                    [disabled]="isCurrentUser(user)"
                     (click)="toggleActive(user)">
                     {{ user.active ? 'Desactivar' : 'Activar' }}
                   </button>
@@ -145,6 +146,7 @@
                   <button
                     type="button"
                     class="danger"
+                    [disabled]="isCurrentUser(user)"
                     (click)="deleteUser(user)">
                     Borrar
                   </button>
@@ -209,7 +211,7 @@
         </label>
 
         <label>
-          <span>Telefono</span>
+          <span>Teléfono</span>
           <input
             name="phoneNumber"
             type="tel"
@@ -217,7 +219,7 @@
         </label>
 
         <label class="full-row">
-          <span>Direccion</span>
+          <span>Dirección</span>
           <input
             name="address"
             type="text"
@@ -260,8 +262,8 @@
 
         <p
           class="password-help full-row">
-          La contraseña debe tener minimo 6 caracteres, una mayuscula y un caracter especial.
-          En edicion podes dejarla vacia para mantener la actual.
+          La contraseña debe tener mínimo 6 caracteres, una mayúscula y un caracter especial.
+          En edición podes dejarla vacía para mantener la actual.
         </p>
 
         <p

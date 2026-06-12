@@ -253,6 +253,11 @@ td small {
   font-weight: 900;
 }
 
+.actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
 .actions .danger {
   border-color: #fecaca;
   color: #b91c1c;

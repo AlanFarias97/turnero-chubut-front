@@ -68,6 +68,9 @@ export class UsersPage implements OnInit {
   isAdmin =
     this.authService.isAdmin;
 
+  currentUser =
+    this.authService.user;
+
   users: AuthUser[] = [];
 
   searchTerm = '';
@@ -186,6 +189,10 @@ export class UsersPage implements OnInit {
             'No pudimos cambiar el estado del usuario.';
         }
       });
+  }
+
+  isCurrentUser(user: AuthUser): boolean {
+    return this.currentUser()?.id === user.id;
   }
 
   deleteUser(user: AuthUser): void {
