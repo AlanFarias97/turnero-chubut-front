@@ -30,29 +30,13 @@
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 12px;
 }
 
 .logo-container img {
-  width: 52px;
-  height: 52px;
-  border-radius: 8px;
-}
-
-.logo-container h1 {
-  margin: 0;
-  font-size: 30px;
-  font-weight: 900;
-  line-height: 1;
-}
-
-.logo-container span {
-  display: block;
-  margin-top: 6px;
-  color: #ff3434;
-  font-size: 12px;
-  font-weight: 900;
-  text-transform: uppercase;
+  width: 128px;
+  height: auto;
+  max-height: 72px;
+  object-fit: contain;
 }
 
 .menu {

@@ -33,6 +33,18 @@
   max-width: 100%;
 }
 
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container img {
+  width: 128px;
+  height: auto;
+  max-height: 72px;
+  object-fit: contain;
+}
+
 .menu {
   margin-top: 42px;
   display: grid;

@@ -27,20 +27,16 @@
   color: #ffffff;
 }
 
-.logo-container h1 {
-  margin: 0;
-  font-size: 30px;
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: 0;
+.logo-container {
+  display: flex;
+  align-items: center;
 }
 
-.logo-container span {
-  display: block;
-  margin-top: 8px;
-  color: #ff3434;
-  font-size: 13px;
-  font-weight: 900;
+.logo-container img {
+  width: 128px;
+  height: auto;
+  max-height: 72px;
+  object-fit: contain;
 }
 
 .menu {
@@ -551,12 +547,9 @@
     display: none;
   }
 
-  .logo-container h1 {
-    font-size: 24px;
-  }
-
-  .logo-container span {
-    margin-top: 4px;
+  .logo-container img {
+    width: 112px;
+    max-height: 58px;
   }
 
   .menu {
