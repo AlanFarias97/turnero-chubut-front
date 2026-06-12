@@ -300,7 +300,7 @@ export class UsersPage implements OnInit {
       address:
         this.form.address.trim(),
       password:
-        this.form.password,
+        this.form.password || undefined,
       role:
         this.form.role,
       active:
