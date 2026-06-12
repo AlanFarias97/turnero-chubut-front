@@ -249,6 +249,15 @@ implements OnInit, OnDestroy {
 
       });
 
+    this.catalogService
+      .refreshFromApi()
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe();
+
   }
 
   ngOnDestroy(): void {

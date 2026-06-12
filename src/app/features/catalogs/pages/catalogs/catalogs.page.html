@@ -158,6 +158,7 @@
                   {{ item.active ? 'Desactivar' : 'Activar' }}
                 </button>
                 <button
+                  *ngIf="isAdmin()"
                   class="delete-action"
                   type="button"
                   (click)="requestDelete(item)">

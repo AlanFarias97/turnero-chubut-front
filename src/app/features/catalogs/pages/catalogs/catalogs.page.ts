@@ -88,6 +88,8 @@ export class CatalogsPage implements OnInit {
 
   formError = '';
 
+  isLoading = false;
+
   ngOnInit(): void {
 
     this.refreshItems();
@@ -204,29 +206,26 @@ export class CatalogsPage implements OnInit {
 
     }
 
-    try {
+    this.catalogService
+      .saveItem(this.draft)
+      .subscribe({
+        next: savedItem => {
+          this.refreshItems();
 
-      const savedItem =
-        this.catalogService
-          .saveItem(this.draft);
+          this.editItem(
+            savedItem
+          );
 
-      this.refreshItems();
-
-      this.editItem(
-        savedItem
-      );
-
-      this.showForm =
-        false;
-
-    } catch (error) {
-
-      this.formError =
-        error instanceof Error
-          ? error.message
-          : 'No se pudo guardar.';
-
-    }
+          this.showForm =
+            false;
+        },
+        error: response => {
+          this.formError =
+            response?.status === 409
+              ? 'Ya existe un item con ese codigo.'
+              : 'No se pudo guardar.';
+        }
+      });
 
   }
 
@@ -256,25 +255,35 @@ export class CatalogsPage implements OnInit {
       this.itemToDelete.id;
 
     this.catalogService
-      .deleteItem(deletedId);
+      .deleteItem(deletedId)
+      .subscribe({
+        next: () => {
+          this.refreshItems();
 
-    this.refreshItems();
+          if (
+            this.selectedItem?.id === deletedId
+          ) {
+            this.selectedItem =
+              null;
 
-    if (
-      this.selectedItem?.id === deletedId
-    ) {
-      this.selectedItem =
-        null;
+            this.draft =
+              this.emptyDraft('service');
 
-      this.draft =
-        this.emptyDraft('service');
+            this.showForm =
+              false;
+          }
 
-      this.showForm =
-        false;
-    }
+          this.itemToDelete =
+            null;
+        },
+        error: () => {
+          this.formError =
+            'No se pudo borrar el item.';
 
-    this.itemToDelete =
-      null;
+          this.itemToDelete =
+            null;
+        }
+      });
 
   }
 
@@ -286,19 +295,24 @@ export class CatalogsPage implements OnInit {
       .setActive(
         item.id,
         !item.active
-      );
+      )
+      .subscribe({
+        next: updatedItem => {
+          this.refreshItems();
 
-    this.refreshItems();
-
-    if (
-      this.selectedItem?.id === item.id
-    ) {
-      this.editItem(
-        this.items.find(current =>
-          current.id === item.id
-        ) as CatalogItem
-      );
-    }
+          if (
+            this.selectedItem?.id === item.id
+          ) {
+            this.editItem(
+              updatedItem
+            );
+          }
+        },
+        error: () => {
+          this.formError =
+            'No se pudo cambiar el estado del item.';
+        }
+      });
 
   }
 
@@ -326,6 +340,25 @@ export class CatalogsPage implements OnInit {
     this.items =
       this.catalogService
         .getItems();
+
+    this.isLoading =
+      true;
+
+    this.catalogService
+      .refreshFromApi()
+      .subscribe({
+        next: items => {
+          this.items =
+            items;
+
+          this.isLoading =
+            false;
+        },
+        error: () => {
+          this.isLoading =
+            false;
+        }
+      });
 
   }
 

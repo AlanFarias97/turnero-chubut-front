@@ -1,10 +1,23 @@
 import {
+  inject,
   Injectable
 } from '@angular/core';
 
 import {
-  BehaviorSubject
+  HttpClient
+} from '@angular/common/http';
+
+import {
+  BehaviorSubject,
+  catchError,
+  Observable,
+  of,
+  tap
 } from 'rxjs';
+
+import {
+  environment
+} from 'src/environments/environment';
 
 import {
   CatalogCategory,
@@ -14,13 +27,23 @@ import {
 import catalogSeed
 from '../data/catalog-seed.json';
 
+type CatalogItemRequest =
+  Omit<CatalogItem, 'id'>
+  & { id?: number };
+
 @Injectable({
   providedIn: 'root'
 })
 export class CatalogService {
 
+  private readonly http =
+    inject(HttpClient);
+
+  private readonly apiUrl =
+    `${environment.apiUrl}/catalogs`;
+
   private readonly storageKey =
-    'turnero-chubut:catalog:v2';
+    'turnero-chubut:catalog:api-cache:v1';
 
   private readonly defaultItems:
     CatalogItem[] =
@@ -28,11 +51,28 @@ export class CatalogService {
 
   private itemsSubject =
     new BehaviorSubject<CatalogItem[]>(
-      this.loadItems()
+      this.loadCachedItems()
     );
 
   items$ =
     this.itemsSubject.asObservable();
+
+  refreshFromApi(): Observable<CatalogItem[]> {
+
+    return this.http
+      .get<CatalogItem[]>(
+        this.apiUrl
+      )
+      .pipe(
+        tap(items =>
+          this.updateItems(items)
+        ),
+        catchError(() =>
+          of(this.getItems())
+        )
+      );
+
+  }
 
   getItems(): CatalogItem[] {
 
@@ -50,127 +90,67 @@ export class CatalogService {
   }
 
   saveItem(
-    entry: Omit<CatalogItem, 'id'>
-      & { id?: number }
-  ): CatalogItem {
+    entry: CatalogItemRequest
+  ): Observable<CatalogItem> {
 
-    const items =
-      this.getItems();
+    const request =
+      this.normalizeRequest(entry);
 
-    const normalizedCode =
-      entry.code.trim().toUpperCase();
+    const action =
+      entry.id
+        ? this.http.put<CatalogItem>(
+            `${this.apiUrl}/${entry.id}`,
+            request
+          )
+        : this.http.post<CatalogItem>(
+            this.apiUrl,
+            request
+          );
 
-    const normalizedName =
-      entry.name.trim();
-
-    const duplicate =
-      items.find(item =>
-        item.code === normalizedCode &&
-        item.id !== entry.id
-      );
-
-    if (duplicate) {
-      throw new Error(
-        'Ya existe un item con ese codigo.'
-      );
-    }
-
-    let savedItem: CatalogItem;
-
-    if (entry.id) {
-
-      savedItem = {
-        id: entry.id,
-        code: normalizedCode,
-        name: normalizedName,
-        category: entry.category,
-        active: entry.active,
-        sourceRubro:
-          entry.sourceRubro
-      };
-
-      const index =
-        items.findIndex(item =>
-          item.id === entry.id
-        );
-
-      if (index === -1) {
-        throw new Error(
-          'El item no existe.'
-        );
-      }
-
-      items[index] =
-        savedItem;
-
-    } else {
-
-      savedItem = {
-        id: this.nextId(items),
-        code: normalizedCode,
-        name: normalizedName,
-        category: entry.category,
-        active: entry.active,
-        sourceRubro:
-          entry.sourceRubro
-      };
-
-      items.unshift(
-        savedItem
-      );
-
-    }
-
-    this.updateItems(items);
-
-    return savedItem;
+    return action.pipe(
+      tap(savedItem =>
+        this.upsertItem(savedItem)
+      )
+    );
 
   }
 
   setActive(
     id: number,
     active: boolean
-  ): void {
+  ): Observable<CatalogItem> {
 
-    const items =
-      this.getItems()
-        .map(item => item.id === id
-          ? {
-              ...item,
-              active
-            }
-          : item
-        );
-
-    this.updateItems(
-      items
-    );
+    return this.http
+      .patch<CatalogItem>(
+        `${this.apiUrl}/${id}/active`,
+        { active }
+      )
+      .pipe(
+        tap(updatedItem =>
+          this.upsertItem(updatedItem)
+        )
+      );
 
   }
 
   deleteItem(
     id: number
-  ): void {
+  ): Observable<void> {
 
-    const items =
-      this.getItems();
-
-    const itemExists =
-      items.some(item =>
-        item.id === id
-      );
-
-    if (!itemExists) {
-      throw new Error(
-        'El item no existe.'
-      );
-    }
-
-    this.updateItems(
-      items.filter(item =>
-        item.id !== id
+    return this.http
+      .delete<void>(
+        `${this.apiUrl}/${id}`
       )
-    );
+      .pipe(
+        tap(() => {
+          this.updateItems(
+            this.getItems()
+              .filter(item =>
+                item.id !== id
+              )
+          );
+        })
+      );
 
   }
 
@@ -186,7 +166,54 @@ export class CatalogService {
 
   }
 
-  private loadItems(): CatalogItem[] {
+  private normalizeRequest(
+    entry: CatalogItemRequest
+  ): Omit<CatalogItem, 'id'> {
+
+    return {
+      code:
+        entry.code.trim().toUpperCase(),
+      name:
+        entry.name.trim(),
+      category:
+        entry.category,
+      active:
+        entry.active,
+      sourceRubro:
+        entry.sourceRubro?.trim() || undefined
+    };
+
+  }
+
+  private upsertItem(
+    savedItem: CatalogItem
+  ): void {
+
+    const items =
+      this.getItems();
+
+    const index =
+      items.findIndex(item =>
+        item.id === savedItem.id
+      );
+
+    if (index === -1) {
+      this.updateItems([
+        savedItem,
+        ...items
+      ]);
+
+      return;
+    }
+
+    items[index] =
+      savedItem;
+
+    this.updateItems(items);
+
+  }
+
+  private loadCachedItems(): CatalogItem[] {
 
     const rawItems =
       localStorage.getItem(
@@ -249,16 +276,4 @@ export class CatalogService {
     }));
 
   }
-
-  private nextId(
-    items: CatalogItem[]
-  ): number {
-
-    return Math.max(
-      0,
-      ...items.map(item => item.id)
-    ) + 1;
-
-  }
-
 }
