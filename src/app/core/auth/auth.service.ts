@@ -20,7 +20,8 @@ import {
 import {
   AuthResponse,
   AuthUser,
-  LoginRequest
+  LoginRequest,
+  RegisterRequest
 } from './auth.models';
 
 const TOKEN_KEY =
@@ -62,6 +63,21 @@ export class AuthService {
     return this.http
       .post<AuthResponse>(
         `${environment.apiUrl}/auth/login`,
+        request
+      )
+      .pipe(
+        tap(response =>
+          this.storeSession(response)
+        )
+      );
+  }
+
+  register(
+    request: RegisterRequest
+  ) {
+    return this.http
+      .post<AuthResponse>(
+        `${environment.apiUrl}/auth/register`,
         request
       )
       .pipe(

@@ -11,6 +11,10 @@ export interface AuthUser {
   id: string;
   email: string;
   displayName: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  address: string;
   role: UserRole;
   authProvider: AuthProvider;
 }
@@ -23,4 +27,14 @@ export interface AuthResponse {
 export interface LoginRequest {
   email: string;
   password: string;
+}
+
+export interface RegisterRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  address: string;
+  password: string;
+  role: Exclude<UserRole, 'ADMINISTRADOR'>;
 }

@@ -14,7 +14,8 @@ import {
 
 import {
   ActivatedRoute,
-  Router
+  Router,
+  RouterLink
 } from '@angular/router';
 
 import {
@@ -33,7 +34,8 @@ import {
   imports: [
     CommonModule,
     FormsModule,
-    IonContent
+    IonContent,
+    RouterLink
   ]
 })
 export class LoginPage {

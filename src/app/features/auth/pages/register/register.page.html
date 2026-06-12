@@ -1,0 +1,147 @@
+<ion-content fullscreen>
+  <main class="register-page">
+    <section class="brand-panel">
+      <div class="brand-lockup">
+        <img
+          src="assets/brand/chubut-mark.png"
+          alt="Neumaticos Chubut" />
+
+        <div>
+          <span>Turnero</span>
+          <strong>Neumaticos Chubut</strong>
+        </div>
+      </div>
+
+      <div class="brand-copy">
+        <h1>Crear usuario</h1>
+        <p>
+          Alta rapida para cajeros y operarios del taller.
+        </p>
+      </div>
+    </section>
+
+    <section class="register-card">
+      <div class="form-heading">
+        <h2>Registro</h2>
+        <p>Completa los datos del empleado para ingresar al sistema.</p>
+      </div>
+
+      <form
+        class="register-form"
+        (submit)="register($event)">
+
+        <label>
+          <span>Email</span>
+          <input
+            name="email"
+            type="email"
+            autocomplete="email"
+            inputmode="email"
+            [(ngModel)]="form.email"
+            [disabled]="isSubmitting" />
+        </label>
+
+        <label>
+          <span>Nombre</span>
+          <input
+            name="firstName"
+            type="text"
+            autocomplete="given-name"
+            [(ngModel)]="form.firstName"
+            [disabled]="isSubmitting" />
+        </label>
+
+        <label>
+          <span>Apellido</span>
+          <input
+            name="lastName"
+            type="text"
+            autocomplete="family-name"
+            [(ngModel)]="form.lastName"
+            [disabled]="isSubmitting" />
+        </label>
+
+        <label>
+          <span>Telefono</span>
+          <input
+            name="phoneNumber"
+            type="tel"
+            autocomplete="tel"
+            inputmode="tel"
+            [(ngModel)]="form.phoneNumber"
+            [disabled]="isSubmitting" />
+        </label>
+
+        <label class="full-row">
+          <span>Direccion</span>
+          <input
+            name="address"
+            type="text"
+            autocomplete="street-address"
+            [(ngModel)]="form.address"
+            [disabled]="isSubmitting" />
+        </label>
+
+        <label>
+          <span>Posicion</span>
+          <select
+            name="role"
+            [(ngModel)]="form.role"
+            [disabled]="isSubmitting">
+            <option value="CAJERO">Cajero</option>
+            <option value="OPERARIO">Operario</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Contrasena</span>
+          <input
+            name="password"
+            type="password"
+            autocomplete="new-password"
+            [(ngModel)]="form.password"
+            [disabled]="isSubmitting" />
+        </label>
+
+        <label>
+          <span>Confirmar contrasena</span>
+          <input
+            name="confirmPassword"
+            type="password"
+            autocomplete="new-password"
+            [(ngModel)]="confirmPassword"
+            [disabled]="isSubmitting" />
+        </label>
+
+        <div class="password-rules full-row">
+          <span [class.is-ok]="hasMinimumLength">Minimo 6 caracteres</span>
+          <span [class.is-ok]="hasUppercase">Una mayuscula</span>
+          <span [class.is-ok]="hasSpecialCharacter">Un caracter especial</span>
+          <span [class.is-ok]="passwordsMatch">Coinciden</span>
+        </div>
+
+        <p
+          class="error-message full-row"
+          *ngIf="errorMessage">
+          {{ errorMessage }}
+        </p>
+
+        <button
+          class="register-button full-row"
+          type="submit"
+          [disabled]="isSubmitting">
+          {{
+            isSubmitting
+              ? 'Creando usuario...'
+              : 'Crear usuario'
+          }}
+        </button>
+      </form>
+
+      <p class="auth-link">
+        Ya tenes cuenta?
+        <a routerLink="/login">Iniciar sesion</a>
+      </p>
+    </section>
+  </main>
+</ion-content>
